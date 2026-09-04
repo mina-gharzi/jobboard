@@ -76,3 +76,36 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+enum Role {
+  CANDIDATE
+  EMPLOYER
+}
+
+enum RemoteType {
+  ONSITE
+  REMOTE
+  HYBRID
+}
+
+enum JobStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+}
+
+model Job {
+  id          String     @id @default(cuid())
+  employerId  String
+  title       String
+  slug        String     @unique
+  description String
+  category    String
+  city        String
+  remoteType  RemoteType
+  salaryMin   Int?
+  salaryMax   Int?
+  status      JobStatus  @default(PUBLISHED)
+  createdAt   DateTime   @default(now())
+
+  @@index([status, category, city])
+}
