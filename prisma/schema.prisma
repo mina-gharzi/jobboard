@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -23,8 +17,8 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   role          String    @default("CANDIDATE")
-  sessions      Session[]
   accounts      Account[]
+  sessions      Session[]
 
   @@map("user")
 }
@@ -32,7 +26,7 @@ model User {
 model Session {
   id        String   @id
   expiresAt DateTime
-  token     String
+  token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ipAddress String?
@@ -40,7 +34,6 @@ model Session {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([token])
   @@index([userId])
   @@map("session")
 }
@@ -50,7 +43,6 @@ model Account {
   accountId             String
   providerId            String
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -60,6 +52,8 @@ model Account {
   password              String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
+  issuer                String?
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("account")
@@ -76,6 +70,37 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+model Job {
+  id           String        @id @default(cuid())
+  employerId   String
+  title        String
+  slug         String        @unique
+  description  String
+  category     String
+  city         String
+  remoteType   RemoteType
+  salaryMin    Int?
+  salaryMax    Int?
+  status       JobStatus     @default(PUBLISHED)
+  createdAt    DateTime      @default(now())
+  applications Application[]
+
+  @@index([status, category, city])
+}
+
+model Application {
+  id          String            @id @default(cuid())
+  jobId       String
+  candidateId String
+  coverLetter String?
+  status      ApplicationStatus @default(PENDING)
+  createdAt   DateTime          @default(now())
+  job         Job               @relation(fields: [jobId], references: [id])
+
+  @@unique([jobId, candidateId])
+}
+
 enum Role {
   CANDIDATE
   EMPLOYER
@@ -93,19 +118,9 @@ enum JobStatus {
   CLOSED
 }
 
-model Job {
-  id          String     @id @default(cuid())
-  employerId  String
-  title       String
-  slug        String     @unique
-  description String
-  category    String
-  city        String
-  remoteType  RemoteType
-  salaryMin   Int?
-  salaryMax   Int?
-  status      JobStatus  @default(PUBLISHED)
-  createdAt   DateTime   @default(now())
-
-  @@index([status, category, city])
+enum ApplicationStatus {
+  PENDING
+  REVIEWED
+  ACCEPTED
+  REJECTED
 }

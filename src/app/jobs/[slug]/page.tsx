@@ -1,5 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { applyToJob } from "@/lib/actions/applyToJob";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import ApplyForm from "./ApplyForm";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -28,7 +32,7 @@ export async function generateMetadata({ params }: Props) {
 export default async function JobDetailPage({ params }: Props) {
   const { slug } = await params;
   const job = await getJob(slug);
-
+  const session = await auth.api.getSession({ headers: await headers() });
   if (!job) {
     notFound();
   }
@@ -45,7 +49,17 @@ export default async function JobDetailPage({ params }: Props) {
         </p>
       )}
       <hr />
+
       <p style={{ whiteSpace: "pre-wrap" }}>{job.description}</p>
+      <hr />
+      {session?.user.role === "CANDIDATE" && <ApplyForm jobId={job.id} />}
+      {!session && <p>برای اپلای کردن باید وارد شوید.</p>}
+      {session?.user.role === "EMPLOYER" && (
+        <p>کارفرماها نمی‌توانند اپلای کنند.</p>
+      )}
+      {session?.user.role === "EMPLOYER" && (
+        <p>کارفرماها نمی‌توانند اپلای کنند.</p>
+      )}
     </div>
   );
 }
