@@ -40,28 +40,56 @@ export default async function ApplicantsPage({ params }: Props) {
     REJECTED: "رد‌شده",
   };
 
+  const statusColors: Record<string, string> = {
+    PENDING: "bg-yellow-100 text-yellow-800",
+    REVIEWED: "bg-blue-100 text-blue-800",
+    ACCEPTED: "bg-green-100 text-green-800",
+    REJECTED: "bg-red-100 text-red-800",
+  };
+
   return (
-    <div style={{ maxWidth: 700, margin: "40px auto" }}>
-      <h1>درخواست‌های آگهی: {job.title}</h1>
+    <div className="mx-auto max-w-2xl px-4 py-10">
+      <h1 className="mb-6 text-2xl font-bold text-gray-900">
+        درخواست‌های آگهی: {job.title}
+      </h1>
 
       {job.applications.length === 0 ? (
-        <p>هنوز کسی برای این آگهی اپلای نکرده است.</p>
+        <p className="text-gray-500">هنوز کسی برای این آگهی اپلای نکرده است.</p>
       ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul className="flex flex-col gap-4">
           {job.applications.map((app) => (
-            <li key={app.id} style={{ border: "1px solid #ddd", padding: 16, marginBottom: 12, borderRadius: 8 }}>
-              <p>وضعیت فعلی: <strong>{statusLabels[app.status]}</strong></p>
-              {app.coverLetter && <p>انگیزه‌نامه: {app.coverLetter}</p>}
+            <li key={app.id} className="rounded-lg border border-gray-200 p-5">
+              <span
+                className={`inline-block rounded-full px-3 py-1 text-xs ${statusColors[app.status]}`}
+              >
+                {statusLabels[app.status]}
+              </span>
 
-              <form action={updateApplicationStatus}>
+              {app.coverLetter && (
+                <p className="mt-3 text-sm text-gray-700">{app.coverLetter}</p>
+              )}
+
+              <form
+                action={updateApplicationStatus}
+                className="mt-4 flex items-center gap-3"
+              >
                 <input type="hidden" name="applicationId" value={app.id} />
-                <select name="status" defaultValue={app.status}>
+                <select
+                  name="status"
+                  defaultValue={app.status}
+                  className="rounded-md border border-gray-300 p-2 text-sm focus:border-gray-500 focus:outline-none"
+                >
                   <option value="PENDING">در انتظار بررسی</option>
                   <option value="REVIEWED">بررسی‌شده</option>
                   <option value="ACCEPTED">پذیرفته‌شده</option>
                   <option value="REJECTED">رد‌شده</option>
                 </select>
-                <button type="submit">ثبت تغییر وضعیت</button>
+                <button
+                  type="submit"
+                  className="rounded-md bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-800"
+                >
+                  ثبت تغییر وضعیت
+                </button>
               </form>
             </li>
           ))}
