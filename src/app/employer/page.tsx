@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import JobCard from "@/components/JobCard";
 
 const statusLabels: Record<string, string> = {
   DRAFT: "پیش‌نویس",
@@ -42,25 +43,28 @@ export default async function EmployerDashboard() {
       ) : (
         <ul className="flex flex-col gap-4">
           {jobs.map((job) => (
-            <li key={job.id} className="rounded-lg border border-line p-5">
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="font-display text-lg font-semibold text-ink">{job.title}</h3>
-                <span className={statusBadge[job.status]}>{statusLabels[job.status]}</span>
-              </div>
-              <p className="mt-1 text-sm text-ink-muted">
-                {job.city} · {job.remoteType === "ONSITE" ? "حضوری" : job.remoteType === "REMOTE" ? "دورکاری" : "ترکیبی"}
-              </p>
-              <p className="mt-2 text-sm text-ink">
-                {job._count.applications} درخواست دریافت‌شده
-              </p>
-              <div className="mt-3 flex items-center gap-4 text-sm">
-                <Link href={`/employer/jobs/${job.id}/applicants`} className="text-slate underline">
-                  مشاهده‌ی درخواست‌ها
-                </Link>
-                <Link href={`/employer/jobs/${job.id}/edit`} className="text-slate underline">
-                  ویرایش / تغییر وضعیت
-                </Link>
-              </div>
+            <li key={job.id}>
+              <JobCard
+                job={job}
+                footer={
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className={statusBadge[job.status]}>{statusLabels[job.status]}</span>
+                      <span className="text-sm text-ink-muted">
+                        {job._count.applications} درخواست دریافت‌شده
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-4 text-sm">
+                      <Link href={`/employer/jobs/${job.id}/applicants`} className="text-slate underline">
+                        مشاهده‌ی درخواست‌ها
+                      </Link>
+                      <Link href={`/employer/jobs/${job.id}/edit`} className="text-slate underline">
+                        ویرایش
+                      </Link>
+                    </div>
+                  </div>
+                }
+              />
             </li>
           ))}
         </ul>
