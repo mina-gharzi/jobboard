@@ -20,6 +20,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   jobs          Job[]     @relation("EmployerJobs")
+  applications  Application[] @relation("CandidateApplications")
 
   @@map("user")
 }
@@ -96,12 +97,14 @@ model Application {
   id          String            @id @default(cuid())
   jobId       String
   candidateId String
+  candidate   User              @relation("CandidateApplications", fields: [candidateId], references: [id])
   coverLetter String?
   status      ApplicationStatus @default(PENDING)
   createdAt   DateTime          @default(now())
   job         Job               @relation(fields: [jobId], references: [id])
 
   @@unique([jobId, candidateId])
+  @@index([candidateId])
 }
 
 enum Role {
