@@ -22,9 +22,22 @@ export async function createJob(formData: FormData) {
   const category = formData.get("category") as string;
   const city = formData.get("city") as string;
   const remoteType = formData.get("remoteType") as string;
+  const salaryMinRaw = formData.get("salaryMin") as string;
+  const salaryMaxRaw = formData.get("salaryMax") as string;
 
   if (!title || !description || !category || !city || !remoteType) {
     throw new Error("همه‌ی فیلدها الزامی هستند");
+  }
+
+  const salaryMin = salaryMinRaw ? Number(salaryMinRaw) : null;
+  const salaryMax = salaryMaxRaw ? Number(salaryMaxRaw) : null;
+
+  if ((salaryMin !== null && Number.isNaN(salaryMin)) || (salaryMax !== null && Number.isNaN(salaryMax))) {
+    throw new Error("مقدار حقوق نامعتبر است");
+  }
+
+  if (salaryMin !== null && salaryMax !== null && salaryMin > salaryMax) {
+    throw new Error("حداقل حقوق نمی‌تواند بیشتر از حداکثر باشد");
   }
 
   function slugify(value: string) {
@@ -46,6 +59,8 @@ export async function createJob(formData: FormData) {
       category,
       city,
       remoteType: remoteType as "ONSITE" | "REMOTE" | "HYBRID",
+      salaryMin,
+      salaryMax,
       status: "PUBLISHED",
     },
   });

@@ -44,6 +44,24 @@ export default async function NewJobPage() {
           required
           className="input-field rounded-md border p-3 text-sm"
         />
+        <div className="flex gap-3">
+          <input
+            name="salaryMin"
+            type="number"
+            min="0"
+            inputMode="numeric"
+            placeholder="حداقل حقوق (تومان، اختیاری)"
+            className="input-field w-full rounded-md border p-3 text-sm"
+          />
+          <input
+            name="salaryMax"
+            type="number"
+            min="0"
+            inputMode="numeric"
+            placeholder="حداکثر حقوق (تومان، اختیاری)"
+            className="input-field w-full rounded-md border p-3 text-sm"
+          />
+        </div>
         <select
           name="remoteType"
           required
