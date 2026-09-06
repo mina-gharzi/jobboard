@@ -1,9 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+
+const emptySubscribe = () => () => {};
+
+// روش رسمی ری‌اکت برای تشخیص «آیا کامپوننت روی کلاینت هیدرات شده»
+// بدون setState داخل useEffect و بدون خطای hydration mismatch
+function useMounted() {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
+}
 
 type Role = "EMPLOYER" | "CANDIDATE" | null;
 
@@ -47,6 +60,7 @@ function ChevronIcon({ className }: { className?: string }) {
 export default function NavLinks({ role }: { role: Role }) {
   const [open, setOpen] = useState(false); // پنل موبایل
   const [menuOpen, setMenuOpen] = useState(false); // دراپ‌داون کاربر (دسکتاپ)
+  const mounted = useMounted();
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const links = buildLinks(role);
@@ -160,86 +174,92 @@ export default function NavLinks({ role }: { role: Role }) {
         )}
       </button>
 
-      {/* پس‌زمینه‌ی تیره پشت دراور */}
-      <div
-        onClick={() => setOpen(false)}
-        className={`fixed inset-0 z-40 bg-ink/40 transition-opacity duration-300 md:hidden ${
-          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
-        }`}
-      />
-
-      {/* دراور موبایل - از راست به چپ باز می‌شود */}
-      <div
-        className={`fixed inset-y-0 right-0 z-50 flex w-72 max-w-[80%] flex-col gap-4 bg-paper px-6 py-6 text-sm font-medium shadow-2xl transition-transform duration-300 ease-out md:hidden ${
-          open ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="mb-2 flex items-center justify-between">
-          <span className="font-display text-lg font-bold text-ink">منو</span>
-          <button
-            onClick={() => setOpen(false)}
-            aria-label="بستن منو"
-            className="flex h-8 w-8 items-center justify-center rounded-md text-ink-muted transition-colors hover:bg-slate/10"
-          >
-            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M6 6l12 12M18 6 6 18" />
-            </svg>
-          </button>
-        </div>
-
-        {links.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            onClick={() => setOpen(false)}
-            className="text-ink-muted transition-colors hover:text-ink"
-          >
-            {link.label}
-          </Link>
-        ))}
-
-        {role ? (
+      {mounted &&
+        createPortal(
           <>
-            <div className="my-1 border-t border-line" />
-
-            <span
-              className={`inline-flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs ${roleBadgeClasses}`}
-            >
-              <UserIcon className="h-3.5 w-3.5" />
-              {roleLabel(role)}
-            </span>
-
-            <Link
-              href={dashboardHref(role)}
+            {/* پس‌زمینه‌ی تیره پشت دراور */}
+            <div
               onClick={() => setOpen(false)}
-              className="text-ink-muted transition-colors hover:text-ink"
-            >
-              داشبورد من
-            </Link>
+              className={`fixed inset-0 z-40 bg-ink/40 transition-opacity duration-300 md:hidden ${
+                open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+              }`}
+            />
 
-            <button onClick={handleSignOut} className="text-right text-danger-dark">
-              خروج
-            </button>
-          </>
-        ) : (
-          <>
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              className="text-ink-muted transition-colors hover:text-ink"
+            {/* دراور موبایل - از راست به چپ باز می‌شود */}
+            <div
+              className={`fixed inset-y-0 right-0 z-50 flex w-72 max-w-[80%] flex-col gap-4 bg-paper px-6 py-6 text-sm font-medium shadow-2xl transition-transform duration-300 ease-out md:hidden ${
+                open ? "translate-x-0" : "translate-x-full"
+              }`}
             >
-              ورود
-            </Link>
-            <Link
-              href="/register"
-              onClick={() => setOpen(false)}
-              className="rounded-lg bg-gold px-4 py-2 text-center font-medium text-ink transition-colors hover:bg-gold-hover"
-            >
-              ثبت‌نام
-            </Link>
-          </>
+              <div className="mb-2 flex items-center justify-between">
+                <span className="font-display text-lg font-bold text-ink">منو</span>
+                <button
+                  onClick={() => setOpen(false)}
+                  aria-label="بستن منو"
+                  className="flex h-8 w-8 items-center justify-center rounded-md text-ink-muted transition-colors hover:bg-slate/10"
+                >
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M6 6l12 12M18 6 6 18" />
+                  </svg>
+                </button>
+              </div>
+
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="text-ink-muted transition-colors hover:text-ink"
+                >
+                  {link.label}
+                </Link>
+              ))}
+
+              {role ? (
+                <>
+                  <div className="my-1 border-t border-line" />
+
+                  <span
+                    className={`inline-flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs ${roleBadgeClasses}`}
+                  >
+                    <UserIcon className="h-3.5 w-3.5" />
+                    {roleLabel(role)}
+                  </span>
+
+                  <Link
+                    href={dashboardHref(role)}
+                    onClick={() => setOpen(false)}
+                    className="text-ink-muted transition-colors hover:text-ink"
+                  >
+                    داشبورد من
+                  </Link>
+
+                  <button onClick={handleSignOut} className="text-right text-danger-dark">
+                    خروج
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setOpen(false)}
+                    className="text-ink-muted transition-colors hover:text-ink"
+                  >
+                    ورود
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg bg-gold px-4 py-2 text-center font-medium text-ink transition-colors hover:bg-gold-hover"
+                  >
+                    ثبت‌نام
+                  </Link>
+                </>
+              )}
+            </div>
+          </>,
+          document.body
         )}
-      </div>
     </>
   );
 }
