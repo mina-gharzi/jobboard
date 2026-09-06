@@ -27,11 +27,15 @@ export async function createJob(formData: FormData) {
     throw new Error("همه‌ی فیلدها الزامی هستند");
   }
 
-  const slug = title
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9\-]/g, "") + "-" + Date.now().toString(36);
+  function slugify(value: string) {
+    return value
+      .trim()
+      .replace(/\s+/g, "-") // فاصله‌ها به خط تیره
+      .replace(/[\/\\?#%&=+:;"'<>]/g, "") // کاراکترهای ناامن برای URL
+      .replace(/-+/g, "-"); // چند خط‌تیره‌ی پشت‌سرهم یکی بشه
+  }
+
+  const slug = `${slugify(title)}-${Date.now().toString(36)}`;
 
   await prisma.job.create({
     data: {

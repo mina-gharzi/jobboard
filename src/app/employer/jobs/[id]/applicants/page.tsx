@@ -24,6 +24,9 @@ export default async function ApplicantsPage({ params }: Props) {
     where: { id },
     include: {
       applications: {
+        include: {
+          candidate: { select: { name: true, email: true, image: true } },
+        },
         orderBy: { createdAt: "desc" },
       },
     },
@@ -59,9 +62,31 @@ export default async function ApplicantsPage({ params }: Props) {
         <ul className="flex flex-col gap-4">
           {job.applications.map((app) => (
             <li key={app.id} className="rounded-lg border border-line p-5">
-              <span className={statusBadgeClasses[app.status]}>
-                {statusLabels[app.status]}
-              </span>
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate/10 text-sm font-bold text-slate-dark">
+                    {app.candidate.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={app.candidate.image}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      app.candidate.name.trim()[0] ?? "؟"
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-medium text-ink">{app.candidate.name}</p>
+                    <p className="text-sm text-ink-muted" dir="ltr">
+                      {app.candidate.email}
+                    </p>
+                  </div>
+                </div>
+                <span className={statusBadgeClasses[app.status]}>
+                  {statusLabels[app.status]}
+                </span>
+              </div>
 
               {app.coverLetter && (
                 <p className="mt-3 text-sm text-ink">{app.coverLetter}</p>
