@@ -1,33 +1,69 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
-export const revalidate = 60;
+const remoteLabels: Record<string, string> = {
+  ONSITE: "حضوری",
+  REMOTE: "دورکاری",
+  HYBRID: "ترکیبی",
+};
 
-export default async function JobsPage() {
+type Props = {
+  searchParams: Promise<{ q?: string; city?: string; category?: string }>;
+};
+
+export default async function JobsPage({ searchParams }: Props) {
+  const { q, city, category } = await searchParams;
+  const hasFilters = Boolean(q || city || category);
+
   const jobs = await prisma.job.findMany({
-    where: { status: "PUBLISHED" },
+    where: {
+      status: "PUBLISHED",
+      ...(q && {
+        OR: [
+          { title: { contains: q, mode: "insensitive" } },
+          { description: { contains: q, mode: "insensitive" } },
+        ],
+      }),
+      ...(city && { city: { contains: city, mode: "insensitive" } }),
+      ...(category && { category }),
+    },
     orderBy: { createdAt: "desc" },
   });
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">آگهی‌های شغلی</h1>
+    <div className="mx-auto max-w-3xl px-6 py-16">
+      <h1 className="font-display text-2xl font-bold text-ink">آگهی‌های شغلی</h1>
+      <p className="mt-1 text-sm text-ink-muted">
+        {jobs.length} آگهی{hasFilters ? " مطابق جستجوی شما" : " فعال"}
+      </p>
+
+      {hasFilters && (
+        <Link href="/jobs" className="mt-2 inline-block text-sm text-gold hover:underline">
+          حذف فیلترها
+        </Link>
+      )}
 
       {jobs.length === 0 ? (
-        <p className="text-gray-500">در حال حاضر آگهی‌ای موجود نیست.</p>
+        <p className="mt-10 text-ink-muted">
+          {hasFilters ? "آگهی‌ای مطابق این جستجو پیدا نشد." : "در حال حاضر آگهی‌ای موجود نیست."}
+        </p>
       ) : (
-        <ul className="flex flex-col gap-4">
-          {jobs.map((job) => (
-            <li key={job.id}>
-              <Link
-                href={`/jobs/${job.slug}`}
-                className="block rounded-lg border border-gray-200 p-5 transition hover:border-gray-400 hover:shadow-sm"
-              >
-                <h2 className="text-lg font-semibold text-gray-900">{job.title}</h2>
-                <p className="mt-1 text-sm text-gray-500">
-                  {job.city} · {job.remoteType === "ONSITE" ? "حضوری" : job.remoteType === "REMOTE" ? "دورکاری" : "ترکیبی"}
-                </p>
-                <span className="mt-2 inline-block rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600">
+        <ul className="mt-8 border-t-2 border-ink">
+          {jobs.map((job, index) => (
+            <li key={job.id} className="border-b border-line py-6">
+              <Link href={`/jobs/${job.slug}`} className="group flex items-start justify-between gap-6">
+                <div>
+                  <span className="text-xs text-ink-muted">
+                    آگهی #{String(index + 1).padStart(4, "0")}
+                  </span>
+                  <h2 className="mt-1 font-display text-lg font-bold text-ink group-hover:text-gold">
+                    {job.title}
+                  </h2>
+                  <p className="mt-2 text-sm text-ink-muted">
+                    {job.city} — {remoteLabels[job.remoteType]}
+                  </p>
+                </div>
+                <span className="mt-1 shrink-0 border border-slate px-3 py-1 text-xs text-slate">
                   {job.category}
                 </span>
               </Link>

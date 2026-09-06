@@ -1,37 +1,92 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f3f1ec;
-  --color-ink: #14181c;
-  --color-ink-muted: #4a5158;
-  --color-gold: #c97a1a;
-  --color-slate: #2b3a42;
-  --color-line: #dad3c3;
+  --color-paper: #e8edf2;
+  --color-paper-dark: #dce3ea;
+  --color-ink: #2c3947;
+  --color-ink-muted: #3d6580;
+  --color-gold: var(--accent);
+  --color-gold-hover: #b89754;
+  --color-slate: var(--primary);
+  --color-slate-dark: #3d5f78;
+  --color-line: #d1d9e0;
 
   --font-display: "Noto Naskh Arabic", serif;
   --font-body: "Vazirmatn", sans-serif;
 }
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #e8edf2;
+  --foreground: #2c3947;
+  --primary: #547a95;
+  --primary-hover: #3d5f78;
+  --accent: #c2a56d;
+  --accent-hover: #b89754;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+/* دکمه‌ها */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-gold {
+  background: var(--accent);
+  color: #2c3947;
+}
+
+.btn-gold:hover {
+  background: var(--accent-hover);
+}
+
+/* خطوط جداکننده */
+.divider {
+  border-color: #d1d9e0;
+}
+
+.input-field {
+  border-color: #d1d9e0;
+  background: white;
+  color: #2c3947;
+}
+
+.input-field:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(84, 122, 149, 0.2);
+}
+
+/* متن‌ها - فقط ink و ink-muted برای متن */
+.text-main {
+  color: #2c3947;
+}
+
+.text-secondary {
+  color: #547a95;
+}
+
+/* طلایی فقط برای دکمه و اکسنت، نه متن */
+.accent-only {
+  background: #c2a56d;
+  color: #2c3947;
 }

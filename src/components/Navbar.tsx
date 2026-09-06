@@ -6,42 +6,62 @@ export default async function Navbar() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   return (
-    <nav className="border-b-2 border-ink px-6 py-5">
-      <div className="mx-auto flex max-w-4xl items-center justify-between">
-        <Link href="/" className="font-display text-xl font-bold text-ink">
-          تابلوی مشاغل
+    <nav className="bg-paper/80 backdrop-blur-md border-b border-line sticky top-0 z-50">
+      <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+        {/* لوگو */}
+        <Link
+          href="/"
+          className="font-display text-xl font-bold text-ink hover:text-slate transition-colors"
+        >
+          جابینو
         </Link>
 
-        <div className="flex items-center gap-6 text-sm">
-          <Link href="/jobs" className="text-ink hover:text-gold">
+        {/* لینک‌ها */}
+        <div className="flex items-center gap-6 text-sm font-medium">
+          <Link
+            href="/jobs"
+            className="text-ink-muted hover:text-ink transition-colors"
+          >
             آگهی‌ها
           </Link>
 
           {session?.user.role === "EMPLOYER" && (
             <>
-              <Link href="/employer" className="text-ink hover:text-gold">
+              <Link
+                href="/employer"
+                className="text-ink-muted hover:text-ink transition-colors"
+              >
                 داشبورد من
               </Link>
-              <Link href="/employer/new" className="text-ink hover:text-gold">
+              <Link
+                href="/employer/new"
+                className="text-ink-muted hover:text-ink transition-colors"
+              >
                 ثبت آگهی
               </Link>
             </>
           )}
 
           {session?.user.role === "CANDIDATE" && (
-            <Link href="/candidate" className="text-ink hover:text-gold">
+            <Link
+              href="/candidate"
+              className="text-ink-muted hover:text-ink transition-colors"
+            >
               درخواست‌های من
             </Link>
           )}
 
           {!session && (
             <>
-              <Link href="/login" className="text-ink hover:text-gold">
+              <Link
+                href="/login"
+                className="text-ink-muted hover:text-ink transition-colors"
+              >
                 ورود
               </Link>
               <Link
                 href="/register"
-                className="border-b-2 border-gold pb-0.5 font-medium text-gold"
+                className="bg-gold hover:bg-gold-hover text-ink px-4 py-2 rounded-lg font-medium transition-colors"
               >
                 ثبت‌نام
               </Link>
