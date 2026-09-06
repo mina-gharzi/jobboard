@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
@@ -13,28 +13,74 @@ function buildLinks(role: Role) {
   ];
 
   if (role === "EMPLOYER") {
-    links.push({ href: "/employer", label: "داشبورد من" });
     links.push({ href: "/employer/new", label: "ثبت آگهی" });
-  }
-
-  if (role === "CANDIDATE") {
-    links.push({ href: "/candidate", label: "درخواست‌های من" });
   }
 
   return links;
 }
 
+function dashboardHref(role: Role) {
+  return role === "EMPLOYER" ? "/employer" : "/candidate";
+}
+
+function roleLabel(role: Role) {
+  return role === "EMPLOYER" ? "کارفرما" : "کارجو";
+}
+
+function UserIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M4.5 20c1.6-3.5 4.6-5.5 7.5-5.5s5.9 2 7.5 5.5" />
+    </svg>
+  );
+}
+
+function ChevronIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
 export default function NavLinks({ role }: { role: Role }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // پنل موبایل
+  const [menuOpen, setMenuOpen] = useState(false); // دراپ‌داون کاربر (دسکتاپ)
+  const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const links = buildLinks(role);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   async function handleSignOut() {
     await authClient.signOut();
     setOpen(false);
+    setMenuOpen(false);
     router.push("/");
     router.refresh();
   }
+
+  const roleBadgeClasses =
+    role === "EMPLOYER"
+      ? "border-gold/40 bg-gold/10 text-ink hover:bg-gold/20"
+      : "border-slate/30 bg-slate/10 text-slate-dark hover:bg-slate/20";
 
   return (
     <>
@@ -51,12 +97,34 @@ export default function NavLinks({ role }: { role: Role }) {
         ))}
 
         {role ? (
-          <button
-            onClick={handleSignOut}
-            className="text-ink-muted transition-colors hover:text-danger-dark"
-          >
-            خروج
-          </button>
+          <div className="relative" ref={menuRef}>
+            <button
+              onClick={() => setMenuOpen((o) => !o)}
+              className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${roleBadgeClasses}`}
+            >
+              <UserIcon className="h-4 w-4" />
+              {roleLabel(role)}
+              <ChevronIcon className={`h-3.5 w-3.5 transition-transform ${menuOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {menuOpen && (
+              <div className="absolute end-0 top-full mt-2 w-44 overflow-hidden rounded-xl border border-line bg-paper shadow-lg">
+                <Link
+                  href={dashboardHref(role)}
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-ink transition-colors hover:bg-slate/10"
+                >
+                  داشبورد من
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="block w-full px-4 py-2.5 text-right text-sm text-danger-dark transition-colors hover:bg-danger/10"
+                >
+                  خروج
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
           <>
             <Link
@@ -92,47 +160,86 @@ export default function NavLinks({ role }: { role: Role }) {
         )}
       </button>
 
-      {/* پنل موبایل */}
-      {open && (
-        <div className="absolute inset-x-0 top-full flex flex-col gap-4 border-b border-line bg-paper/95 px-6 py-5 text-sm font-medium backdrop-blur-md md:hidden">
-          {links.map((link) => (
+      {/* پس‌زمینه‌ی تیره پشت دراور */}
+      <div
+        onClick={() => setOpen(false)}
+        className={`fixed inset-0 z-40 bg-ink/40 transition-opacity duration-300 md:hidden ${
+          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      />
+
+      {/* دراور موبایل - از راست به چپ باز می‌شود */}
+      <div
+        className={`fixed inset-y-0 right-0 z-50 flex w-72 max-w-[80%] flex-col gap-4 bg-paper px-6 py-6 text-sm font-medium shadow-2xl transition-transform duration-300 ease-out md:hidden ${
+          open ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="mb-2 flex items-center justify-between">
+          <span className="font-display text-lg font-bold text-ink">منو</span>
+          <button
+            onClick={() => setOpen(false)}
+            aria-label="بستن منو"
+            className="flex h-8 w-8 items-center justify-center rounded-md text-ink-muted transition-colors hover:bg-slate/10"
+          >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M6 6l12 12M18 6 6 18" />
+            </svg>
+          </button>
+        </div>
+
+        {links.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={() => setOpen(false)}
+            className="text-ink-muted transition-colors hover:text-ink"
+          >
+            {link.label}
+          </Link>
+        ))}
+
+        {role ? (
+          <>
+            <div className="my-1 border-t border-line" />
+
+            <span
+              className={`inline-flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs ${roleBadgeClasses}`}
+            >
+              <UserIcon className="h-3.5 w-3.5" />
+              {roleLabel(role)}
+            </span>
+
             <Link
-              key={link.href}
-              href={link.href}
+              href={dashboardHref(role)}
               onClick={() => setOpen(false)}
               className="text-ink-muted transition-colors hover:text-ink"
             >
-              {link.label}
+              داشبورد من
             </Link>
-          ))}
 
-          {role ? (
-            <button
-              onClick={handleSignOut}
-              className="text-right text-danger"
-            >
+            <button onClick={handleSignOut} className="text-right text-danger-dark">
               خروج
             </button>
-          ) : (
-            <>
-              <Link
-                href="/login"
-                onClick={() => setOpen(false)}
-                className="text-ink-muted transition-colors hover:text-ink"
-              >
-                ورود
-              </Link>
-              <Link
-                href="/register"
-                onClick={() => setOpen(false)}
-                className="rounded-lg bg-gold px-4 py-2 text-center font-medium text-ink transition-colors hover:bg-gold-hover"
-              >
-                ثبت‌نام
-              </Link>
-            </>
-          )}
-        </div>
-      )}
+          </>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              onClick={() => setOpen(false)}
+              className="text-ink-muted transition-colors hover:text-ink"
+            >
+              ورود
+            </Link>
+            <Link
+              href="/register"
+              onClick={() => setOpen(false)}
+              className="rounded-lg bg-gold px-4 py-2 text-center font-medium text-ink transition-colors hover:bg-gold-hover"
+            >
+              ثبت‌نام
+            </Link>
+          </>
+        )}
+      </div>
     </>
   );
 }
