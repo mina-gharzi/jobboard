@@ -22,6 +22,9 @@ export default async function JobsPage({ searchParams }: Props) {
       ...(city && { city: { contains: city, mode: "insensitive" } }),
       ...(category && { category }),
     },
+    include: {
+      employer: { select: { name: true, image: true } },
+    },
     orderBy: { createdAt: "desc" },
   });
 
