@@ -33,7 +33,7 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto max-w-sm px-4 py-12">
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">ورود</h1>
+      <h1 className="mb-6 font-display text-2xl font-bold text-ink">ورود</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
@@ -42,7 +42,7 @@ export default function LoginPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="rounded-md border border-gray-300 p-3 text-sm focus:border-gray-500 focus:outline-none"
+          className="input-field rounded-md border p-3 text-sm"
         />
         <input
           placeholder="رمز عبور"
@@ -50,15 +50,15 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="rounded-md border border-gray-300 p-3 text-sm focus:border-gray-500 focus:outline-none"
+          className="input-field rounded-md border p-3 text-sm"
         />
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-danger">{error}</p>}
 
         <button
           type="submit"
           disabled={loading}
-          className="rounded-md bg-gray-900 py-3 text-sm text-white hover:bg-gray-800 disabled:opacity-50"
+          className="btn-primary rounded-md py-3 text-sm disabled:opacity-50"
         >
           {loading ? "در حال ورود..." : "ورود"}
         </button>

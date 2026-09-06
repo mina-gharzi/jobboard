@@ -37,25 +37,25 @@ export default function RegisterPage() {
 
   return (
     <div className="mx-auto max-w-sm px-4 py-12">
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">ثبت‌نام</h1>
+      <h1 className="mb-6 font-display text-2xl font-bold text-ink">ثبت‌نام</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="flex gap-4 rounded-lg border border-gray-200 p-3">
-          <label className="flex flex-1 cursor-pointer items-center gap-2 text-sm">
+        <div className="flex gap-4 rounded-lg border border-line p-3">
+          <label className="flex flex-1 cursor-pointer items-center gap-2 text-sm text-ink">
             <input
               type="radio"
               checked={role === "CANDIDATE"}
               onChange={() => setRole("CANDIDATE")}
-              className="accent-gray-900"
+              className="accent-slate"
             />
             کارجو هستم
           </label>
-          <label className="flex flex-1 cursor-pointer items-center gap-2 text-sm">
+          <label className="flex flex-1 cursor-pointer items-center gap-2 text-sm text-ink">
             <input
               type="radio"
               checked={role === "EMPLOYER"}
               onChange={() => setRole("EMPLOYER")}
-              className="accent-gray-900"
+              className="accent-slate"
             />
             کارفرما هستم
           </label>
@@ -66,7 +66,7 @@ export default function RegisterPage() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="rounded-md border border-gray-300 p-3 text-sm focus:border-gray-500 focus:outline-none"
+          className="input-field rounded-md border p-3 text-sm"
         />
         <input
           placeholder="ایمیل"
@@ -74,7 +74,7 @@ export default function RegisterPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="rounded-md border border-gray-300 p-3 text-sm focus:border-gray-500 focus:outline-none"
+          className="input-field rounded-md border p-3 text-sm"
         />
         <input
           placeholder="رمز عبور"
@@ -82,15 +82,15 @@ export default function RegisterPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="rounded-md border border-gray-300 p-3 text-sm focus:border-gray-500 focus:outline-none"
+          className="input-field rounded-md border p-3 text-sm"
         />
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-danger">{error}</p>}
 
         <button
           type="submit"
           disabled={loading}
-          className="rounded-md bg-gray-900 py-3 text-sm text-white hover:bg-gray-800 disabled:opacity-50"
+          className="btn-primary rounded-md py-3 text-sm disabled:opacity-50"
         >
           {loading ? "در حال ثبت‌نام..." : "ثبت‌نام"}
         </button>

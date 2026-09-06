@@ -16,49 +16,46 @@ export default async function NewJobPage() {
 
   return (
     <div className="mx-auto max-w-lg px-4 py-12">
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">ثبت آگهی جدید</h1>
+      <h1 className="mb-6 font-display text-2xl font-bold text-ink">ثبت آگهی جدید</h1>
 
       <form action={createJob} className="flex flex-col gap-4">
         <input
           name="title"
           placeholder="عنوان شغل"
           required
-          className="rounded-md border border-gray-300 p-3 text-sm focus:border-gray-500 focus:outline-none"
+          className="input-field rounded-md border p-3 text-sm"
         />
         <textarea
           name="description"
           placeholder="توضیحات"
           required
           rows={6}
-          className="rounded-md border border-gray-300 p-3 text-sm focus:border-gray-500 focus:outline-none"
+          className="input-field rounded-md border p-3 text-sm"
         />
         <input
           name="category"
           placeholder="دسته‌بندی (مثلاً فرانت‌اند)"
           required
-          className="rounded-md border border-gray-300 p-3 text-sm focus:border-gray-500 focus:outline-none"
+          className="input-field rounded-md border p-3 text-sm"
         />
         <input
           name="city"
           placeholder="شهر"
           required
-          className="rounded-md border border-gray-300 p-3 text-sm focus:border-gray-500 focus:outline-none"
+          className="input-field rounded-md border p-3 text-sm"
         />
         <select
           name="remoteType"
           required
           defaultValue=""
-          className="rounded-md border border-gray-300 p-3 text-sm focus:border-gray-500 focus:outline-none"
+          className="input-field rounded-md border p-3 text-sm"
         >
           <option value="" disabled>نوع همکاری را انتخاب کنید</option>
           <option value="ONSITE">حضوری</option>
           <option value="REMOTE">دورکاری</option>
           <option value="HYBRID">ترکیبی</option>
         </select>
-        <button
-          type="submit"
-          className="rounded-md bg-gray-900 py-3 text-sm text-white hover:bg-gray-800"
-        >
+        <button type="submit" className="btn-primary rounded-md py-3 text-sm">
           ثبت آگهی
         </button>
       </form>

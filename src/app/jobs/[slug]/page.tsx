@@ -39,8 +39,8 @@ export default async function JobDetailPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
-      <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
-      <p className="mt-2 text-sm text-gray-500">
+      <h1 className="font-display text-2xl font-bold text-ink">{job.title}</h1>
+      <p className="mt-2 text-sm text-ink-muted">
         {job.city} ·{" "}
         {job.remoteType === "ONSITE"
           ? "حضوری"
@@ -51,25 +51,25 @@ export default async function JobDetailPage({ params }: Props) {
       </p>
 
       {(job.salaryMin || job.salaryMax) && (
-        <p className="mt-2 text-sm text-gray-700">
+        <p className="mt-2 text-sm text-ink">
           حقوق: {job.salaryMin ?? "؟"} تا {job.salaryMax ?? "؟"}
         </p>
       )}
 
-      <hr className="my-6 border-gray-200" />
+      <hr className="divider my-6 border-t" />
 
-      <p className="whitespace-pre-wrap text-gray-800 leading-7">
+      <p className="whitespace-pre-wrap text-ink leading-7">
         {job.description}
       </p>
 
-      <hr className="my-6 border-gray-200" />
+      <hr className="divider my-6 border-t" />
 
       {session?.user.role === "CANDIDATE" && <ApplyForm jobId={job.id} />}
       {!session && (
-        <p className="text-sm text-gray-500">برای اپلای کردن باید وارد شوید.</p>
+        <p className="text-sm text-ink-muted">برای اپلای کردن باید وارد شوید.</p>
       )}
       {session?.user.role === "EMPLOYER" && (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-ink-muted">
           کارفرماها نمی‌توانند اپلای کنند.
         </p>
       )}

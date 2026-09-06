@@ -12,26 +12,24 @@ export default function ApplyForm({ jobId }: { jobId: string }) {
 
   return (
     <form action={formAction} className="flex flex-col gap-3">
-      <h3 className="text-lg font-semibold text-gray-900">
+      <h3 className="font-display text-lg font-semibold text-ink">
         اپلای برای این شغل
       </h3>
       <textarea
         name="coverLetter"
         placeholder="متن انگیزه‌نامه (اختیاری)"
         rows={4}
-        className="rounded-md border border-gray-300 p-3 text-sm focus:border-gray-500 focus:outline-none"
+        className="input-field rounded-md border p-3 text-sm"
       />
       <button
         type="submit"
         disabled={isPending}
-        className="w-fit rounded-md bg-gray-900 px-5 py-2 text-sm text-white hover:bg-gray-800 disabled:opacity-50"
+        className="btn-primary w-fit rounded-md px-5 py-2 text-sm disabled:opacity-50"
       >
         {isPending ? "در حال ارسال..." : "ارسال درخواست"}
       </button>
       {state.message && (
-        <p
-          className={`text-sm ${state.success ? "text-green-600" : "text-red-600"}`}
-        >
+        <p className={`text-sm ${state.success ? "text-success" : "text-danger"}`}>
           {state.message}
         </p>
       )}

@@ -11,6 +11,11 @@
   --color-slate-dark: #3d5f78;
   --color-line: #d1d9e0;
 
+  --color-success: #4f7942;
+  --color-success-dark: #3c5c32;
+  --color-danger: #b5533f;
+  --color-danger-dark: #8f3f2e;
+
   --font-display: "Noto Naskh Arabic", serif;
   --font-body: "Vazirmatn", sans-serif;
 }
@@ -89,4 +94,47 @@ body {
 .accent-only {
   background: #c2a56d;
   color: #2c3947;
+}
+
+/* بج‌های وضعیت درخواست */
+.badge {
+  display: inline-block;
+  border-radius: 9999px;
+  border-width: 1px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-pending {
+  background: rgba(194, 165, 109, 0.15);
+  border-color: rgba(194, 165, 109, 0.35);
+  color: #8a6d3b;
+}
+
+.badge-reviewed {
+  background: rgba(84, 122, 149, 0.12);
+  border-color: rgba(84, 122, 149, 0.3);
+  color: var(--color-slate-dark);
+}
+
+.badge-accepted {
+  background: rgba(79, 121, 66, 0.12);
+  border-color: rgba(79, 121, 66, 0.3);
+  color: var(--color-success-dark);
+}
+
+.badge-rejected {
+  background: rgba(181, 83, 63, 0.12);
+  border-color: rgba(181, 83, 63, 0.3);
+  color: var(--color-danger-dark);
+}
+
+/* متن پیام‌های موفقیت / خطا در فرم‌ها */
+.text-success {
+  color: var(--color-success-dark);
+}
+
+.text-danger {
+  color: var(--color-danger-dark);
 }

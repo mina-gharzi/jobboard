@@ -24,31 +24,31 @@ export default async function EmployerDashboard() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">آگهی‌های من</h1>
+        <h1 className="font-display text-2xl font-bold text-ink">آگهی‌های من</h1>
         <Link
           href="/employer/new"
-          className="rounded-md bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-800"
+          className="btn-primary rounded-md px-4 py-2 text-sm"
         >
           + ثبت آگهی جدید
         </Link>
       </div>
 
       {jobs.length === 0 ? (
-        <p className="text-gray-500">هنوز آگهی‌ای ثبت نکرده‌اید.</p>
+        <p className="text-ink-muted">هنوز آگهی‌ای ثبت نکرده‌اید.</p>
       ) : (
         <ul className="flex flex-col gap-4">
           {jobs.map((job) => (
-            <li key={job.id} className="rounded-lg border border-gray-200 p-5">
-              <h3 className="text-lg font-semibold text-gray-900">{job.title}</h3>
-              <p className="mt-1 text-sm text-gray-500">
+            <li key={job.id} className="rounded-lg border border-line p-5">
+              <h3 className="font-display text-lg font-semibold text-ink">{job.title}</h3>
+              <p className="mt-1 text-sm text-ink-muted">
                 {job.city} · {job.remoteType === "ONSITE" ? "حضوری" : job.remoteType === "REMOTE" ? "دورکاری" : "ترکیبی"}
               </p>
-              <p className="mt-2 text-sm text-gray-700">
+              <p className="mt-2 text-sm text-ink">
                 {job._count.applications} درخواست دریافت‌شده
               </p>
               <Link
                 href={`/employer/jobs/${job.id}/applicants`}
-                className="mt-3 inline-block text-sm text-gray-900 underline"
+                className="mt-3 inline-block text-sm text-slate underline"
               >
                 مشاهده‌ی درخواست‌ها
               </Link>

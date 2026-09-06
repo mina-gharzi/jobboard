@@ -7,7 +7,7 @@ export default async function Navbar() {
 
   return (
     <nav className="bg-paper/80 backdrop-blur-md border-b border-line sticky top-0 z-50">
-      <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         {/* لوگو */}
         <Link
           href="/"
