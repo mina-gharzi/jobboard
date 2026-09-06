@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+@theme {
+  --color-paper: #f3f1ec;
+  --color-ink: #14181c;
+  --color-ink-muted: #4a5158;
+  --color-gold: #c97a1a;
+  --color-slate: #2b3a42;
+  --color-line: #dad3c3;
+
+  --font-display: "Noto Naskh Arabic", serif;
+  --font-body: "Vazirmatn", sans-serif;
+}
 :root {
   --background: #ffffff;
   --foreground: #171717;
