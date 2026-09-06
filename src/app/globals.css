@@ -129,7 +129,11 @@ body {
   border-color: rgba(181, 83, 63, 0.3);
   color: var(--color-danger-dark);
 }
-
+.badge-neutral {
+  background: rgba(84, 122, 149, 0.1);
+  border-color: rgba(84, 122, 149, 0.25);
+  color: var(--color-slate-dark);
+}
 /* متن پیام‌های موفقیت / خطا در فرم‌ها */
 .text-success {
   color: var(--color-success-dark);

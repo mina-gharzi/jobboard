@@ -122,7 +122,7 @@ export default function NavLinks({ role }: { role: Role }) {
             </button>
 
             {menuOpen && (
-              <div className="absolute end-0 top-full mt-2 w-44 overflow-hidden rounded-xl border border-line bg-paper shadow-lg">
+              <div className="absolute inset-e-0 top-full mt-2 w-44 overflow-hidden rounded-xl border border-line bg-paper shadow-lg">
                 <Link
                   href={dashboardHref(role)}
                   onClick={() => setMenuOpen(false)}

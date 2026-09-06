@@ -58,6 +58,18 @@ export default async function JobDetailPage({ params }: Props) {
     notFound();
   }
 
+  const existingApplication =
+    session?.user.role === "CANDIDATE"
+      ? await prisma.application.findUnique({
+          where: {
+            jobId_candidateId: {
+              jobId: job.id,
+              candidateId: session.user.id,
+            },
+          },
+        })
+      : null;
+
   const salary = formatSalary(job.salaryMin, job.salaryMax);
   const initial = job.employer?.name?.trim()?.[0] ?? job.category.trim()[0] ?? "؟";
 
@@ -184,7 +196,7 @@ export default async function JobDetailPage({ params }: Props) {
 
           {/* اپلای در نمای موبایل، زیر توضیحات */}
           <div className="mt-10 md:hidden">
-            <ApplyBox session={session} jobId={job.id} />
+            <ApplyBox session={session} jobId={job.id} existingApplication={existingApplication} />
           </div>
 
           {relatedJobs.length > 0 && (
@@ -207,7 +219,7 @@ export default async function JobDetailPage({ params }: Props) {
         {/* سایدبار اپلای — فقط دسکتاپ */}
         <div className="hidden md:block">
           <div className="sticky top-24">
-            <ApplyBox session={session} jobId={job.id} />
+            <ApplyBox session={session} jobId={job.id} existingApplication={existingApplication} />
           </div>
         </div>
       </div>
@@ -215,16 +227,44 @@ export default async function JobDetailPage({ params }: Props) {
   );
 }
 
+const applicationStatusLabels: Record<string, string> = {
+  PENDING: "در انتظار بررسی",
+  REVIEWED: "بررسی‌شده",
+  ACCEPTED: "پذیرفته‌شده",
+  REJECTED: "رد‌شده",
+};
+
+const applicationStatusBadge: Record<string, string> = {
+  PENDING: "badge badge-pending",
+  REVIEWED: "badge badge-reviewed",
+  ACCEPTED: "badge badge-accepted",
+  REJECTED: "badge badge-rejected",
+};
+
 function ApplyBox({
   session,
   jobId,
+  existingApplication,
 }: {
   session: Awaited<ReturnType<typeof auth.api.getSession>>;
   jobId: string;
+  existingApplication: { status: string } | null;
 }) {
   return (
     <div className="rounded-2xl border border-line bg-white/70 p-5 shadow-[0_14px_32px_rgba(44,57,71,0.06)]">
-      {session?.user.role === "CANDIDATE" && <ApplyForm jobId={jobId} />}
+      {session?.user.role === "CANDIDATE" && existingApplication && (
+        <div className="flex flex-col gap-2">
+          <p className="text-sm text-ink">قبلاً برای این آگهی اپلای کرده‌ای.</p>
+          <span className={`w-fit ${applicationStatusBadge[existingApplication.status]}`}>
+            {applicationStatusLabels[existingApplication.status]}
+          </span>
+        </div>
+      )}
+
+      {session?.user.role === "CANDIDATE" && !existingApplication && (
+        <ApplyForm jobId={jobId} />
+      )}
+
       {!session && (
         <div className="flex flex-col gap-3">
           <p className="text-sm text-ink-muted">
@@ -233,14 +273,12 @@ function ApplyBox({
           <Link href="/login" className="btn-primary rounded-md px-4 py-2 text-center text-sm">
             ورود
           </Link>
-          <Link
-            href="/register"
-            className="btn-gold rounded-md px-4 py-2 text-center text-sm"
-          >
+          <Link href="/register" className="btn-gold rounded-md px-4 py-2 text-center text-sm">
             ساخت حساب کاربری
           </Link>
         </div>
       )}
+
       {session?.user.role === "EMPLOYER" && (
         <p className="text-sm text-ink-muted">
           حساب‌های کارفرما نمی‌توانند برای آگهی‌ها اپلای کنند.
