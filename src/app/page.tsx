@@ -28,8 +28,8 @@ export default async function Home() {
     <main className="overflow-hidden">
       <section className="relative">
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute -right-40 -top-40 h-105 w-105 rounded-full bg-gold/10 blur-3xl" />
-          <div className="absolute -left-40 top-1/2 h-90 w-90 rounded-full bg-gold/5 blur-3xl" />
+          <div className="absolute -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-gold/10 blur-3xl" />
+          <div className="absolute -left-40 top-1/2 h-[360px] w-[360px] rounded-full bg-gold/5 blur-3xl" />
         </div>
 
         <div className="mx-auto max-w-6xl px-6 pb-20 pt-16 md:px-10 md:pb-28 md:pt-24">

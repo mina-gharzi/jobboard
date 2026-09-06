@@ -19,6 +19,7 @@ model User {
   role          String    @default("CANDIDATE")
   accounts      Account[]
   sessions      Session[]
+  jobs          Job[]     @relation("EmployerJobs")
 
   @@map("user")
 }
@@ -74,6 +75,7 @@ model Verification {
 model Job {
   id           String        @id @default(cuid())
   employerId   String
+  employer     User          @relation("EmployerJobs", fields: [employerId], references: [id])
   title        String
   slug         String        @unique
   description  String
@@ -87,6 +89,7 @@ model Job {
   applications Application[]
 
   @@index([status, category, city])
+  @@index([employerId])
 }
 
 model Application {
