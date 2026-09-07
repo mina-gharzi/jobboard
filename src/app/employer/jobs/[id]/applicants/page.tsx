@@ -32,6 +32,11 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
           orderBy: { createdAt: "desc" },
           skip: (page - 1) * PAGE_SIZE,
           take: PAGE_SIZE,
+          include: {
+            candidate: {
+              select: { name: true, email: true },
+            },
+          },
         },
       },
     }),
@@ -67,6 +72,13 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
                 <div className="flex items-center justify-between gap-3">
                   <span className={applicationStatusBadge[app.status]}>{applicationStatusLabels[app.status]}</span>
                   <span className="text-xs text-ink-muted">{formatRelativeTime(app.createdAt)}</span>
+                </div>
+
+                <div className="mt-3">
+                  <p className="font-semibold text-ink">
+                    {app.candidate.name || "بدون نام"}
+                  </p>
+                  <p className="text-sm text-ink-muted">{app.candidate.email}</p>
                 </div>
 
                 <p className="mt-3 text-sm text-ink">

@@ -34,6 +34,7 @@ export default async function Home() {
       take: 6,
       select: {
         id: true,
+        slug: true,
         title: true,
         category: true,
         city: true,
@@ -187,7 +188,7 @@ export default async function Home() {
               {recentJobs.map((job) => (
                 <Link
                   key={job.id}
-                  href={`/jobs/${job.id}`}
+                  href={`/jobs/${job.slug}`}
                   className="group relative flex flex-col overflow-hidden rounded-3xl border border-ink/10 bg-paper p-6 transition duration-300 hover:-translate-y-1 hover:border-gold/30 hover:shadow-[0_24px_60px_-24px_rgba(0,0,0,0.15)]"
                 >
                   <div className="mb-6 flex items-start gap-4">
