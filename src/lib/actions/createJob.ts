@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { createJobSchema, toStr } from "@/lib/validation";
 
 export async function createJob(formData: FormData) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -17,28 +18,22 @@ export async function createJob(formData: FormData) {
     throw new Error("فقط کارفرماها می‌توانند آگهی ثبت کنند");
   }
 
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string;
-  const category = formData.get("category") as string;
-  const city = formData.get("city") as string;
-  const remoteType = formData.get("remoteType") as string;
-  const salaryMinRaw = formData.get("salaryMin") as string;
-  const salaryMaxRaw = formData.get("salaryMax") as string;
+  const parsed = createJobSchema.safeParse({
+    title: toStr(formData.get("title")),
+    description: toStr(formData.get("description")),
+    category: toStr(formData.get("category")),
+    city: toStr(formData.get("city")),
+    remoteType: toStr(formData.get("remoteType")),
+    salaryMin: toStr(formData.get("salaryMin")),
+    salaryMax: toStr(formData.get("salaryMax")),
+  });
 
-  if (!title || !description || !category || !city || !remoteType) {
-    throw new Error("همه‌ی فیلدها الزامی هستند");
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0].message);
   }
 
-  const salaryMin = salaryMinRaw ? Number(salaryMinRaw) : null;
-  const salaryMax = salaryMaxRaw ? Number(salaryMaxRaw) : null;
-
-  if ((salaryMin !== null && Number.isNaN(salaryMin)) || (salaryMax !== null && Number.isNaN(salaryMax))) {
-    throw new Error("مقدار حقوق نامعتبر است");
-  }
-
-  if (salaryMin !== null && salaryMax !== null && salaryMin > salaryMax) {
-    throw new Error("حداقل حقوق نمی‌تواند بیشتر از حداکثر باشد");
-  }
+  const { title, description, category, city, remoteType, salaryMin, salaryMax } =
+    parsed.data;
 
   function slugify(value: string) {
     return value
@@ -58,9 +53,9 @@ export async function createJob(formData: FormData) {
       description,
       category,
       city,
-      remoteType: remoteType as "ONSITE" | "REMOTE" | "HYBRID",
-      salaryMin,
-      salaryMax,
+      remoteType,
+      salaryMin: salaryMin ?? null,
+      salaryMax: salaryMax ?? null,
       status: "PUBLISHED",
     },
   });

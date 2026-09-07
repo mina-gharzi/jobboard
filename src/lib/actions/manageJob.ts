@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { updateJobSchema, toStr } from "@/lib/validation";
 
 async function requireJobOwner(jobId: string) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -25,25 +26,23 @@ async function requireJobOwner(jobId: string) {
 export async function updateJob(jobId: string, formData: FormData) {
   await requireJobOwner(jobId);
 
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string;
-  const category = formData.get("category") as string;
-  const city = formData.get("city") as string;
-  const remoteType = formData.get("remoteType") as string;
-  const status = formData.get("status") as string;
-  const salaryMinRaw = formData.get("salaryMin") as string;
-  const salaryMaxRaw = formData.get("salaryMax") as string;
+  const parsed = updateJobSchema.safeParse({
+    title: toStr(formData.get("title")),
+    description: toStr(formData.get("description")),
+    category: toStr(formData.get("category")),
+    city: toStr(formData.get("city")),
+    remoteType: toStr(formData.get("remoteType")),
+    status: toStr(formData.get("status")),
+    salaryMin: toStr(formData.get("salaryMin")),
+    salaryMax: toStr(formData.get("salaryMax")),
+  });
 
-  if (!title || !description || !category || !city || !remoteType || !status) {
-    throw new Error("همه‌ی فیلدها الزامی هستند");
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0].message);
   }
 
-  const salaryMin = salaryMinRaw ? Number(salaryMinRaw) : null;
-  const salaryMax = salaryMaxRaw ? Number(salaryMaxRaw) : null;
-
-  if (salaryMin !== null && salaryMax !== null && salaryMin > salaryMax) {
-    throw new Error("حداقل حقوق نمی‌تواند بیشتر از حداکثر باشد");
-  }
+  const { title, description, category, city, remoteType, status, salaryMin, salaryMax } =
+    parsed.data;
 
   await prisma.job.update({
     where: { id: jobId },
@@ -52,10 +51,10 @@ export async function updateJob(jobId: string, formData: FormData) {
       description,
       category,
       city,
-      remoteType: remoteType as "ONSITE" | "REMOTE" | "HYBRID",
-      status: status as "DRAFT" | "PUBLISHED" | "CLOSED",
-      salaryMin,
-      salaryMax,
+      remoteType,
+      status,
+      salaryMin: salaryMin ?? null,
+      salaryMax: salaryMax ?? null,
     },
   });
 

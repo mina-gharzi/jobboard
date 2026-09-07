@@ -91,15 +91,9 @@ export default function JobCard({
 
   return (
     <div className="rounded-2xl border border-line bg-white/70 p-5 transition hover:border-gold hover:shadow-[0_14px_32px_rgba(44,57,71,0.08)]">
-      {footer ? (
-        <Link href={`/jobs/${job.slug}`} className="block">
-          {content}
-        </Link>
-      ) : (
-        <Link href={`/jobs/${job.slug}`} className="block">
-          {content}
-        </Link>
-      )}
+      <Link href={`/jobs/${job.slug}`} className="block">
+        {content}
+      </Link>
       {footer && <div className="mt-4 border-t border-line pt-3">{footer}</div>}
     </div>
   );

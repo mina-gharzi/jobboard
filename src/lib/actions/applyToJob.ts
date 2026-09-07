@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { applyToJobSchema, toStr } from "@/lib/validation";
 
 type ApplyState = {
   success: boolean;
@@ -25,7 +26,19 @@ export async function applyToJob(
     return { success: false, message: "فقط کارجوها می‌توانند اپلای کنند" };
   }
 
-  const coverLetter = formData.get("coverLetter") as string;
+  const job = await prisma.job.findUnique({ where: { id: jobId } });
+
+  if (!job || job.status !== "PUBLISHED") {
+    return { success: false, message: "این آگهی دیگر برای اپلای در دسترس نیست" };
+  }
+
+  const parsed = applyToJobSchema.safeParse({
+    coverLetter: toStr(formData.get("coverLetter")),
+  });
+
+  if (!parsed.success) {
+    return { success: false, message: parsed.error.issues[0].message };
+  }
 
   const existing = await prisma.application.findUnique({
     where: {
@@ -44,7 +57,7 @@ export async function applyToJob(
     data: {
       jobId,
       candidateId: session.user.id,
-      coverLetter: coverLetter || null,
+      coverLetter: parsed.data.coverLetter || null,
     },
   });
 

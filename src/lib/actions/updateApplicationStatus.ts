@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { updateApplicationStatusSchema, toStr } from "@/lib/validation";
 
 export async function updateApplicationStatus(formData: FormData) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -12,8 +13,16 @@ export async function updateApplicationStatus(formData: FormData) {
     throw new Error("دسترسی غیرمجاز");
   }
 
-  const applicationId = formData.get("applicationId") as string;
-  const newStatus = formData.get("status") as string;
+  const parsed = updateApplicationStatusSchema.safeParse({
+    applicationId: toStr(formData.get("applicationId")),
+    status: toStr(formData.get("status")),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0].message);
+  }
+
+  const { applicationId, status } = parsed.data;
 
   // چک مالکیت: این درخواست باید مال یکی از آگهی‌های همین کارفرما باشه
   const application = await prisma.application.findUnique({
@@ -27,7 +36,7 @@ export async function updateApplicationStatus(formData: FormData) {
 
   await prisma.application.update({
     where: { id: applicationId },
-    data: { status: newStatus as "PENDING" | "REVIEWED" | "ACCEPTED" | "REJECTED" },
+    data: { status },
   });
 
   revalidatePath(`/employer/jobs/${application.jobId}/applicants`);
