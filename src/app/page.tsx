@@ -54,8 +54,8 @@ export default async function Home() {
       {/* ───── Hero ───── */}
       <section className="relative">
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute -right-40 -top-40 h-[480px] w-[480px] rounded-full bg-gold/10 blur-3xl" />
-          <div className="absolute -bottom-40 -left-40 h-[380px] w-[380px] rounded-full bg-gold/5 blur-3xl" />
+          <div className="absolute -right-40 -top-40 h-120 w-120 rounded-full bg-gold/10 blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 h-95 w-95 rounded-full bg-gold/5 blur-3xl" />
         </div>
 
         <div className="mx-auto max-w-7xl px-6 pb-20 pt-16 md:px-10 md:pb-24 md:pt-24">
@@ -67,7 +67,7 @@ export default async function Home() {
 
             <h1 className="mt-8 text-4xl font-black leading-[1.3] tracking-tight text-ink sm:text-5xl md:text-7xl">
               فرصت‌ها را پیدا کن.
-              <span className="mt-2 block bg-gradient-to-l from-gold via-gold to-gold/50 bg-clip-text text-transparent">
+              <span className="mt-2 block bg-linear-to-l from-gold via-gold to-gold/50 bg-clip-text text-transparent">
                 آینده را بساز.
               </span>
             </h1>
@@ -165,7 +165,7 @@ export default async function Home() {
       </section>
 
       {/* ───── Latest Jobs ───── */}
-      <section className="border-t border-ink/5 bg-ink/[0.02]">
+      <section className="border-t border-ink/5 bg-ink/2">
         <div className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-24">
           <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -191,7 +191,7 @@ export default async function Home() {
                   className="group relative flex flex-col overflow-hidden rounded-3xl border border-ink/10 bg-paper p-6 transition duration-300 hover:-translate-y-1 hover:border-gold/30 hover:shadow-[0_24px_60px_-24px_rgba(0,0,0,0.15)]"
                 >
                   <div className="mb-6 flex items-start gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-ink/[0.04] text-base font-black text-ink">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-ink/4 text-base font-black text-ink">
                       {(job.employer?.name ?? "ک")[0]}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -208,7 +208,7 @@ export default async function Home() {
                     <span className="rounded-full bg-gold/10 px-3 py-1.5 text-xs font-medium text-ink">
                       {job.category}
                     </span>
-                    <span className="rounded-full bg-ink/[0.04] px-3 py-1.5 text-xs text-ink-muted">
+                    <span className="rounded-full bg-ink/4 px-3 py-1.5 text-xs text-ink-muted">
                       {job.city || "تهران"}
                     </span>
                     {job.remoteType && (

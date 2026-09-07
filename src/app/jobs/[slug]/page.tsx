@@ -126,7 +126,7 @@ export default async function JobDetailPage({ params }: Props) {
         <div className="min-w-0">
           {/* کارت هدر آگهی */}
           <div className="overflow-hidden rounded-3xl border border-line bg-white/70 shadow-[0_24px_64px_-32px_rgba(44,57,71,0.18)] backdrop-blur">
-            <div className="h-20 bg-gradient-to-l from-gold/20 via-gold/5 to-transparent" />
+            <div className="h-20 bg-linear-to-l from-gold/20 via-gold/5 to-transparent" />
 
             <div className="relative px-5 pb-5 md:px-8 md:pb-7">
               <div className="flex items-start gap-4">
@@ -425,7 +425,7 @@ function ApplyBox({
       {/* کاربر مهمان */}
       {!session && (
         <div className="p-5">
-          <div className="rounded-2xl bg-gradient-to-br from-gold/10 via-white to-transparent p-5">
+          <div className="rounded-2xl bg-linear-to-br from-gold/10 via-white to-transparent p-5">
             <h3 className="text-base font-bold text-ink">
               برای اپلای باید وارد شوی
             </h3>

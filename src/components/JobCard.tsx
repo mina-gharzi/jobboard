@@ -36,7 +36,7 @@ export default function JobCard({
       {/* نوار طلایی هنگام hover */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-y-6 right-0 w-[3px] origin-bottom scale-y-0 rounded-full bg-gold transition-transform duration-300 group-hover:scale-y-100"
+        className="pointer-events-none absolute inset-y-6 right-0 w-0.75 origin-bottom scale-y-0 rounded-full bg-gold transition-transform duration-300 group-hover:scale-y-100"
       />
 
       <Link href={`/jobs/${job.slug}`} className="flex-1 p-5">
