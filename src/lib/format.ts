@@ -1,8 +1,15 @@
-export const remoteTypeLabels: Record<string, string> = {
+import { RemoteType } from "@/generated/prisma/enums";
+
+export const remoteTypeLabels: Record<RemoteType, string> = {
   ONSITE: "حضوری",
   REMOTE: "دورکاری",
   HYBRID: "ترکیبی",
 };
+
+export const remoteTypeOptions = Object.values(RemoteType).map((value) => ({
+  value,
+  label: remoteTypeLabels[value],
+}));
 
 /**
  * فرض بر این است که مبلغ حقوق به تومان ذخیره شده است.

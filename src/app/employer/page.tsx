@@ -4,20 +4,9 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import JobCard from "@/components/JobCard";
+import { jobStatusLabels, jobStatusBadge } from "@/lib/status";
 
 const PAGE_SIZE = 6;
-
-const statusLabels: Record<string, string> = {
-  DRAFT: "پیش‌نویس",
-  PUBLISHED: "منتشرشده",
-  CLOSED: "بسته‌شده",
-};
-
-const statusBadge: Record<string, string> = {
-  DRAFT: "badge badge-neutral",
-  PUBLISHED: "badge badge-accepted",
-  CLOSED: "badge badge-rejected",
-};
 
 type Props = {
   searchParams: Promise<{ page?: string }>;
@@ -66,7 +55,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
                   footer={
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <span className={statusBadge[job.status]}>{statusLabels[job.status]}</span>
+                        <span className={jobStatusBadge[job.status]}>{jobStatusLabels[job.status]}</span>
                         <span className="text-sm text-ink-muted">
                           {job._count.applications} درخواست دریافت‌شده
                         </span>

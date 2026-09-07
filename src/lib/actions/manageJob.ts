@@ -7,24 +7,46 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { updateJobSchema, toStr } from "@/lib/validation";
 
-async function requireJobOwner(jobId: string) {
+async function getOwnedJob(jobId: string) {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session || session.user.role !== "EMPLOYER") {
-    throw new Error("دسترسی غیرمجاز");
+    return { job: null, error: "دسترسی غیرمجاز" } as const;
   }
 
   const job = await prisma.job.findUnique({ where: { id: jobId } });
 
   if (!job || job.employerId !== session.user.id) {
-    throw new Error("این آگهی متعلق به شما نیست");
+    return { job: null, error: "این آگهی متعلق به شما نیست" } as const;
   }
 
-  return job;
+  return { job, error: null } as const;
 }
 
-export async function updateJob(jobId: string, formData: FormData) {
-  await requireJobOwner(jobId);
+export type UpdateJobState = {
+  error?: string;
+  fieldErrors?: {
+    title?: string;
+    description?: string;
+    category?: string;
+    city?: string;
+    remoteType?: string;
+    status?: string;
+    salaryMin?: string;
+    salaryMax?: string;
+  };
+};
+
+export async function updateJob(
+  jobId: string,
+  _prevState: UpdateJobState,
+  formData: FormData
+): Promise<UpdateJobState> {
+  const { job, error } = await getOwnedJob(jobId);
+
+  if (!job) {
+    return { error: error ?? "خطایی رخ داد" };
+  }
 
   const parsed = updateJobSchema.safeParse({
     title: toStr(formData.get("title")),
@@ -38,7 +60,19 @@ export async function updateJob(jobId: string, formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0].message);
+    const fe = parsed.error.flatten().fieldErrors;
+    return {
+      fieldErrors: {
+        title: fe.title?.[0],
+        description: fe.description?.[0],
+        category: fe.category?.[0],
+        city: fe.city?.[0],
+        remoteType: fe.remoteType?.[0],
+        status: fe.status?.[0],
+        salaryMin: fe.salaryMin?.[0],
+        salaryMax: fe.salaryMax?.[0],
+      },
+    };
   }
 
   const { title, description, category, city, remoteType, status, salaryMin, salaryMax } =
@@ -63,8 +97,20 @@ export async function updateJob(jobId: string, formData: FormData) {
   redirect("/employer");
 }
 
-export async function deleteJob(jobId: string) {
-  await requireJobOwner(jobId);
+export type DeleteJobState = {
+  error?: string;
+};
+
+export async function deleteJob(
+  jobId: string,
+  _prevState: DeleteJobState,
+  _formData: FormData
+): Promise<DeleteJobState> {
+  const { job, error } = await getOwnedJob(jobId);
+
+  if (!job) {
+    return { error: error ?? "خطایی رخ داد" };
+  }
 
   // چون Application به Job وصل است، اول درخواست‌های مرتبط حذف می‌شوند
   await prisma.$transaction([

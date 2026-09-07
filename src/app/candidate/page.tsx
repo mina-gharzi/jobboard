@@ -4,22 +4,9 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import JobCard from "@/components/JobCard";
+import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
 
 const PAGE_SIZE = 6;
-
-const statusLabels: Record<string, string> = {
-  PENDING: "در انتظار بررسی",
-  REVIEWED: "بررسی‌شده",
-  ACCEPTED: "پذیرفته‌شده",
-  REJECTED: "رد‌شده",
-};
-
-const statusBadge: Record<string, string> = {
-  PENDING: "badge badge-pending",
-  REVIEWED: "badge badge-reviewed",
-  ACCEPTED: "badge badge-accepted",
-  REJECTED: "badge badge-rejected",
-};
 
 type Props = {
   searchParams: Promise<{ page?: string }>;
@@ -63,7 +50,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
                 <JobCard
                   job={app.job}
                   footer={
-                    <span className={statusBadge[app.status]}>{statusLabels[app.status]}</span>
+                    <span className={applicationStatusBadge[app.status]}>{applicationStatusLabels[app.status]}</span>
                   }
                 />
               </li>

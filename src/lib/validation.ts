@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { RemoteType, JobStatus, ApplicationStatus, Role } from "@/generated/prisma/enums";
+import { JOB_CATEGORIES } from "@/lib/categories";
 
 /**
  * FormData.get() می‌تواند null یا File برگرداند؛ این تابع همیشه یک رشته
@@ -16,18 +18,26 @@ const optionalSalary = z.preprocess((val) => {
   .nonnegative("حقوق نمی‌تواند منفی باشد")
   .optional());
 
-const remoteTypeSchema = z.enum(["ONSITE", "REMOTE", "HYBRID"], {
+// این Enumها مستقیماً از generated/prisma/enums.ts می‌آیند، نه رشته‌های
+// دستی جدا — اگر روزی مقداری به schema.prisma اضافه/حذف شود، همین‌جا و
+// فقط همین‌جا (بعد از prisma generate) به‌روزرسانی می‌شود.
+const remoteTypeSchema = z.nativeEnum(RemoteType, {
   errorMap: () => ({ message: "نوع همکاری نامعتبر است" }),
 });
 
-const jobStatusSchema = z.enum(["DRAFT", "PUBLISHED", "CLOSED"], {
+const jobStatusSchema = z.nativeEnum(JobStatus, {
   errorMap: () => ({ message: "وضعیت آگهی نامعتبر است" }),
 });
 
-const applicationStatusSchema = z.enum(
-  ["PENDING", "REVIEWED", "ACCEPTED", "REJECTED"],
-  { errorMap: () => ({ message: "وضعیت درخواست نامعتبر است" }) }
-);
+const applicationStatusSchema = z.nativeEnum(ApplicationStatus, {
+  errorMap: () => ({ message: "وضعیت درخواست نامعتبر است" }),
+});
+
+export const userRoleSchema = z.nativeEnum(Role);
+
+const categorySchema = z.enum(JOB_CATEGORIES, {
+  errorMap: () => ({ message: "دسته‌بندی نامعتبر است" }),
+});
 
 const jobFieldsSchema = z.object({
   title: z
@@ -40,11 +50,7 @@ const jobFieldsSchema = z.object({
     .trim()
     .min(20, "توضیحات باید حداقل ۲۰ کاراکتر باشد")
     .max(5000, "توضیحات بیش از حد طولانی است"),
-  category: z
-    .string()
-    .trim()
-    .min(2, "دسته‌بندی را وارد کنید")
-    .max(100, "دسته‌بندی بیش از حد طولانی است"),
+  category: categorySchema,
   city: z
     .string()
     .trim()

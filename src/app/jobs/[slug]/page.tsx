@@ -6,6 +6,8 @@ import Link from "next/link";
 import ApplyForm from "./ApplyForm";
 import JobCard from "@/components/JobCard";
 import { remoteTypeLabels, formatSalary, formatRelativeTime } from "@/lib/format";
+import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
+import type { ApplicationStatus } from "@/generated/prisma/enums";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -227,19 +229,6 @@ export default async function JobDetailPage({ params }: Props) {
   );
 }
 
-const applicationStatusLabels: Record<string, string> = {
-  PENDING: "در انتظار بررسی",
-  REVIEWED: "بررسی‌شده",
-  ACCEPTED: "پذیرفته‌شده",
-  REJECTED: "رد‌شده",
-};
-
-const applicationStatusBadge: Record<string, string> = {
-  PENDING: "badge badge-pending",
-  REVIEWED: "badge badge-reviewed",
-  ACCEPTED: "badge badge-accepted",
-  REJECTED: "badge badge-rejected",
-};
 
 function ApplyBox({
   session,
@@ -248,7 +237,7 @@ function ApplyBox({
 }: {
   session: Awaited<ReturnType<typeof auth.api.getSession>>;
   jobId: string;
-  existingApplication: { status: string } | null;
+  existingApplication: { status: ApplicationStatus } | null;
 }) {
   return (
     <div className="rounded-2xl border border-line bg-white/70 p-5 shadow-[0_14px_32px_rgba(44,57,71,0.06)]">

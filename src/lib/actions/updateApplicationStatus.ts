@@ -6,11 +6,18 @@ import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { updateApplicationStatusSchema, toStr } from "@/lib/validation";
 
-export async function updateApplicationStatus(formData: FormData) {
+export type UpdateStatusState = {
+  error?: string;
+};
+
+export async function updateApplicationStatus(
+  _prevState: UpdateStatusState,
+  formData: FormData
+): Promise<UpdateStatusState> {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session || session.user.role !== "EMPLOYER") {
-    throw new Error("دسترسی غیرمجاز");
+    return { error: "دسترسی غیرمجاز" };
   }
 
   const parsed = updateApplicationStatusSchema.safeParse({
@@ -19,7 +26,7 @@ export async function updateApplicationStatus(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0].message);
+    return { error: parsed.error.issues[0].message };
   }
 
   const { applicationId, status } = parsed.data;
@@ -31,7 +38,7 @@ export async function updateApplicationStatus(formData: FormData) {
   });
 
   if (!application || application.job.employerId !== session.user.id) {
-    throw new Error("این درخواست متعلق به شما نیست");
+    return { error: "این درخواست متعلق به شما نیست" };
   }
 
   await prisma.application.update({
@@ -40,4 +47,6 @@ export async function updateApplicationStatus(formData: FormData) {
   });
 
   revalidatePath(`/employer/jobs/${application.jobId}/applicants`);
+
+  return {};
 }

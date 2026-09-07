@@ -7,15 +7,31 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createJobSchema, toStr } from "@/lib/validation";
 
-export async function createJob(formData: FormData) {
+export type CreateJobState = {
+  errors: {
+    form?: string;
+    title?: string;
+    description?: string;
+    category?: string;
+    city?: string;
+    remoteType?: string;
+    salaryMin?: string;
+    salaryMax?: string;
+  };
+};
+
+export async function createJob(
+  _prevState: CreateJobState,
+  formData: FormData
+): Promise<CreateJobState> {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
-    throw new Error("باید وارد شوید");
+    return { errors: { form: "باید وارد شوید" } };
   }
 
   if (session.user.role !== "EMPLOYER") {
-    throw new Error("فقط کارفرماها می‌توانند آگهی ثبت کنند");
+    return { errors: { form: "فقط کارفرماها می‌توانند آگهی ثبت کنند" } };
   }
 
   const parsed = createJobSchema.safeParse({
@@ -29,7 +45,18 @@ export async function createJob(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0].message);
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    return {
+      errors: {
+        title: fieldErrors.title?.[0],
+        description: fieldErrors.description?.[0],
+        category: fieldErrors.category?.[0],
+        city: fieldErrors.city?.[0],
+        remoteType: fieldErrors.remoteType?.[0],
+        salaryMin: fieldErrors.salaryMin?.[0],
+        salaryMax: fieldErrors.salaryMax?.[0],
+      },
+    };
   }
 
   const { title, description, category, city, remoteType, salaryMin, salaryMax } =

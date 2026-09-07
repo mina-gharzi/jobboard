@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { remoteTypeLabels, formatSalary, formatRelativeTime } from "@/lib/format";
+import type { RemoteType } from "@/generated/prisma/enums";
 
 export type JobCardData = {
   slug: string;
   title: string;
   city: string;
-  remoteType: "ONSITE" | "REMOTE" | "HYBRID";
+  remoteType: RemoteType;
   category: string;
   salaryMin: number | null;
   salaryMax: number | null;

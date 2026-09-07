@@ -2,10 +2,12 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import NavLinks from "./NavLinks";
+import { userRoleSchema } from "@/lib/validation";
 
 export default async function Navbar() {
   const session = await auth.api.getSession({ headers: await headers() });
-  const role = (session?.user.role as "EMPLOYER" | "CANDIDATE" | undefined) ?? null;
+  const parsedRole = userRoleSchema.safeParse(session?.user.role);
+  const role = parsedRole.success ? parsedRole.data : null;
 
   return (
     <nav className="sticky top-0 z-50 border-b border-line bg-paper/80 backdrop-blur-md">
