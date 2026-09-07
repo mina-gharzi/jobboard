@@ -53,15 +53,23 @@ export async function applyToJob(
     return { success: false, message: "شما قبلاً برای این آگهی اپلای کرده‌اید" };
   }
 
-  await prisma.application.create({
-    data: {
-      jobId,
-      candidateId: session.user.id,
-      coverLetter: parsed.data.coverLetter || null,
-    },
-  });
+  try {
+    await prisma.application.create({
+      data: {
+        jobId,
+        candidateId: session.user.id,
+        coverLetter: parsed.data.coverLetter || null,
+      },
+    });
+  } catch {
+    // اگر بین چک "existing" و create، یک درخواست دیگر (مثلاً کلیک دوباره‌ی
+    // سریع کاربر) از همان جفت job/candidate ثبت شده باشد، unique constraint
+    // خطا می‌دهد؛ به‌جای نمایش خطای خام Prisma، پیام مفهومی نشان می‌دهیم.
+    return { success: false, message: "شما قبلاً برای این آگهی اپلای کرده‌اید" };
+  }
 
   revalidatePath(`/jobs`);
+  revalidatePath(`/jobs/${job.slug}`);
 
   return { success: true, message: "درخواست شما با موفقیت ثبت شد" };
 }

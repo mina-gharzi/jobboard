@@ -94,6 +94,7 @@ export async function updateJob(
 
   revalidatePath("/jobs");
   revalidatePath("/employer");
+  revalidatePath(`/jobs/${job.slug}`);
   redirect("/employer");
 }
 
@@ -120,5 +121,6 @@ export async function deleteJob(
 
   revalidatePath("/jobs");
   revalidatePath("/employer");
+  revalidatePath(`/jobs/${job.slug}`);
   redirect("/employer");
 }

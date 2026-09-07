@@ -19,18 +19,30 @@ type Props = {
 
 async function getJob(slug: string) {
   return prisma.job.findUnique({
-    where: { slug, status: "PUBLISHED" },
+    where: { slug },
     include: {
       employer: { select: { name: true, image: true } },
     },
   });
 }
 
+// آگهی برای عموم فقط وقتی PUBLISHED است قابل مشاهده است؛ کارفرمای
+// صاحب آگهی استثنا است و باید بتواند پیش‌نمایش آگهی DRAFT/CLOSED خودش را ببیند.
+function canViewJob(
+  job: { status: string; employerId: string },
+  session: Awaited<ReturnType<typeof auth.api.getSession>>
+) {
+  return job.status === "PUBLISHED" || session?.user.id === job.employerId;
+}
+
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const job = await getJob(slug);
+  const [job, session] = await Promise.all([
+    getJob(slug),
+    auth.api.getSession({ headers: await headers() }),
+  ]);
 
-  if (!job) {
+  if (!job || !canViewJob(job, session)) {
     return { title: "آگهی یافت نشد" };
   }
 
@@ -66,9 +78,11 @@ export default async function JobDetailPage({ params }: Props) {
     headers: await headers(),
   });
 
-  if (!job) {
+  if (!job || !canViewJob(job, session)) {
     notFound();
   }
+
+  const isOwnerPreview = job.status !== "PUBLISHED";
 
   const existingApplication =
     session?.user.role === "CANDIDATE"
@@ -102,6 +116,12 @@ export default async function JobDetailPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-14">
+      {isOwnerPreview && (
+        <div className="mb-6 rounded-2xl border border-amber-300/50 bg-amber-50 px-5 py-3 text-sm text-amber-800">
+          این یک پیش‌نمایش است — این آگهی «{job.status === "DRAFT" ? "پیش‌نویس" : "بسته‌شده"}» است و برای عموم نمایش داده نمی‌شود.
+        </div>
+      )}
+
       {/* مسیر بازگشت */}
       <Link
         href="/jobs"

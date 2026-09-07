@@ -9,8 +9,17 @@ export default function DeleteJobForm({ jobId }: { jobId: string }) {
   const deleteJobWithId = deleteJob.bind(null, jobId);
   const [state, formAction, isPending] = useActionState(deleteJobWithId, initialState);
 
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    const confirmed = window.confirm(
+      "این آگهی و همه‌ی درخواست‌های ثبت‌شده برای آن برای همیشه حذف می‌شوند. مطمئنید؟"
+    );
+    if (!confirmed) {
+      e.preventDefault();
+    }
+  }
+
   return (
-    <form action={formAction} className="mt-4">
+    <form action={formAction} onSubmit={handleSubmit} className="mt-4">
       {state.error && <p className="mb-2 text-sm text-danger">{state.error}</p>}
       <button
         type="submit"
