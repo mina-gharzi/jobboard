@@ -12,6 +12,7 @@ import {
 } from "@/lib/format";
 import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
 import type { ApplicationStatus } from "@/generated/prisma/enums";
+import { SITE_URL } from "@/lib/site";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -43,6 +44,73 @@ function canViewJob(
   return job.status === "PUBLISHED" || session?.user.id === job.employerId;
 }
 
+// داده‌ی ساخت‌یافته‌ی schema.org/JobPosting — برای دیده‌شدن بهتر تو
+// نتایج جستجوی گوگل (از جمله Google for Jobs).
+function buildJobPostingJsonLd(job: {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  city: string;
+  remoteType: string;
+  salaryMin: number | null;
+  salaryMax: number | null;
+  createdAt: Date;
+  employer: {
+    name: string;
+    image: string | null;
+    companyWebsite: string | null;
+  } | null;
+}) {
+  const isRemote = job.remoteType === "REMOTE";
+
+  const jsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: job.title,
+    description: job.description,
+    datePosted: job.createdAt.toISOString(),
+    hiringOrganization: {
+      "@type": "Organization",
+      name: job.employer?.name ?? "نامشخص",
+      ...(job.employer?.companyWebsite && { sameAs: job.employer.companyWebsite }),
+      ...(job.employer?.image && { logo: job.employer.image }),
+    },
+  };
+
+  if (isRemote) {
+    jsonLd.jobLocationType = "TELECOMMUTE";
+    jsonLd.applicantLocationRequirements = {
+      "@type": "Country",
+      name: "IR",
+    };
+  } else {
+    jsonLd.jobLocation = {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: job.city,
+        addressCountry: "IR",
+      },
+    };
+  }
+
+  if (job.salaryMin || job.salaryMax) {
+    jsonLd.baseSalary = {
+      "@type": "MonetaryAmount",
+      currency: "IRR",
+      value: {
+        "@type": "QuantitativeValue",
+        ...(job.salaryMin && { minValue: job.salaryMin }),
+        ...(job.salaryMax && { maxValue: job.salaryMax }),
+        unitText: "MONTH",
+      },
+    };
+  }
+
+  return jsonLd;
+}
+
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const [job, session] = await Promise.all([
@@ -54,9 +122,24 @@ export async function generateMetadata({ params }: Props) {
     return { title: "آگهی یافت نشد" };
   }
 
+  const description = job.description.slice(0, 150);
+  const url = `${SITE_URL}/jobs/${job.slug}`;
+
   return {
     title: `${job.title} — ${job.city} | Job Board`,
-    description: job.description.slice(0, 150),
+    description,
+    alternates: { canonical: url },
+    // آگهی‌های DRAFT/CLOSED فقط برای صاحبشون قابل دیدن‌ان (پیش‌نمایش)؛
+    // نباید تو نتایج گوگل بیان.
+    robots: job.status === "PUBLISHED" ? undefined : { index: false, follow: false },
+    openGraph: {
+      title: job.title,
+      description,
+      url,
+      siteName: "Job Board",
+      locale: "fa_IR",
+      type: "website",
+    },
   };
 }
 
@@ -124,6 +207,16 @@ export default async function JobDetailPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-14">
+      {!isOwnerPreview && (
+        <script
+          type="application/ld+json"
+           
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(buildJobPostingJsonLd(job)),
+          }}
+        />
+      )}
+
       {isOwnerPreview && (
         <div className="mb-6 rounded-2xl border border-amber-300/50 bg-amber-50 px-5 py-3 text-sm text-amber-800">
           این یک پیش‌نمایش است — این آگهی «{job.status === "DRAFT" ? "پیش‌نویس" : "بسته‌شده"}» است و برای عموم نمایش داده نمی‌شود.
