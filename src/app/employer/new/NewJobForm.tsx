@@ -8,7 +8,10 @@ import { JOB_CATEGORIES } from "@/lib/categories";
 const initialState: CreateJobState = { errors: {} };
 
 export default function NewJobForm() {
-  const [state, formAction, isPending] = useActionState(createJob, initialState);
+  const [state, formAction, isPending] = useActionState(
+    createJob,
+    initialState,
+  );
 
   return (
     <form
@@ -23,6 +26,7 @@ export default function NewJobForm() {
         <label className="mb-1.5 block text-sm text-ink-muted">عنوان شغل</label>
         <input
           name="title"
+          defaultValue={state.values?.title ?? ""}
           placeholder="مثلاً توسعه‌دهنده‌ی فرانت‌اند"
           className="input-field w-full rounded-md border p-3 text-sm"
         />
@@ -35,24 +39,31 @@ export default function NewJobForm() {
         <label className="mb-1.5 block text-sm text-ink-muted">توضیحات</label>
         <textarea
           name="description"
+          defaultValue={state.values?.description ?? ""}
           placeholder="شرح موقعیت شغلی، مهارت‌های مورد نیاز و..."
           rows={6}
           className="input-field w-full rounded-md border p-3 text-sm"
         />
         {state.errors.description && (
-          <p className="mt-1.5 text-sm text-danger">{state.errors.description}</p>
+          <p className="mt-1.5 text-sm text-danger">
+            {state.errors.description}
+          </p>
         )}
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-sm text-ink-muted">دسته‌بندی</label>
+          <label className="mb-1.5 block text-sm text-ink-muted">
+            دسته‌بندی
+          </label>
           <select
             name="category"
-            defaultValue=""
+            defaultValue={state.values?.category ?? ""}
             className="input-field w-full rounded-md border p-3 text-sm"
           >
-            <option value="" disabled>انتخاب کنید</option>
+            <option value="" disabled>
+              انتخاب کنید
+            </option>
             {JOB_CATEGORIES.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -60,13 +71,16 @@ export default function NewJobForm() {
             ))}
           </select>
           {state.errors.category && (
-            <p className="mt-1.5 text-sm text-danger">{state.errors.category}</p>
+            <p className="mt-1.5 text-sm text-danger">
+              {state.errors.category}
+            </p>
           )}
         </div>
         <div>
           <label className="mb-1.5 block text-sm text-ink-muted">شهر</label>
           <input
             name="city"
+            defaultValue={state.values?.city ?? ""}
             placeholder="مثلاً تهران"
             className="input-field w-full rounded-md border p-3 text-sm"
           />
@@ -77,13 +91,17 @@ export default function NewJobForm() {
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm text-ink-muted">نوع همکاری</label>
+        <label className="mb-1.5 block text-sm text-ink-muted">
+          نوع همکاری
+        </label>
         <select
           name="remoteType"
-          defaultValue=""
+          defaultValue={state.values?.remoteType ?? ""}
           className="input-field w-full rounded-md border p-3 text-sm"
         >
-          <option value="" disabled>انتخاب کنید</option>
+          <option value="" disabled>
+            انتخاب کنید
+          </option>
           {remoteTypeOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
@@ -91,33 +109,45 @@ export default function NewJobForm() {
           ))}
         </select>
         {state.errors.remoteType && (
-          <p className="mt-1.5 text-sm text-danger">{state.errors.remoteType}</p>
+          <p className="mt-1.5 text-sm text-danger">
+            {state.errors.remoteType}
+          </p>
         )}
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-sm text-ink-muted">حداقل حقوق (تومان)</label>
+          <label className="mb-1.5 block text-sm text-ink-muted">
+            حداقل حقوق (تومان)
+          </label>
           <input
             name="salaryMin"
             type="number"
+            defaultValue={state.values?.salaryMin ?? ""}
             placeholder="اختیاری"
             className="input-field w-full rounded-md border p-3 text-sm"
           />
           {state.errors.salaryMin && (
-            <p className="mt-1.5 text-sm text-danger">{state.errors.salaryMin}</p>
+            <p className="mt-1.5 text-sm text-danger">
+              {state.errors.salaryMin}
+            </p>
           )}
         </div>
         <div>
-          <label className="mb-1.5 block text-sm text-ink-muted">حداکثر حقوق (تومان)</label>
+          <label className="mb-1.5 block text-sm text-ink-muted">
+            حداکثر حقوق (تومان)
+          </label>
           <input
             name="salaryMax"
             type="number"
+            defaultValue={state.values?.salaryMax ?? ""}
             placeholder="اختیاری"
             className="input-field w-full rounded-md border p-3 text-sm"
           />
           {state.errors.salaryMax && (
-            <p className="mt-1.5 text-sm text-danger">{state.errors.salaryMax}</p>
+            <p className="mt-1.5 text-sm text-danger">
+              {state.errors.salaryMax}
+            </p>
           )}
         </div>
       </div>

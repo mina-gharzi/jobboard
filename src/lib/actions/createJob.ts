@@ -18,6 +18,15 @@ export type CreateJobState = {
     salaryMin?: string;
     salaryMax?: string;
   };
+  values?: {
+    title: string;
+    description: string;
+    category: string;
+    city: string;
+    remoteType: string;
+    salaryMin: string;
+    salaryMax: string;
+  };
 };
 
 export async function createJob(
@@ -34,7 +43,7 @@ export async function createJob(
     return { errors: { form: "فقط کارفرماها می‌توانند آگهی ثبت کنند" } };
   }
 
-  const parsed = createJobSchema.safeParse({
+  const rawValues = {
     title: toStr(formData.get("title")),
     description: toStr(formData.get("description")),
     category: toStr(formData.get("category")),
@@ -42,7 +51,9 @@ export async function createJob(
     remoteType: toStr(formData.get("remoteType")),
     salaryMin: toStr(formData.get("salaryMin")),
     salaryMax: toStr(formData.get("salaryMax")),
-  });
+  };
+
+  const parsed = createJobSchema.safeParse(rawValues);
 
   if (!parsed.success) {
     const fieldErrors = parsed.error.flatten().fieldErrors;
@@ -56,6 +67,8 @@ export async function createJob(
         salaryMin: fieldErrors.salaryMin?.[0],
         salaryMax: fieldErrors.salaryMax?.[0],
       },
+      // مقادیری که کاربر تایپ کرده رو برمی‌گردونیم تا فرم بعد از ریست خودکار React خالی نشه
+      values: rawValues,
     };
   }
 

@@ -56,6 +56,13 @@ export default function LoginPage() {
 
         {error && <p className="text-sm text-danger">{error}</p>}
 
+        <a
+          href="/forgot-password"
+          className="-mt-2 self-end text-xs text-ink-muted underline"
+        >
+          فراموشی رمز عبور؟
+        </a>
+
         <button
           type="submit"
           disabled={loading}
