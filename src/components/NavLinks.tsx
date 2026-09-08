@@ -130,6 +130,15 @@ export default function NavLinks({ role }: { role: Role }) {
                 >
                   داشبورد من
                 </Link>
+                {role === "CANDIDATE" && (
+                  <Link
+                    href="/candidate/profile"
+                    onClick={() => setMenuOpen(false)}
+                    className="block px-4 py-2.5 text-sm text-ink transition-colors hover:bg-slate/10"
+                  >
+                    پروفایل من
+                  </Link>
+                )}
                 <button
                   onClick={handleSignOut}
                   className="block w-full px-4 py-2.5 text-right text-sm text-danger-dark transition-colors hover:bg-danger/10"
@@ -233,6 +242,16 @@ export default function NavLinks({ role }: { role: Role }) {
                   >
                     داشبورد من
                   </Link>
+
+                  {role === "CANDIDATE" && (
+                    <Link
+                      href="/candidate/profile"
+                      onClick={() => setOpen(false)}
+                      className="text-ink-muted transition-colors hover:text-ink"
+                    >
+                      پروفایل من
+                    </Link>
+                  )}
 
                   <button onClick={handleSignOut} className="text-right text-danger-dark">
                     خروج

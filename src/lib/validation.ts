@@ -95,3 +95,31 @@ export const updateApplicationStatusSchema = z.object({
   applicationId: z.string().min(1, "شناسه‌ی درخواست نامعتبر است"),
   status: applicationStatusSchema,
 });
+
+/**
+ * فیلدهای پروفایل همگی اختیاری‌اند؛ رشته‌ی خالی هم مجاز است (یعنی کاربر
+ * می‌تواند مقدار قبلی را پاک کند). در اکشن سرور، رشته‌ی خالی به null
+ * تبدیل می‌شود تا در دیتابیس یکدست ذخیره شود.
+ */
+export const updateProfileSchema = z.object({
+  phone: z
+    .string()
+    .trim()
+    .max(20, "شماره تماس بیش از حد طولانی است")
+    .regex(/^[0-9+\-\s]*$/, "شماره تماس فقط می‌تواند شامل عدد، فاصله، + و - باشد")
+    .optional()
+    .or(z.literal("")),
+  resumeUrl: z
+    .string()
+    .trim()
+    .max(500, "لینک بیش از حد طولانی است")
+    .url("لینک رزومه معتبر نیست (باید با http یا https شروع شود)")
+    .optional()
+    .or(z.literal("")),
+  bio: z
+    .string()
+    .trim()
+    .max(600, "معرفی کوتاه نباید بیشتر از ۶۰۰ کاراکتر باشد")
+    .optional()
+    .or(z.literal("")),
+});

@@ -21,7 +21,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
   const { page: pageRaw } = await searchParams;
   const page = Math.max(1, Number(pageRaw) || 1);
 
-  const [applications, totalCount] = await Promise.all([
+  const [applications, totalCount, profile] = await Promise.all([
     prisma.application.findMany({
       where: { candidateId: session.user.id },
       include: {
@@ -32,13 +32,39 @@ export default async function CandidateDashboard({ searchParams }: Props) {
       take: PAGE_SIZE,
     }),
     prisma.application.count({ where: { candidateId: session.user.id } }),
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { phone: true, resumeUrl: true, bio: true },
+    }),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const isProfileIncomplete =
+    !profile?.phone || !profile?.resumeUrl || !profile?.bio;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
-      <h1 className="mb-6 font-display text-2xl font-bold text-ink">درخواست‌های من</h1>
+      <div className="mb-6 flex items-center justify-between gap-3">
+        <h1 className="font-display text-2xl font-bold text-ink">درخواست‌های من</h1>
+        <Link
+          href="/candidate/profile"
+          className="shrink-0 rounded-md border border-line px-4 py-2 text-sm text-ink transition hover:border-gold/40 hover:text-gold"
+        >
+          پروفایل من
+        </Link>
+      </div>
+
+      {isProfileIncomplete && (
+        <Link
+          href="/candidate/profile"
+          className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-gold/30 bg-gold/5 px-5 py-4 text-sm text-ink transition hover:bg-gold/10"
+        >
+          <span>
+            پروفایلت کامل نیست — شماره تماس، رزومه یا معرفی کوتاه رو اضافه کن تا شانس دیده‌شدنت پیش کارفرماها بیشتر بشه.
+          </span>
+          <span className="shrink-0 font-semibold text-gold">تکمیل پروفایل ←</span>
+        </Link>
+      )}
 
       {applications.length === 0 ? (
         <p className="text-ink-muted">هنوز برای هیچ آگهی‌ای اپلای نکرده‌اید.</p>

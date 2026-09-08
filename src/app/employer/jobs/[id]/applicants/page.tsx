@@ -34,7 +34,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
           take: PAGE_SIZE,
           include: {
             candidate: {
-              select: { name: true, email: true },
+              select: { name: true, email: true, phone: true, resumeUrl: true, bio: true },
             },
           },
         },
@@ -79,6 +79,24 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
                     {app.candidate.name || "بدون نام"}
                   </p>
                   <p className="text-sm text-ink-muted">{app.candidate.email}</p>
+                  {app.candidate.phone && (
+                    <p className="mt-0.5 text-sm text-ink-muted" dir="ltr">
+                      {app.candidate.phone}
+                    </p>
+                  )}
+                  {app.candidate.resumeUrl && (
+                    <a
+                      href={app.candidate.resumeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-block text-sm text-slate underline"
+                    >
+                      مشاهده‌ی رزومه
+                    </a>
+                  )}
+                  {app.candidate.bio && (
+                    <p className="mt-2 text-sm leading-6 text-ink/80">{app.candidate.bio}</p>
+                  )}
                 </div>
 
                 <p className="mt-3 text-sm text-ink">
