@@ -12,11 +12,16 @@ type Props = {
   phone: string;
   resumeUrl: string;
   bio: string;
+  /**
+   * اگر true باشد، فرم بدون توجه به خالی بودن فیلدها مستقیماً در حالت
+   * ویرایش شروع می‌شود (مناسب صفحه‌ی «ویرایش پروفایل» مجزا).
+   */
+  startEditing?: boolean;
 };
 
-export default function ProfileForm({ phone, resumeUrl, bio }: Props) {
+export default function ProfileForm({ phone, resumeUrl, bio, startEditing }: Props) {
   const isFirstTime = !phone && !resumeUrl && !bio;
-  const [isEditing, setIsEditing] = useState(isFirstTime);
+  const [isEditing, setIsEditing] = useState(startEditing ?? isFirstTime);
   const [state, formAction, isPending] = useActionState(
     updateCandidateProfile,
     initialState

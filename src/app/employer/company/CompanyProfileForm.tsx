@@ -15,6 +15,11 @@ type Props = {
   companyDescription: string;
   companyWebsite: string;
   companyTeamSize: string;
+  /**
+   * اگر true باشد، فرم بدون توجه به خالی بودن فیلدها مستقیماً در حالت
+   * ویرایش شروع می‌شود (مناسب صفحه‌ی «ویرایش پروفایل شرکت» مجزا).
+   */
+  startEditing?: boolean;
 };
 
 export default function CompanyProfileForm({
@@ -23,9 +28,10 @@ export default function CompanyProfileForm({
   companyDescription,
   companyWebsite,
   companyTeamSize,
+  startEditing,
 }: Props) {
   const isFirstTime = !logoUrl && !companyDescription && !companyWebsite && !companyTeamSize;
-  const [isEditing, setIsEditing] = useState(isFirstTime);
+  const [isEditing, setIsEditing] = useState(startEditing ?? isFirstTime);
   const [state, formAction, isPending] = useActionState(
     updateCompanyProfile,
     initialState

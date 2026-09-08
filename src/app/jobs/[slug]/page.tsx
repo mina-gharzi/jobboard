@@ -146,13 +146,26 @@ export async function generateMetadata({ params }: Props) {
 function MetaPill({
   icon,
   children,
+  tint = "slate",
 }: {
   icon: React.ReactNode;
   children: React.ReactNode;
+  tint?: "slate" | "gold";
 }) {
+  const tintClasses =
+    tint === "gold"
+      ? "border-gold/25 bg-gold/10 text-ink"
+      : "border-slate/15 bg-slate/5 text-ink-muted";
+
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white/70 px-3.5 py-2 text-[13px] font-medium text-ink-muted shadow-[0_2px_10px_rgba(44,57,71,0.04)] backdrop-blur transition hover:border-gold/30 hover:bg-white">
-      <span className="inline-flex h-4 w-4 shrink-0 items-center justify-center text-ink-muted/70">
+    <span
+      className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-[13px] font-medium shadow-sm backdrop-blur transition hover:-translate-y-0.5 ${tintClasses}`}
+    >
+      <span
+        className={`inline-flex h-4 w-4 shrink-0 items-center justify-center ${
+          tint === "gold" ? "text-gold" : "text-slate-dark"
+        }`}
+      >
         {icon}
       </span>
 
@@ -205,159 +218,176 @@ export default async function JobDetailPage({ params }: Props) {
     take: 3,
   });
 
+  const isCandidate = session?.user.role === "CANDIDATE";
+  const hasApplied = isCandidate && existingApplication;
+  const showMobileBar = session?.user.role !== "EMPLOYER";
+
   return (
-    <div className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-14">
-      {!isOwnerPreview && (
-        <script
-          type="application/ld+json"
-           
-          dangerouslySetInnerHTML={{
-            // escape می‌کنیم چون title/description از کاربر (کارفرما) میاد؛
-            // بدون این escape، رشته‌ی «</script>» توی توضیحات می‌تونه تگ رو
-            // زودتر ببنده و کد دلخواه رو تو صفحه inject کنه (Stored XSS).
-            __html: JSON.stringify(buildJobPostingJsonLd(job)).replace(
-              /</g,
-              "\\u003c"
-            ),
-          }}
-        />
-      )}
+    <div className="relative pb-24 lg:pb-0">
+      {/* decorative background */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -right-40 -top-40 h-120 w-120 rounded-full bg-gold/8 blur-[80px]" />
+        <div className="absolute -left-40 top-1/3 h-96 w-96 rounded-full bg-slate/6 blur-[80px]" />
+      </div>
 
-      {isOwnerPreview && (
-        <div className="mb-6 rounded-2xl border border-amber-300/50 bg-amber-50 px-5 py-3 text-sm text-amber-800">
-          این یک پیش‌نمایش است — این آگهی «{job.status === "DRAFT" ? "پیش‌نویس" : "بسته‌شده"}» است و برای عموم نمایش داده نمی‌شود.
-        </div>
-      )}
+      <div className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-14">
+        {!isOwnerPreview && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              // escape می‌کنیم چون title/description از کاربر (کارفرما) میاد؛
+              // بدون این escape، رشته‌ی «</script>» توی توضیحات می‌تونه تگ رو
+              // زودتر ببنده و کد دلخواه رو تو صفحه inject کنه (Stored XSS).
+              __html: JSON.stringify(buildJobPostingJsonLd(job)).replace(
+                /</g,
+                "\\u003c"
+              ),
+            }}
+          />
+        )}
 
-      {/* مسیر بازگشت */}
-      <Link
-        href="/jobs"
-        className="group inline-flex items-center gap-2 text-sm font-medium text-ink-muted transition hover:text-ink"
-      >
-        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-white/60 transition group-hover:border-gold/30 group-hover:bg-gold/5">
-          <svg
-            className="h-4 w-4 -scale-x-100"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path d="m9 6 6 6-6 6" />
-          </svg>
-        </span>
-        بازگشت به آگهی‌ها
-      </Link>
+        {isOwnerPreview && (
+          <div className="mb-6 rounded-2xl border border-amber-300/50 bg-amber-50/80 px-5 py-3 text-sm text-amber-800 backdrop-blur">
+            <span className="inline-flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-200/60">
+                <svg
+                  className="h-3.5 w-3.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
+                  <path d="M12 9v4M12 17h.01" />
+                </svg>
+              </span>
+              این یک پیش‌نمایش است — این آگهی «{job.status === "DRAFT" ? "پیش‌نویس" : "بسته‌شده"}» است و برای عموم نمایش داده نمی‌شود.
+            </span>
+          </div>
+        )}
 
-      <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
-        {/* ستون اصلی */}
-        <div className="min-w-0">
-          {/* کارت هدر آگهی */}
-          <div className="overflow-hidden rounded-3xl border border-line bg-white/70 shadow-[0_24px_64px_-32px_rgba(44,57,71,0.18)] backdrop-blur">
-            <div className="h-20 bg-linear-to-l from-gold/20 via-gold/5 to-transparent" />
+        {/* مسیر بازگشت */}
+        <Link
+          href="/jobs"
+          className="group inline-flex items-center gap-2 text-sm font-medium text-ink-muted transition hover:text-ink"
+        >
+          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/60 backdrop-blur transition group-hover:border-gold/30 group-hover:bg-gold/5">
+            <svg
+              className="h-4 w-4 -scale-x-100"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="m9 6 6 6-6 6" />
+            </svg>
+          </span>
+          بازگشت به آگهی‌ها
+        </Link>
 
-            <div className="relative px-5 pb-5 md:px-8 md:pb-7">
-              <div className="flex items-start gap-4">
-                {/* لوگوی شرکت */}
-                <div className="relative -mt-8 flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-line bg-white text-xl font-bold text-slate-dark shadow-[0_12px_32px_-8px_rgba(44,57,71,0.25)]">
-                  {job.employer?.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={job.employer.image}
-                      alt=""
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    initial
-                  )}
-                </div>
-
-                <div className="min-w-0 pt-2">
-                  <h1 className="font-display text-xl font-black leading-9 text-ink md:text-3xl">
-                    {job.title}
-                  </h1>
-
-                  {job.employer?.name && (
-                    <p className="mt-1 flex items-center gap-1.5 text-sm text-ink-muted">
-                      <svg
-                        className="h-4 w-4 shrink-0"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M15 9h4a2 2 0 0 1 2 2v10" />
-                      </svg>
-
-                      {job.employer.name}
-                    </p>
-                  )}
+        <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+          {/* ستون اصلی */}
+          <div className="min-w-0">
+            {/* کارت هدر آگهی */}
+            <div className="overflow-hidden rounded-[32px] border border-line bg-white/70 shadow-[0_32px_80px_-32px_rgba(44,57,71,0.22)] backdrop-blur">
+              {/* بنر گرادیانی */}
+              <div className="relative h-24 overflow-hidden bg-linear-to-br from-gold/25 via-gold/8 to-slate/5 md:h-28">
+                <div className="pointer-events-none absolute inset-0">
+                  <div className="absolute -right-10 -top-16 h-40 w-40 rounded-full bg-gold/20 blur-3xl" />
+                  <div className="absolute -bottom-16 right-1/3 h-32 w-32 rounded-full bg-white/40 blur-2xl" />
+                  <div className="absolute left-1/4 top-4 h-2 w-2 rounded-full bg-gold/60 animate-float" />
+                  <div className="absolute right-1/4 bottom-5 h-1.5 w-1.5 rounded-full bg-slate/30 animate-float-delayed" />
+                  <div className="absolute left-8 bottom-6 h-8 w-8 rotate-12 rounded-xl border border-gold/25 bg-white/40 backdrop-blur-sm" />
                 </div>
               </div>
 
-              {/* متادیتا */}
-              <div className="mt-6 flex flex-wrap gap-2">
-                {/* شهر */}
-                <MetaPill
-                  icon={
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="h-full w-full"
-                    >
-                      <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                      <circle cx="12" cy="10" r="2.5" />
-                    </svg>
-                  }
-                >
-                  {job.city}
-                </MetaPill>
-
-                {/* نوع همکاری / ریموت */}
-                <MetaPill
-                  icon={
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="h-full w-full"
-                    >
-                      <rect x="3" y="7" width="18" height="13" rx="2" />
-                      <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                    </svg>
-                  }
-                >
-                  {remoteTypeLabels[job.remoteType]}
-                </MetaPill>
-
-                {/* دسته‌بندی */}
-                <MetaPill
-                  icon={
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="h-full w-full"
-                    >
-                      <path d="M12 2 2 12l10 10 10-10z" />
-                      <circle
-                        cx="8"
-                        cy="8"
-                        r="1.2"
-                        fill="currentColor"
-                        stroke="none"
+              <div className="relative px-5 pb-6 md:px-8 md:pb-8">
+                <div className="flex items-start gap-4 md:gap-5">
+                  {/* لوگوی شرکت */}
+                  <div className="relative -mt-10 flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white bg-white text-2xl font-bold text-slate-dark shadow-[0_16px_40px_-8px_rgba(44,57,71,0.3)] ring-4 ring-white/70 md:h-20 md:w-20">
+                    {job.employer?.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={job.employer.image}
+                        alt=""
+                        className="h-full w-full object-cover"
                       />
-                    </svg>
-                  }
-                >
-                  {job.category}
-                </MetaPill>
+                    ) : (
+                      initial
+                    )}
+                  </div>
 
-                {/* حقوق */}
-                {salary && (
+                  <div className="min-w-0 pt-2.5">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h1 className="font-display text-xl font-black leading-9 text-ink md:text-3xl">
+                        {job.title}
+                      </h1>
+                      {job.category && (
+                        <span className="rounded-full border border-slate/15 bg-slate/5 px-3 py-1 text-xs font-semibold text-slate-dark">
+                          {job.category}
+                        </span>
+                      )}
+                    </div>
+
+                    {job.employer?.name && (
+                      <p className="mt-1.5 flex items-center gap-1.5 text-sm text-ink-muted">
+                        <svg
+                          className="h-4 w-4 shrink-0"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M15 9h4a2 2 0 0 1 2 2v10" />
+                        </svg>
+
+                        {job.employer.name}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* متادیتا */}
+                <div className="mt-6 flex flex-wrap gap-2.5">
+                  {/* حقوق — هایلایت طلایی */}
+                  {salary ? (
+                    <MetaPill
+                      tint="gold"
+                      icon={
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          className="h-full w-full"
+                        >
+                          <rect x="2" y="6" width="20" height="12" rx="2" />
+                          <path d="M2 10h20" />
+                        </svg>
+                      }
+                    >
+                      <span className="font-bold">{salary}</span>
+                    </MetaPill>
+                  ) : (
+                    <MetaPill
+                      tint="gold"
+                      icon={
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          className="h-full w-full"
+                        >
+                          <rect x="2" y="6" width="20" height="12" rx="2" />
+                          <path d="M2 10h20" />
+                        </svg>
+                      }
+                    >
+                      حقوق توافقی
+                    </MetaPill>
+                  )}
+
+                  {/* شهر */}
                   <MetaPill
                     icon={
                       <svg
@@ -367,110 +397,353 @@ export default async function JobDetailPage({ params }: Props) {
                         strokeWidth="2"
                         className="h-full w-full"
                       >
-                        <rect x="2" y="6" width="20" height="12" rx="2" />
-                        <path d="M2 10h20" />
+                        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                        <circle cx="12" cy="10" r="2.5" />
                       </svg>
                     }
                   >
-                    {salary}
+                    {job.city}
                   </MetaPill>
-                )}
 
-                {/* زمان انتشار */}
-                <MetaPill
-                  icon={
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="h-full w-full"
-                    >
-                      <circle cx="12" cy="12" r="9" />
-                      <path d="M12 7v5l3 3" />
-                    </svg>
-                  }
-                >
-                  {formatRelativeTime(job.createdAt)}
-                </MetaPill>
+                  {/* نوع همکاری / ریموت */}
+                  <MetaPill
+                    icon={
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="h-full w-full"
+                      >
+                        <rect x="3" y="7" width="18" height="13" rx="2" />
+                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                      </svg>
+                    }
+                  >
+                    {remoteTypeLabels[job.remoteType]}
+                  </MetaPill>
+
+                  {/* زمان انتشار */}
+                  <MetaPill
+                    icon={
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="h-full w-full"
+                      >
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 7v5l3 3" />
+                      </svg>
+                    }
+                  >
+                    {formatRelativeTime(job.createdAt)}
+                  </MetaPill>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* توضیحات */}
-          <div className="mt-8 rounded-3xl border border-line bg-white/50 p-6 md:p-8">
-            <div className="flex items-center gap-3">
-              <span className="h-5 w-1 rounded-full bg-gold" />
+            {/* توضیحات */}
+            <div className="mt-8 rounded-[32px] border border-line bg-white/60 p-6 backdrop-blur md:p-9">
+              <div className="flex items-center gap-3">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold/10 text-gold">
+                  <svg
+                    className="h-4.5 w-4.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <path d="M14 2v6h6" />
+                    <path d="M16 13H8M16 17H8M10 9H8" />
+                  </svg>
+                </span>
+                <h2 className="font-display text-xl font-bold text-ink">
+                  شرح موقعیت شغلی
+                </h2>
+              </div>
 
-              <h2 className="font-display text-lg font-bold text-ink">
-                شرح موقعیت شغلی
-              </h2>
+              <p className="mt-6 whitespace-pre-wrap text-[15px] leading-9 text-ink/90 md:text-base">
+                {job.description}
+              </p>
             </div>
 
-            <p className="mt-5 whitespace-pre-wrap text-[15px] leading-9 text-ink/90">
-              {job.description}
-            </p>
-          </div>
-
-          {/* اپلای موبایل */}
-          <div className="mt-8 lg:hidden">
-            <ApplyBox
-              session={session}
-              jobId={job.id}
-              existingApplication={existingApplication}
-            />
-            <div className="mt-5">
-              <CompanyInfoCard employer={job.employer} />
+            {/* اپلای موبایل */}
+            <div id="apply" className="mt-8 scroll-mt-28 lg:hidden">
+              <ApplyBox
+                session={session}
+                jobId={job.id}
+                existingApplication={existingApplication}
+              />
+              <div className="mt-6">
+                <CompanyInfoCard employer={job.employer} />
+              </div>
             </div>
-          </div>
 
-          {/* مشاغل مشابه */}
-          {relatedJobs.length > 0 && (
-            <section className="mt-12">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="h-5 w-1 rounded-full bg-gold" />
+            {/* مشاغل مشابه */}
+            {relatedJobs.length > 0 && (
+              <section className="mt-14">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold/10 text-gold">
+                      <svg
+                        className="h-4.5 w-4.5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M2 12h6l2-5 4 10 2-5h6" />
+                      </svg>
+                    </span>
+                    <h2 className="font-display text-xl font-bold text-ink md:text-2xl">
+                      مشاغل مشابه
+                    </h2>
+                  </div>
 
-                  <h2 className="font-display text-lg font-bold text-ink md:text-xl">
-                    مشاغل مشابه
-                  </h2>
+                  <span className="rounded-full border border-gold/20 bg-gold/5 px-3 py-1 text-xs font-semibold text-ink">
+                    {relatedJobs.length} آگهی مرتبط
+                  </span>
                 </div>
 
-                <span className="text-xs text-ink-muted">
-                  {relatedJobs.length} آگهی مرتبط
-                </span>
-              </div>
+                <div className="mt-6 grid gap-5 sm:grid-cols-2">
+                  {relatedJobs.map((related) => (
+                    <JobCard key={related.id} job={related} />
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
 
-              <ul className="mt-5 flex flex-col gap-4">
-                {relatedJobs.map((related) => (
-                  <li key={related.id}>
-                    <JobCard job={related} />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-        </div>
+          {/* سایدبار — دسکتاپ */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-24 flex flex-col gap-6">
+              <QuickFactsCard
+                job={{
+                  salary,
+                  city: job.city,
+                  remoteType: job.remoteType,
+                  category: job.category,
+                  createdAt: job.createdAt,
+                }}
+              />
 
-        {/* سایدبار اپلای — دسکتاپ */}
-        <aside className="hidden lg:block">
-          <div className="sticky top-24">
-            <div className="mb-4 flex items-center gap-2 px-1 text-xs font-medium text-ink-muted">
-              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-              موقعیت شغلی
-            </div>
+              <ApplyBox
+                session={session}
+                jobId={job.id}
+                existingApplication={existingApplication}
+              />
 
-            <ApplyBox
-              session={session}
-              jobId={job.id}
-              existingApplication={existingApplication}
-            />
-
-            <div className="mt-5">
               <CompanyInfoCard employer={job.employer} />
             </div>
-          </div>
-        </aside>
+          </aside>
+        </div>
+      </div>
+
+      {/* نوار اپلای موبایل */}
+      {showMobileBar && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/5 bg-white/85 p-3 backdrop-blur-xl lg:hidden">
+          <a
+            href="#apply"
+            className="flex items-center justify-between gap-3 rounded-2xl bg-ink px-5 py-3 text-sm font-bold text-paper shadow-[0_16px_40px_-16px_rgba(44,57,71,0.5)] transition active:scale-[0.98]"
+          >
+            {hasApplied ? (
+              <>
+                <span className="inline-flex items-center gap-2">
+                  <svg
+                    className="h-4 w-4 text-emerald-400"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                  >
+                    <path d="m5 13 4 4L19 7" />
+                  </svg>
+                  درخواستت ثبت شده — وضعیت را ببین
+                </span>
+              </>
+            ) : session ? (
+              <>
+                <span>همین حالا درخواست بده</span>
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gold">
+                  <svg
+                    className="h-3.5 w-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </span>
+              </>
+            ) : (
+              <>
+                <span>برای اپلای، ورود یا ثبت‌نام کن</span>
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gold">
+                  <svg
+                    className="h-3.5 w-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </span>
+              </>
+            )}
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ───── کارت خلاصه شرایط اگهی (سایدبار) ───── */
+
+function QuickFactsCard({
+  job,
+}: {
+  job: {
+    salary: string | null;
+    city: string;
+    remoteType: string;
+    category: string;
+    createdAt: Date;
+  };
+}) {
+  const rows = {
+    city: "شهر",
+    remoteType: "نوع همکاری",
+    category: "دسته‌بندی",
+    createdAt: "زمان انتشار",
+  };
+
+  return (
+    <div className="overflow-hidden rounded-3xl border border-line bg-white/70 shadow-[0_24px_64px_-36px_rgba(44,57,71,0.3)] backdrop-blur">
+      <div className="border-b border-line bg-gold/5 px-5 py-4">
+        <p className="text-sm font-bold text-ink">خلاصه‌ی شرایط</p>
+      </div>
+
+      <div className="p-5">
+        {/* حقوق */}
+        <div className="flex items-center justify-between rounded-2xl bg-gold/10 px-4 py-3">
+          <span className="inline-flex items-center gap-2 text-[13px] font-medium text-ink-muted">
+            <svg
+              className="h-4 w-4 text-gold"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="2" y="6" width="20" height="12" rx="2" />
+              <path d="M2 10h20" />
+            </svg>
+            حقوق
+          </span>
+          <span className="text-sm font-black text-ink">
+            {job.salary ?? "توافقی"}
+          </span>
+        </div>
+
+        {/* سایر جزئیات */}
+        <div className="mt-3 flex flex-col divide-y divide-line/70 px-1">
+          {Object.entries(rows).map(([key, label]) => {
+            const value =
+              key === "createdAt"
+                ? formatRelativeTime(job.createdAt)
+                : key === "remoteType"
+                  ? remoteTypeLabels[job.remoteType as keyof typeof remoteTypeLabels]
+                  : (job as unknown as Record<string, string>)[key];
+
+            const icons: Record<string, React.ReactNode> = {
+              city: (
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
+              ),
+              remoteType: (
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="3" y="7" width="18" height="13" rx="2" />
+                  <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+              ),
+              category: (
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 2 2 12l10 10 10-10z" />
+                  <path d="M15.5 8.5a3 3 0 0 0-6 0c0 3 6 3 6 6a3 3 0 0 1-6 0" />
+                </svg>
+              ),
+              createdAt: (
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 3" />
+                </svg>
+              ),
+            };
+
+            return (
+              <div
+                key={key}
+                className="flex items-center justify-between py-2.5"
+              >
+                <span className="inline-flex items-center gap-2 text-[13px] text-ink-muted">
+                  <span className="text-slate-dark/60">{icons[key]}</span>
+                  {label}
+                </span>
+                <span className="text-[13px] font-semibold text-ink">
+                  {value}
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -490,14 +763,14 @@ function ApplyBox({
   const hasApplied = isCandidate && existingApplication;
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-line bg-white/70 shadow-[0_24px_64px_-36px_rgba(44,57,71,0.3)] backdrop-blur">
+    <div className="overflow-hidden rounded-3xl border border-line bg-white/80 shadow-[0_24px_64px_-40px_rgba(44,57,71,0.35)] backdrop-blur">
       {/* کاندیدا — اپلای جدید */}
       {isCandidate && !hasApplied && (
         <div className="flex flex-col">
-          <div className="flex items-center gap-2 border-b border-line bg-gold/5 px-5 py-4">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gold/15 text-gold">
+          <div className="flex items-center gap-3 border-b border-line bg-linear-to-l from-gold/10 via-gold/4 to-transparent px-5 py-4">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold text-ink shadow-[0_8px_20px_-8px_rgba(194,165,109,0.8)]">
               <svg
-                className="h-4 w-4"
+                className="h-4.5 w-4.5"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -527,8 +800,8 @@ function ApplyBox({
 
       {/* کاندیدا — قبلاً اپلای کرده */}
       {isCandidate && hasApplied && (
-        <div className="flex flex-col items-center px-5 py-8 text-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-50/40">
+        <div className="flex flex-col items-center px-5 py-9 text-center">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-50/50">
             <svg
               className="h-6 w-6"
               viewBox="0 0 24 24"
@@ -631,6 +904,7 @@ function CompanyInfoCard({
 }: {
   employer: {
     name: string;
+    image: string | null;
     companyDescription: string | null;
     companyWebsite: string | null;
     companyTeamSize: string | null;
@@ -643,25 +917,70 @@ function CompanyInfoCard({
     return null;
   }
 
+  const initial = employer.name?.trim()?.[0] ?? "؟";
+
   return (
-    <div className="rounded-2xl border border-line bg-white/70 p-5">
-      <p className="text-sm font-bold text-ink">درباره‌ی {employer.name}</p>
+    <div className="rounded-3xl border border-line bg-white/70 p-5 shadow-[0_24px_64px_-40px_rgba(44,57,71,0.3)] backdrop-blur md:p-6">
+      <div className="flex items-center gap-3">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-white text-lg font-bold text-slate-dark">
+          {employer.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={employer.image}
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            initial
+          )}
+        </div>
+        <div className="min-w-0">
+          <p className="font-bold text-ink">درباره‌ی {employer.name}</p>
+          <p className="mt-0.5 text-xs text-ink-muted">شرکت کارفرما</p>
+        </div>
+      </div>
 
       {employer.companyDescription && (
-        <p className="mt-2 whitespace-pre-line text-sm leading-6 text-ink/80">
+        <p className="mt-4 whitespace-pre-line text-sm leading-7 text-ink/80">
           {employer.companyDescription}
         </p>
       )}
 
-      <div className="mt-3 flex flex-col gap-1.5 text-sm text-ink-muted">
-        {employer.companyTeamSize && <p>اندازه‌ی تیم: {employer.companyTeamSize}</p>}
+      <div className="mt-4 flex flex-col gap-2.5 border-t border-line pt-4 text-sm text-ink-muted">
+        {employer.companyTeamSize && (
+          <span className="inline-flex items-center gap-2">
+            <svg
+              className="h-4 w-4 text-slate-dark/60"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            تیم {employer.companyTeamSize} نفره
+          </span>
+        )}
         {employer.companyWebsite && (
           <a
             href={employer.companyWebsite}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-slate underline"
+            className="group inline-flex items-center gap-2 font-semibold text-slate underline-offset-4 hover:underline"
           >
+            <svg
+              className="h-4 w-4 text-slate-dark/60 group-hover:text-gold"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg>
             {employer.companyWebsite}
           </a>
         )}

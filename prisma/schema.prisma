@@ -14,15 +14,15 @@ model User {
   name               String
   emailVerified      Boolean       @default(false)
   image              String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  role               String        @default("CANDIDATE")
   phone              String?
   resumeUrl          String?
   bio                String?
   companyDescription String?
   companyWebsite     String?
   companyTeamSize    String?
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
-  role               String        @default("CANDIDATE")
   applications       Application[] @relation("CandidateApplications")
   jobs               Job[]         @relation("EmployerJobs")
   accounts           Account[]
