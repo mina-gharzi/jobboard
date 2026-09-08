@@ -19,20 +19,17 @@ export function formatSalary(
   min: number | null | undefined,
   max: number | null | undefined
 ): string | null {
-  if (!min && !max) return null;
+  if (min == null && max == null) return null;
 
   const fa = (n: number) => n.toLocaleString("fa-IR");
 
-  if (min && max) {
+  if (min != null && max != null) {
     return `${fa(min)} تا ${fa(max)} تومان`;
   }
-  if (min) {
+  if (min != null) {
     return `از ${fa(min)} تومان`;
   }
-  if (max) {
-    return `تا ${fa(max)} تومان`;
-  }
-  return null;
+  return `تا ${fa(max as number)} تومان`;
 }
 
 export function formatRelativeTime(date: Date): string {

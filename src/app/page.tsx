@@ -31,7 +31,7 @@ export default async function Home() {
     }),
     prisma.job.findMany({
       where: { status: "PUBLISHED" },
-      orderBy: { id: "desc" },
+      orderBy: { createdAt: "desc" },
       take: 6,
       select: {
         id: true,

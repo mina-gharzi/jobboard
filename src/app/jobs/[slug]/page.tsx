@@ -95,14 +95,14 @@ function buildJobPostingJsonLd(job: {
     };
   }
 
-  if (job.salaryMin || job.salaryMax) {
+  if (job.salaryMin != null || job.salaryMax != null) {
     jsonLd.baseSalary = {
       "@type": "MonetaryAmount",
       currency: "IRR",
       value: {
         "@type": "QuantitativeValue",
-        ...(job.salaryMin && { minValue: job.salaryMin }),
-        ...(job.salaryMax && { maxValue: job.salaryMax }),
+        ...(job.salaryMin != null && { minValue: job.salaryMin }),
+        ...(job.salaryMax != null && { maxValue: job.salaryMax }),
         unitText: "MONTH",
       },
     };
