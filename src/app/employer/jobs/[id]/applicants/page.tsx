@@ -49,6 +49,10 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
+  if (totalCount > 0 && page > totalPages) {
+    redirect(`/employer/jobs/${id}/applicants?page=${totalPages}`);
+  }
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
       <Link href="/employer" className="text-sm text-ink-muted hover:text-ink">

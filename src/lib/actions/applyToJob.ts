@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/generated/prisma/client";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { applyToJobSchema, toStr } from "@/lib/validation";
@@ -61,11 +62,25 @@ export async function applyToJob(
         coverLetter: parsed.data.coverLetter || null,
       },
     });
-  } catch {
+  } catch (error) {
     // اگر بین چک "existing" و create، یک درخواست دیگر (مثلاً کلیک دوباره‌ی
     // سریع کاربر) از همان جفت job/candidate ثبت شده باشد، unique constraint
-    // خطا می‌دهد؛ به‌جای نمایش خطای خام Prisma، پیام مفهومی نشان می‌دهیم.
-    return { success: false, message: "شما قبلاً برای این آگهی اپلای کرده‌اید" };
+    // (کد P2002) خطا می‌دهد؛ فقط همین حالت خاص را پیام "قبلاً اپلای کرده‌اید"
+    // می‌دهیم. هر خطای دیگر (قطعی دیتابیس، تایم‌اوت و...) باید پیام درست
+    // خودش را بگیرد، وگرنه کاربر فکر می‌کند درخواستش قبلاً ثبت شده در حالی
+    // که اصلاً ثبت نشده.
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return { success: false, message: "شما قبلاً برای این آگهی اپلای کرده‌اید" };
+    }
+
+    console.error("applyToJob failed:", error);
+    return {
+      success: false,
+      message: "مشکلی در ثبت درخواست پیش آمد. لطفاً دوباره تلاش کنید.",
+    };
   }
 
   revalidatePath(`/jobs`);

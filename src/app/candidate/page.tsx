@@ -39,6 +39,11 @@ export default async function CandidateDashboard({ searchParams }: Props) {
   ]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+
+  if (totalCount > 0 && page > totalPages) {
+    redirect(`/candidate?page=${totalPages}`);
+  }
+
   const isProfileIncomplete =
     !profile?.phone || !profile?.resumeUrl || !profile?.bio;
 

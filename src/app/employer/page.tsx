@@ -37,6 +37,14 @@ export default async function EmployerDashboard({ searchParams }: Props) {
   ]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+
+  // صفحه‌ی خارج از محدوده (مثلاً بعد از حذف چند آگهی، یا URL دستکاری‌شده)
+  // به آخرین صفحه‌ی معتبر redirect می‌شه، وگرنه یه لیست خالی و گمراه‌کننده
+  // («هنوز آگهی‌ای ثبت نکرده‌اید») نشون داده می‌شه در حالی که آگهی هست.
+  if (totalCount > 0 && page > totalPages) {
+    redirect(`/employer?page=${totalPages}`);
+  }
+
   const isCompanyProfileIncomplete =
     !profile?.image || !profile?.companyDescription || !profile?.companyWebsite || !profile?.companyTeamSize;
 

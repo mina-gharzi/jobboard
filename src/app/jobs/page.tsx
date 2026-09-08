@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import JobCard from "@/components/JobCard";
 
 const PAGE_SIZE = 6;
@@ -47,6 +48,14 @@ export default async function JobsPage({ searchParams }: Props) {
   ]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+
+  // اگه صفحه‌ی درخواستی بیشتر از تعداد صفحات موجوده (مثلاً کاربر URL رو
+  // دستی دستکاری کرده یا از یه لینک قدیمی اومده)، به آخرین صفحه‌ی معتبر
+  // redirect می‌کنیم؛ وگرنه یه صفحه‌ی خالی و گمراه‌کننده («آگهی‌ای پیدا
+  // نشد») نشون داده می‌شه در حالی که واقعاً نتیجه‌ای برای فیلترها هست.
+  if (totalCount > 0 && page > totalPages) {
+    redirect(buildHref({ q, city, category }, totalPages));
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
