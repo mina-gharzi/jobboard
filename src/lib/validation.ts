@@ -11,6 +11,16 @@ export function toStr(value: FormDataEntryValue | null): string {
   return typeof value === "string" ? value : "";
 }
 
+/**
+ * z.url() فقط syntactically معتبر بودن URL رو چک می‌کند، نه scheme را —
+ * یعنی چیزی مثل "javascript:..." یا "data:..." را هم قبول می‌کند. چون
+ * این لینک‌ها بعداً به‌صورت <a href={...}> به کاربرهای دیگر (کارفرما،
+ * کارجو، بازدیدکننده‌ی صفحه‌ی آگهی) نمایش داده می‌شوند، این چک اضافه
+ * تضمین می‌کند فقط http/https ذخیره شود — در غیر این صورت کلیک روی لینک
+ * می‌توانست کد دلخواه را در مرورگر قربانی اجرا کند.
+ */
+const isHttpUrl = (val: string) => /^https?:\/\//i.test(val);
+
 const optionalSalary = z.preprocess((val) => {
   if (val === "" || val === null || val === undefined) return undefined;
   return val;
@@ -115,6 +125,7 @@ export const updateProfileSchema = z.object({
     .trim()
     .max(500, "لینک بیش از حد طولانی است")
     .url("لینک رزومه معتبر نیست (باید با http یا https شروع شود)")
+    .refine(isHttpUrl, "لینک رزومه باید با http یا https شروع شود")
     .optional()
     .or(z.literal("")),
   bio: z
@@ -146,6 +157,7 @@ export const updateCompanyProfileSchema = z.object({
     .trim()
     .max(300, "لینک بیش از حد طولانی است")
     .url("آدرس وب‌سایت معتبر نیست (باید با http یا https شروع شود)")
+    .refine(isHttpUrl, "آدرس وب‌سایت باید با http یا https شروع شود")
     .optional()
     .or(z.literal("")),
   companyTeamSize: z
@@ -157,6 +169,7 @@ export const updateCompanyProfileSchema = z.object({
     .trim()
     .max(500, "لینک بیش از حد طولانی است")
     .url("لینک لوگو معتبر نیست (باید با http یا https شروع شود)")
+    .refine(isHttpUrl, "لینک لوگو باید با http یا https شروع شود")
     .optional()
     .or(z.literal("")),
 });

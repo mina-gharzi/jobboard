@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import JobCard from "@/components/JobCard";
+import { JOB_CATEGORIES } from "@/lib/categories";
 
 const formatNumber = (value: number) =>
   new Intl.NumberFormat("fa-IR").format(value);
@@ -24,10 +25,14 @@ export default async function Home() {
     }),
     prisma.user.count({ where: { role: "CANDIDATE" } }),
     prisma.job.findMany({
-      where: { status: "PUBLISHED" },
+      // به‌جای نمایش هر مقداری که تو ستون category هست (که ممکنه شامل
+      // داده‌ی قدیمی/دستی قبل از کنترل‌شدن این فیلد باشه)، فقط دسته‌های
+      // معتبرِ همون لیستی که تو فرم ثبت آگهی استفاده می‌شه رو می‌گیریم —
+      // این یعنی چیزی که تو Home نشون داده می‌شه، همیشه با label های
+      // فارسی و ترتیب ثابتِ بقیه‌ی پروژه یکدست می‌مونه.
+      where: { status: "PUBLISHED", category: { in: [...JOB_CATEGORIES] } },
       select: { category: true },
       distinct: ["category"],
-      take: 5,
     }),
     prisma.job.findMany({
       where: { status: "PUBLISHED" },
@@ -51,6 +56,18 @@ export default async function Home() {
   ]);
 
   const employerCount = employerGroups.length;
+
+  // خروجی Prisma به ترتیب ثابتی مرتب نیست؛ همون ترتیبی که تو select
+  // فرم ثبت آگهی هست رو اینجا هم رعایت می‌کنیم تا چیپ‌ها همیشه یک شکل
+  // ظاهر بشن (مثلاً همیشه «فرانت‌اند» قبل از «بک‌اند»).
+  const sortedCategories = categories
+    .map((c) => c.category)
+    .sort(
+      (a, b) =>
+        (JOB_CATEGORIES as readonly string[]).indexOf(a) -
+        (JOB_CATEGORIES as readonly string[]).indexOf(b)
+    )
+    .slice(0, 5);
 
   return (
     <main className="overflow-hidden">
@@ -123,10 +140,10 @@ export default async function Home() {
             </form>
 
             {/* ── Category chips ── */}
-            {categories.length > 0 && (
+            {sortedCategories.length > 0 && (
               <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs">
                 <span className="text-ink-muted">دسته‌های موجود:</span>
-                {categories.map(({ category }) => (
+                {sortedCategories.map((category) => (
                   <Link
                     key={category}
                     href={`/jobs?category=${encodeURIComponent(category)}`}
