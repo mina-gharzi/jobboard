@@ -21,7 +21,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
   const { page: pageRaw } = await searchParams;
   const page = Math.max(1, Number(pageRaw) || 1);
 
-  const [jobs, totalCount] = await Promise.all([
+  const [jobs, totalCount, profile] = await Promise.all([
     prisma.job.findMany({
       where: { employerId: session.user.id },
       include: { _count: { select: { applications: true } } },
@@ -30,18 +30,44 @@ export default async function EmployerDashboard({ searchParams }: Props) {
       take: PAGE_SIZE,
     }),
     prisma.job.count({ where: { employerId: session.user.id } }),
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { image: true, companyDescription: true, companyWebsite: true, companyTeamSize: true },
+    }),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const isCompanyProfileIncomplete =
+    !profile?.image || !profile?.companyDescription || !profile?.companyWebsite || !profile?.companyTeamSize;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between gap-3">
         <h1 className="font-display text-2xl font-bold text-ink">آگهی‌های من</h1>
-        <Link href="/employer/new" className="btn-primary rounded-md px-4 py-2 text-sm">
-          + ثبت آگهی جدید
-        </Link>
+        <div className="flex shrink-0 items-center gap-2">
+          <Link
+            href="/employer/company"
+            className="rounded-md border border-line px-4 py-2 text-sm text-ink transition hover:border-gold/40 hover:text-gold"
+          >
+            پروفایل شرکت
+          </Link>
+          <Link href="/employer/new" className="btn-primary rounded-md px-4 py-2 text-sm">
+            + ثبت آگهی جدید
+          </Link>
+        </div>
       </div>
+
+      {isCompanyProfileIncomplete && (
+        <Link
+          href="/employer/company"
+          className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-gold/30 bg-gold/5 px-5 py-4 text-sm text-ink transition hover:bg-gold/10"
+        >
+          <span>
+            پروفایل شرکتت کامل نیست — لوگو، وب‌سایت یا توضیحات رو اضافه کن تا کارجوها بیشتر بهت اعتماد کنن.
+          </span>
+          <span className="shrink-0 font-semibold text-gold">تکمیل پروفایل ←</span>
+        </Link>
+      )}
 
       {jobs.length === 0 ? (
         <p className="text-ink-muted">هنوز آگهی‌ای ثبت نکرده‌اید.</p>

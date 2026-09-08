@@ -30,6 +30,20 @@ export const auth = betterAuth({
         type: "string",
         required: false,
       },
+      // فیلدهای پروفایل شرکت — اختیاری، فقط برای کارفرماها معنا دارند؛
+      // نام شرکت از همون فیلد name استفاده می‌کنه و لوگو از فیلد image.
+      companyDescription: {
+        type: "string",
+        required: false,
+      },
+      companyWebsite: {
+        type: "string",
+        required: false,
+      },
+      companyTeamSize: {
+        type: "string",
+        required: false,
+      },
     },
   },
 });

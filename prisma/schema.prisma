@@ -9,21 +9,24 @@ datasource db {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  email         String        @unique
-  name          String
-  emailVerified Boolean       @default(false)
-  image         String?
-  phone         String?
-  resumeUrl     String?
-  bio           String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  role          String        @default("CANDIDATE")
-  applications  Application[] @relation("CandidateApplications")
-  jobs          Job[]         @relation("EmployerJobs")
-  accounts      Account[]
-  sessions      Session[]
+  id                 String        @id @default(cuid())
+  email              String        @unique
+  name               String
+  emailVerified      Boolean       @default(false)
+  image              String?
+  phone              String?
+  resumeUrl          String?
+  bio                String?
+  companyDescription String?
+  companyWebsite     String?
+  companyTeamSize    String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  role               String        @default("CANDIDATE")
+  applications       Application[] @relation("CandidateApplications")
+  jobs               Job[]         @relation("EmployerJobs")
+  accounts           Account[]
+  sessions           Session[]
 
   @@map("user")
 }

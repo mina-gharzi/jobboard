@@ -21,7 +21,15 @@ async function getJob(slug: string) {
   return prisma.job.findUnique({
     where: { slug },
     include: {
-      employer: { select: { name: true, image: true } },
+      employer: {
+        select: {
+          name: true,
+          image: true,
+          companyDescription: true,
+          companyWebsite: true,
+          companyTeamSize: true,
+        },
+      },
     },
   });
 }
@@ -312,6 +320,9 @@ export default async function JobDetailPage({ params }: Props) {
               jobId={job.id}
               existingApplication={existingApplication}
             />
+            <div className="mt-5">
+              <CompanyInfoCard employer={job.employer} />
+            </div>
           </div>
 
           {/* مشاغل مشابه */}
@@ -355,6 +366,10 @@ export default async function JobDetailPage({ params }: Props) {
               jobId={job.id}
               existingApplication={existingApplication}
             />
+
+            <div className="mt-5">
+              <CompanyInfoCard employer={job.employer} />
+            </div>
           </div>
         </aside>
       </div>
@@ -508,6 +523,50 @@ function ApplyBox({
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function CompanyInfoCard({
+  employer,
+}: {
+  employer: {
+    name: string;
+    companyDescription: string | null;
+    companyWebsite: string | null;
+    companyTeamSize: string | null;
+  } | null;
+}) {
+  if (
+    !employer ||
+    (!employer.companyDescription && !employer.companyWebsite && !employer.companyTeamSize)
+  ) {
+    return null;
+  }
+
+  return (
+    <div className="rounded-2xl border border-line bg-white/70 p-5">
+      <p className="text-sm font-bold text-ink">درباره‌ی {employer.name}</p>
+
+      {employer.companyDescription && (
+        <p className="mt-2 whitespace-pre-line text-sm leading-6 text-ink/80">
+          {employer.companyDescription}
+        </p>
+      )}
+
+      <div className="mt-3 flex flex-col gap-1.5 text-sm text-ink-muted">
+        {employer.companyTeamSize && <p>اندازه‌ی تیم: {employer.companyTeamSize}</p>}
+        {employer.companyWebsite && (
+          <a
+            href={employer.companyWebsite}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate underline"
+          >
+            {employer.companyWebsite}
+          </a>
+        )}
+      </div>
     </div>
   );
 }

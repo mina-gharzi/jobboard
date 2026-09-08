@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { RemoteType, JobStatus, ApplicationStatus, Role } from "@/generated/prisma/enums";
 import { JOB_CATEGORIES } from "@/lib/categories";
+import { COMPANY_TEAM_SIZES } from "@/lib/companyTeamSizes";
 
 /**
  * FormData.get() می‌تواند null یا File برگرداند؛ این تابع همیشه یک رشته
@@ -120,6 +121,42 @@ export const updateProfileSchema = z.object({
     .string()
     .trim()
     .max(600, "معرفی کوتاه نباید بیشتر از ۶۰۰ کاراکتر باشد")
+    .optional()
+    .or(z.literal("")),
+});
+
+/**
+ * فیلدهای پروفایل شرکت. مثل پروفایل کارجو، همه اختیاری‌اند و رشته‌ی خالی
+ * یعنی «پاک کردن» مقدار قبلی.
+ */
+export const updateCompanyProfileSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, "نام شرکت نمی‌تواند خالی باشد")
+    .max(100, "نام شرکت بیش از حد طولانی است"),
+  companyDescription: z
+    .string()
+    .trim()
+    .max(800, "توضیحات شرکت نباید بیشتر از ۸۰۰ کاراکتر باشد")
+    .optional()
+    .or(z.literal("")),
+  companyWebsite: z
+    .string()
+    .trim()
+    .max(300, "لینک بیش از حد طولانی است")
+    .url("آدرس وب‌سایت معتبر نیست (باید با http یا https شروع شود)")
+    .optional()
+    .or(z.literal("")),
+  companyTeamSize: z
+    .enum(COMPANY_TEAM_SIZES)
+    .optional()
+    .or(z.literal("")),
+  logoUrl: z
+    .string()
+    .trim()
+    .max(500, "لینک بیش از حد طولانی است")
+    .url("لینک لوگو معتبر نیست (باید با http یا https شروع شود)")
     .optional()
     .or(z.literal("")),
 });

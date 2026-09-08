@@ -139,6 +139,15 @@ export default function NavLinks({ role }: { role: Role }) {
                     پروفایل من
                   </Link>
                 )}
+                {role === "EMPLOYER" && (
+                  <Link
+                    href="/employer/company"
+                    onClick={() => setMenuOpen(false)}
+                    className="block px-4 py-2.5 text-sm text-ink transition-colors hover:bg-slate/10"
+                  >
+                    پروفایل شرکت
+                  </Link>
+                )}
                 <button
                   onClick={handleSignOut}
                   className="block w-full px-4 py-2.5 text-right text-sm text-danger-dark transition-colors hover:bg-danger/10"
@@ -250,6 +259,16 @@ export default function NavLinks({ role }: { role: Role }) {
                       className="text-ink-muted transition-colors hover:text-ink"
                     >
                       پروفایل من
+                    </Link>
+                  )}
+
+                  {role === "EMPLOYER" && (
+                    <Link
+                      href="/employer/company"
+                      onClick={() => setOpen(false)}
+                      className="text-ink-muted transition-colors hover:text-ink"
+                    >
+                      پروفایل شرکت
                     </Link>
                   )}
 
