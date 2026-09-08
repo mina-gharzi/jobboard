@@ -8,6 +8,7 @@ import { updateApplicationStatusSchema, toStr } from "@/lib/validation";
 
 export type UpdateStatusState = {
   error?: string;
+  success?: boolean;
 };
 
 export async function updateApplicationStatus(
@@ -48,5 +49,5 @@ export async function updateApplicationStatus(
 
   revalidatePath(`/employer/jobs/${application.jobId}/applicants`);
 
-  return {};
+  return { success: true };
 }

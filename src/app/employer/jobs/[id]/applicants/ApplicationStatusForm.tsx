@@ -49,6 +49,9 @@ export default function ApplicationStatusForm({
         </button>
       </div>
       {state.error && <p className="text-sm text-danger">{state.error}</p>}
+      {state.success && (
+        <p className="text-sm text-success">وضعیت به‌روزرسانی شد ✓</p>
+      )}
     </form>
   );
 }
