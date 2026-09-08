@@ -6,12 +6,20 @@ import Link from "next/link";
 import { formatRelativeTime } from "@/lib/format";
 import ApplicationStatusForm from "./ApplicationStatusForm";
 import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
+import type { ApplicationStatus } from "@/generated/prisma/enums";
 
 const PAGE_SIZE = 10;
 
+const STATUS_VALUES: ApplicationStatus[] = [
+  "PENDING",
+  "REVIEWED",
+  "ACCEPTED",
+  "REJECTED",
+];
+
 type Props = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; status?: string }>;
 };
 
 export default async function ApplicantsPage({ params, searchParams }: Props) {
@@ -21,14 +29,21 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
   if (!session) redirect("/login");
   if (session.user.role !== "EMPLOYER") redirect("/jobs");
 
-  const { page: pageRaw } = await searchParams;
+  const { page: pageRaw, status: statusRaw } = await searchParams;
   const page = Math.max(1, Number(pageRaw) || 1);
+  // فقط مقادیر معتبر enum رو به‌عنوان فیلتر قبول کن؛ هر چیز دیگه یعنی «همه»
+  const status = STATUS_VALUES.includes(statusRaw as ApplicationStatus)
+    ? (statusRaw as ApplicationStatus)
+    : undefined;
 
-  const [job, totalCount] = await Promise.all([
+  const where = { jobId: id, ...(status ? { status } : {}) };
+
+  const [job, filteredCount, statusCounts] = await Promise.all([
     prisma.job.findUnique({
       where: { id },
       include: {
         applications: {
+          where,
           orderBy: { createdAt: "desc" },
           skip: (page - 1) * PAGE_SIZE,
           take: PAGE_SIZE,
@@ -40,17 +55,28 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
         },
       },
     }),
-    prisma.application.count({ where: { jobId: id } }),
+    prisma.application.count({ where }),
+    prisma.application.groupBy({
+      by: ["status"],
+      where: { jobId: id },
+      _count: true,
+    }),
   ]);
 
   if (!job || job.employerId !== session.user.id) {
     notFound();
   }
 
-  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const totalCount = statusCounts.reduce((sum, s) => sum + s._count, 0);
+  const countByStatus = Object.fromEntries(
+    statusCounts.map((s) => [s.status, s._count])
+  ) as Partial<Record<ApplicationStatus, number>>;
 
-  if (totalCount > 0 && page > totalPages) {
-    redirect(`/employer/jobs/${id}/applicants?page=${totalPages}`);
+  const totalPages = Math.max(1, Math.ceil(filteredCount / PAGE_SIZE));
+
+  if (filteredCount > 0 && page > totalPages) {
+    const suffix = status ? `&status=${status}` : "";
+    redirect(`/employer/jobs/${id}/applicants?page=${totalPages}${suffix}`);
   }
 
   return (
@@ -66,8 +92,38 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
         {totalCount} درخواست دریافت‌شده
       </p>
 
+      <div className="mt-5 flex flex-wrap gap-2">
+        <Link
+          href={`/employer/jobs/${id}/applicants`}
+          className={
+            !status
+              ? "rounded-full bg-slate px-3 py-1.5 text-xs font-medium text-white"
+              : "rounded-full border border-line px-3 py-1.5 text-xs text-ink-muted hover:text-ink"
+          }
+        >
+          همه ({totalCount})
+        </Link>
+        {STATUS_VALUES.map((s) => (
+          <Link
+            key={s}
+            href={`/employer/jobs/${id}/applicants?status=${s}`}
+            className={
+              status === s
+                ? "rounded-full bg-slate px-3 py-1.5 text-xs font-medium text-white"
+                : "rounded-full border border-line px-3 py-1.5 text-xs text-ink-muted hover:text-ink"
+            }
+          >
+            {applicationStatusLabels[s]} ({countByStatus[s] ?? 0})
+          </Link>
+        ))}
+      </div>
+
       {job.applications.length === 0 ? (
-        <p className="mt-10 text-ink-muted">هنوز کسی برای این آگهی اپلای نکرده است.</p>
+        <p className="mt-10 text-ink-muted">
+          {status
+            ? `درخواستی با وضعیت «${applicationStatusLabels[status]}» یافت نشد.`
+            : "هنوز کسی برای این آگهی اپلای نکرده است."}
+        </p>
       ) : (
         <>
           <ul className="mt-8 flex flex-col gap-4">
@@ -116,7 +172,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
             <div className="mt-8 flex items-center justify-between border-t border-line pt-5 text-sm">
               {page > 1 ? (
                 <Link
-                  href={`/employer/jobs/${id}/applicants?page=${page - 1}`}
+                  href={`/employer/jobs/${id}/applicants?page=${page - 1}${status ? `&status=${status}` : ""}`}
                   className="text-slate hover:underline"
                 >
                   ← صفحه‌ی قبل
@@ -131,7 +187,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
 
               {page < totalPages ? (
                 <Link
-                  href={`/employer/jobs/${id}/applicants?page=${page + 1}`}
+                  href={`/employer/jobs/${id}/applicants?page=${page + 1}${status ? `&status=${status}` : ""}`}
                   className="text-slate hover:underline"
                 >
                   صفحه‌ی بعد ←
