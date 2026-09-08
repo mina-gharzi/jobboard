@@ -212,7 +212,13 @@ export default async function JobDetailPage({ params }: Props) {
           type="application/ld+json"
            
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(buildJobPostingJsonLd(job)),
+            // escape می‌کنیم چون title/description از کاربر (کارفرما) میاد؛
+            // بدون این escape، رشته‌ی «</script>» توی توضیحات می‌تونه تگ رو
+            // زودتر ببنده و کد دلخواه رو تو صفحه inject کنه (Stored XSS).
+            __html: JSON.stringify(buildJobPostingJsonLd(job)).replace(
+              /</g,
+              "\\u003c"
+            ),
           }}
         />
       )}

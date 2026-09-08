@@ -2,6 +2,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
+import JobCard from "@/components/JobCard";
 
 const formatNumber = (value: number) =>
   new Intl.NumberFormat("fa-IR").format(value);
@@ -41,8 +42,9 @@ export default async function Home() {
         remoteType: true,
         salaryMin: true,
         salaryMax: true,
+        createdAt: true,
         employer: {
-          select: { name: true },
+          select: { name: true, image: true },
         },
       },
     }),
@@ -185,54 +187,8 @@ export default async function Home() {
 
           {recentJobs.length > 0 ? (
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {recentJobs.map((job) => (
-                <Link
-                  key={job.id}
-                  href={`/jobs/${job.slug}`}
-                  className="group relative flex flex-col overflow-hidden rounded-3xl border border-ink/10 bg-paper p-6 transition duration-300 hover:-translate-y-1 hover:border-gold/30 hover:shadow-[0_24px_60px_-24px_rgba(0,0,0,0.15)]"
-                >
-                  <div className="mb-6 flex items-start gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-ink/4 text-base font-black text-ink">
-                      {(job.employer?.name ?? "ک")[0]}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="truncate font-bold text-ink transition group-hover:text-gold">
-                        {job.title}
-                      </h3>
-                      <p className="mt-0.5 text-sm text-ink-muted">
-                        {job.employer?.name ?? "شرکت"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto flex flex-wrap gap-2">
-                    <span className="rounded-full bg-gold/10 px-3 py-1.5 text-xs font-medium text-ink">
-                      {job.category}
-                    </span>
-                    <span className="rounded-full bg-ink/4 px-3 py-1.5 text-xs text-ink-muted">
-                      {job.city || "تهران"}
-                    </span>
-                    {job.remoteType && (
-                      <span className="rounded-full bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-700">
-                        {job.remoteType}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="mt-4 border-t border-ink/5 pt-4">
-                    {job.salaryMin || job.salaryMax ? (
-                      <p className="text-sm font-semibold text-ink">
-                        {job.salaryMin && job.salaryMax
-                          ? `${formatNumber(job.salaryMin)} تا ${formatNumber(job.salaryMax)} تومان`
-                          : job.salaryMin
-                            ? `از ${formatNumber(job.salaryMin)} تومان`
-                            : `تا ${formatNumber(job.salaryMax!)} تومان`}
-                      </p>
-                    ) : (
-                      <p className="text-sm text-ink-muted">حقوق توافقی</p>
-                    )}
-                  </div>
-                </Link>
+              {recentJobs.map((job, index) => (
+                <JobCard key={job.id} job={job} index={index} />
               ))}
             </div>
           ) : (
