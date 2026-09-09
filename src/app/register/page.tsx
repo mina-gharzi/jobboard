@@ -37,7 +37,11 @@ export default function RegisterPage() {
     setLoading(false);
 
     if (signUpError) {
-      setError(signUpError.message ?? "ثبت‌نام انجام نشد");
+      setError(
+        signUpError.status === 429
+          ? "تعداد درخواست‌های ثبت‌نام شما زیاد بوده است. لطفاً چند دقیقه صبر کنید و دوباره امتحان کنید."
+          : signUpError.message ?? "ثبت‌نام انجام نشد"
+      );
       return;
     }
 

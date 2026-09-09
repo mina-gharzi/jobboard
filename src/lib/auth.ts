@@ -7,6 +7,28 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  // Better Auth یه rate limiter داخلی داره که به‌صورت پیش‌فرض فقط در
+  // production فعاله (نه در dev) و مقدار پیش‌فرضش سراسریه (۱۰۰ درخواست
+  // در ۶۰ ثانیه). این‌جا صراحتاً فعالش می‌کنیم (تا رفتارش قابل پیش‌بینی
+  // باشه و بین dev/prod فرق نکنه) و برای مسیرهای حساس‌تر (لاگین، ثبت‌نام،
+  // فراموشی رمز) محدودیت سخت‌گیرانه‌تری می‌ذاریم تا جلوی brute-force روی
+  // رمز عبور و spam کردن ایمیل بازیابی/ثبت‌نام گرفته بشه.
+  //
+  // نکته: storage پیش‌فرض این rate limiter در حافظه (in-memory) است؛
+  // یعنی روی هاست‌های چند-instance/serverless بین درخواست‌ها به‌صورت
+  // کامل به اشتراک گذاشته نمی‌شه. برای production واقعی روی چنین
+  // هاستی، بعداً باید `secondaryStorage` (مثلاً Redis/Upstash) هم اضافه
+  // بشه؛ فعلاً همین سطح محافظت به‌مراتب از نبودنش بهتره.
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 100,
+    customRules: {
+      "/sign-in/email": { window: 60, max: 5 },
+      "/sign-up/email": { window: 600, max: 5 },
+      "/forget-password": { window: 600, max: 3 },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     // تا وقتی کاربر ایمیلش رو تایید نکرده، اجازه‌ی ورود نداره؛ صفحه‌ی

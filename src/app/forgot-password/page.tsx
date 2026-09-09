@@ -22,7 +22,11 @@ export default function ForgotPasswordPage() {
     setLoading(false);
 
     if (requestError) {
-      setError(requestError.message ?? "درخواست ناموفق بود");
+      setError(
+        requestError.status === 429
+          ? "تعداد درخواست‌های بازیابی رمز عبور شما زیاد بوده است. لطفاً چند دقیقه صبر کنید و دوباره امتحان کنید."
+          : requestError.message ?? "درخواست ناموفق بود"
+      );
       return;
     }
 

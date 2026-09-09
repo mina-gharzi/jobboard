@@ -29,6 +29,10 @@ export default function LoginPage() {
         setError(
           "ایمیل شما هنوز تایید نشده است. یک ایمیل تایید جدید برای شما ارسال شد؛ لطفاً صندوق ورودی (یا اسپم) را بررسی کنید."
         );
+      } else if (signInError.status === 429) {
+        setError(
+          "تعداد تلاش‌های ورود شما زیاد بوده است. لطفاً چند دقیقه صبر کنید و دوباره امتحان کنید."
+        );
       } else {
         setError(signInError.message ?? "ورود انجام نشد");
       }
