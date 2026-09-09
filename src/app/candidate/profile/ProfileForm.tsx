@@ -101,6 +101,20 @@ export default function ProfileForm({ name, email, phone, resumePdf, bio }: Prop
     if (resumeInputRef.current) resumeInputRef.current.value = "";
   }
 
+  // ساخت دستی FormData: در برخی نسخه‌های React/Next هنگام ارسال خودکار فرمِ
+  // حاوی فایل، ورودی‌های FormData (از جمله فایل) حذف می‌شوند (issue #93822).
+  // فایل را از state تزریق می‌کنیم تا مطمئن باشیم به سرور می‌رسد.
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    if (selectedResume) {
+      fd.set("resumePdf", selectedResume);
+    } else {
+      fd.delete("resumePdf");
+    }
+    formAction(fd);
+  }
+
   // بعد از ثبت موفق، از حالت ویرایش خارج شو. این کار حین رندر انجام می‌شه
   // (الگوی توصیه‌شده‌ی React برای «adjusting state when a value changes»)،
   // نه داخل useEffect، چون همون‌جا setState زدن باعث یک رندر اضافه می‌شه.
@@ -184,7 +198,7 @@ export default function ProfileForm({ name, email, phone, resumePdf, bio }: Prop
             )}
             {state.error && <p className="mb-4 text-sm text-danger">{state.error}</p>}
 
-            <form action={formAction} className="flex flex-col gap-5">
+            <form action={formAction} onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div>
                 <label htmlFor="profile-phone" className="mb-1.5 block text-sm text-ink-muted">شماره تماس</label>
                 <input

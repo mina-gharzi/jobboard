@@ -81,7 +81,31 @@ export default async function CandidateDashboard({ searchParams }: Props) {
                 <JobCard
                   job={app.job}
                   footer={
-                    <span className={applicationStatusBadge[app.status]}>{applicationStatusLabels[app.status]}</span>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className={applicationStatusBadge[app.status]}>
+                        {applicationStatusLabels[app.status]}
+                      </span>
+                      {app.resumePdf && (
+                        <a
+                          href={app.resumePdf}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-xs font-medium text-slate underline-offset-4 hover:underline"
+                        >
+                          <svg
+                            className="h-3.5 w-3.5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <path d="M14 2v6h6" />
+                          </svg>
+                          رزومه‌ی ارسالی
+                        </a>
+                      )}
+                    </div>
                   }
                 />
               </li>

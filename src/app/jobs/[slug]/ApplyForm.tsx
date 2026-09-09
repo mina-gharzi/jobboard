@@ -54,8 +54,22 @@ export default function ApplyForm({ jobId }: { jobId: string }) {
     if (inputRef.current) inputRef.current.value = "";
   }
 
+  // ساخت دستی FormData: در برخی نسخه‌های React/Next هنگام ارسال خودکار فرمِ
+  // حاوی فایل، ورودی‌های FormData (از جمله فایل) حذف می‌شوند (issue #93822).
+  // فایل را از state تزریق می‌کنیم تا مطمئن باشیم به سرور می‌رسد.
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    if (selectedResume) {
+      fd.set("resumePdf", selectedResume);
+    } else {
+      fd.delete("resumePdf");
+    }
+    formAction(fd);
+  }
+
   return (
-    <form action={formAction} className="flex flex-col gap-3">
+    <form action={formAction} onSubmit={handleSubmit} className="flex flex-col gap-3">
       <h3 className="font-display text-lg font-semibold text-ink">
         اپلای برای این شغل
       </h3>
