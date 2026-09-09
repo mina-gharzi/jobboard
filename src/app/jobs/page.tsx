@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import JobCard from "@/components/JobCard";
+import { buildSearchTerms } from "@/lib/search";
 
 const PAGE_SIZE = 6;
 
@@ -56,13 +57,15 @@ export default async function JobsPage({ searchParams }: Props) {
   const hasFilters = Boolean(q || city || category);
   const page = Math.max(1, Number(pageRaw) || 1);
 
+  const searchTerms = q ? buildSearchTerms(q) : [];
+
   const where = {
     status: "PUBLISHED" as const,
-    ...(q && {
-      OR: [
-        { title: { contains: q, mode: "insensitive" as const } },
-        { description: { contains: q, mode: "insensitive" as const } },
-      ],
+    ...(searchTerms.length && {
+      OR: searchTerms.flatMap((term) => [
+        { title: { contains: term, mode: "insensitive" as const } },
+        { description: { contains: term, mode: "insensitive" as const } },
+      ]),
     }),
     ...(city && { city: { contains: city, mode: "insensitive" as const } }),
     ...(category && { category }),
