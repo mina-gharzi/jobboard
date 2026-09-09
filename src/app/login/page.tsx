@@ -136,10 +136,11 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-ink-muted">
+                <label htmlFor="login-email" className="mb-1.5 block text-sm font-semibold text-ink-muted">
                   ایمیل
                 </label>
                 <input
+                  id="login-email"
                   placeholder="example@email.com"
                   type="email"
                   value={email}
@@ -152,7 +153,7 @@ export default function LoginPage() {
 
               <div>
                 <div className="mb-1.5 flex items-center justify-between">
-                  <label className="text-sm font-semibold text-ink-muted">
+                  <label htmlFor="login-password" className="text-sm font-semibold text-ink-muted">
                     رمز عبور
                   </label>
                   <a
@@ -163,6 +164,7 @@ export default function LoginPage() {
                   </a>
                 </div>
                 <input
+                  id="login-password"
                   placeholder="••••••••"
                   type="password"
                   value={password}

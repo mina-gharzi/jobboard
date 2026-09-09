@@ -44,6 +44,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
         onChange={(e) => setPassword(e.target.value)}
         required
         autoComplete="new-password"
+        aria-label="رمز عبور جدید"
         className="input-field rounded-md border p-3 text-sm"
       />
       <input
@@ -53,6 +54,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
         onChange={(e) => setConfirmPassword(e.target.value)}
         required
         autoComplete="new-password"
+        aria-label="تکرار رمز عبور جدید"
         className="input-field rounded-md border p-3 text-sm"
       />
 

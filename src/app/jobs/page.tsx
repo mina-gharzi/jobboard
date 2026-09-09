@@ -174,6 +174,7 @@ export default async function JobsPage({ searchParams }: Props) {
                   name="q"
                   defaultValue={q ?? ""}
                   placeholder="عنوان شغل یا مهارت..."
+                  aria-label="عنوان شغل یا مهارت"
                   className="w-full bg-transparent text-xs text-ink placeholder:text-ink-muted/70 focus:outline-none"
                 />
               </label>
@@ -189,6 +190,7 @@ export default async function JobsPage({ searchParams }: Props) {
                     name="city"
                     defaultValue={city ?? ""}
                     placeholder="شهر"
+                    aria-label="شهر"
                     className="w-full bg-transparent text-xs text-ink placeholder:text-ink-muted/70 focus:outline-none"
                   />
                 </label>
@@ -220,6 +222,7 @@ export default async function JobsPage({ searchParams }: Props) {
                   name="q"
                   defaultValue={q ?? ""}
                   placeholder="عنوان شغل، مهارت یا کلمه کلیدی"
+                  aria-label="عنوان شغل، مهارت یا کلمه کلیدی"
                   className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/70 focus:outline-none"
                 />
               </label>
@@ -234,6 +237,7 @@ export default async function JobsPage({ searchParams }: Props) {
                   name="city"
                   defaultValue={city ?? ""}
                   placeholder="شهر"
+                  aria-label="شهر"
                   className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/70 focus:outline-none"
                 />
               </label>

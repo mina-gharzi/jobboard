@@ -63,6 +63,7 @@ export default function ForgotPasswordPage() {
           onChange={(e) => setEmail(e.target.value)}
           required
           autoComplete="email"
+          aria-label="ایمیل"
           className="input-field rounded-md border p-3 text-sm"
         />
 

@@ -118,8 +118,9 @@ export default function ProfileForm({ name, email, phone, resumeUrl, bio }: Prop
 
             <form action={formAction} className="flex flex-col gap-5">
               <div>
-                <label className="mb-1.5 block text-sm text-ink-muted">شماره تماس</label>
+                <label htmlFor="profile-phone" className="mb-1.5 block text-sm text-ink-muted">شماره تماس</label>
                 <input
+                  id="profile-phone"
                   name="phone"
                   type="tel"
                   defaultValue={effective.phone}
@@ -131,8 +132,9 @@ export default function ProfileForm({ name, email, phone, resumeUrl, bio }: Prop
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm text-ink-muted">لینک رزومه</label>
+                <label htmlFor="profile-resume" className="mb-1.5 block text-sm text-ink-muted">لینک رزومه</label>
                 <input
+                  id="profile-resume"
                   name="resumeUrl"
                   type="url"
                   defaultValue={effective.resumeUrl}
@@ -146,8 +148,9 @@ export default function ProfileForm({ name, email, phone, resumeUrl, bio }: Prop
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm text-ink-muted">معرفی کوتاه</label>
+                <label htmlFor="profile-bio" className="mb-1.5 block text-sm text-ink-muted">معرفی کوتاه</label>
                 <textarea
+                  id="profile-bio"
                   name="bio"
                   defaultValue={effective.bio}
                   rows={5}

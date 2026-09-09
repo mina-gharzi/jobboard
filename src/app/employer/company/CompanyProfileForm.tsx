@@ -140,8 +140,9 @@ export default function CompanyProfileForm({
 
             <form action={formAction} className="flex flex-col gap-5">
               <div>
-                <label className="mb-1.5 block text-sm text-ink-muted">نام شرکت</label>
+                <label htmlFor="company-name" className="mb-1.5 block text-sm text-ink-muted">نام شرکت</label>
                 <input
+                  id="company-name"
                   name="name"
                   type="text"
                   defaultValue={effective.name}
@@ -152,8 +153,9 @@ export default function CompanyProfileForm({
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm text-ink-muted">لینک لوگو</label>
+                <label htmlFor="company-logo" className="mb-1.5 block text-sm text-ink-muted">لینک لوگو</label>
                 <input
+                  id="company-logo"
                   name="logoUrl"
                   type="url"
                   defaultValue={effective.logoUrl}
@@ -165,8 +167,9 @@ export default function CompanyProfileForm({
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm text-ink-muted">وب‌سایت شرکت</label>
+                <label htmlFor="company-website" className="mb-1.5 block text-sm text-ink-muted">وب‌سایت شرکت</label>
                 <input
+                  id="company-website"
                   name="companyWebsite"
                   type="url"
                   defaultValue={effective.companyWebsite}
@@ -180,8 +183,9 @@ export default function CompanyProfileForm({
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm text-ink-muted">اندازه‌ی تیم</label>
+                <label htmlFor="company-team" className="mb-1.5 block text-sm text-ink-muted">اندازه‌ی تیم</label>
                 <select
+                  id="company-team"
                   name="companyTeamSize"
                   defaultValue={effective.companyTeamSize}
                   className="input-field w-full rounded-md border p-3 text-sm"
@@ -199,8 +203,9 @@ export default function CompanyProfileForm({
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm text-ink-muted">درباره‌ی شرکت</label>
+                <label htmlFor="company-desc" className="mb-1.5 block text-sm text-ink-muted">درباره‌ی شرکت</label>
                 <textarea
+                  id="company-desc"
                   name="companyDescription"
                   defaultValue={effective.companyDescription}
                   rows={5}

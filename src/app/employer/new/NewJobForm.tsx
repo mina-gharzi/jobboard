@@ -23,8 +23,9 @@ export default function NewJobForm() {
       )}
 
       <div>
-        <label className="mb-1.5 block text-sm text-ink-muted">عنوان شغل</label>
+        <label htmlFor="job-title" className="mb-1.5 block text-sm text-ink-muted">عنوان شغل</label>
         <input
+          id="job-title"
           name="title"
           defaultValue={state.values?.title ?? ""}
           placeholder="مثلاً توسعه‌دهنده‌ی فرانت‌اند"
@@ -36,8 +37,9 @@ export default function NewJobForm() {
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm text-ink-muted">توضیحات</label>
+        <label htmlFor="job-desc" className="mb-1.5 block text-sm text-ink-muted">توضیحات</label>
         <textarea
+          id="job-desc"
           name="description"
           defaultValue={state.values?.description ?? ""}
           placeholder="شرح موقعیت شغلی، مهارت‌های مورد نیاز و..."
@@ -53,10 +55,11 @@ export default function NewJobForm() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-sm text-ink-muted">
+          <label htmlFor="job-category" className="mb-1.5 block text-sm text-ink-muted">
             دسته‌بندی
           </label>
           <select
+            id="job-category"
             name="category"
             defaultValue={state.values?.category ?? ""}
             className="input-field w-full rounded-md border p-3 text-sm"
@@ -77,8 +80,9 @@ export default function NewJobForm() {
           )}
         </div>
         <div>
-          <label className="mb-1.5 block text-sm text-ink-muted">شهر</label>
+          <label htmlFor="job-city" className="mb-1.5 block text-sm text-ink-muted">شهر</label>
           <input
+            id="job-city"
             name="city"
             defaultValue={state.values?.city ?? ""}
             placeholder="مثلاً تهران"
@@ -91,10 +95,11 @@ export default function NewJobForm() {
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm text-ink-muted">
+        <label htmlFor="job-remote" className="mb-1.5 block text-sm text-ink-muted">
           نوع همکاری
         </label>
         <select
+          id="job-remote"
           name="remoteType"
           defaultValue={state.values?.remoteType ?? ""}
           className="input-field w-full rounded-md border p-3 text-sm"
@@ -117,10 +122,11 @@ export default function NewJobForm() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-sm text-ink-muted">
+          <label htmlFor="job-salary-min" className="mb-1.5 block text-sm text-ink-muted">
             حداقل حقوق (تومان)
           </label>
           <input
+            id="job-salary-min"
             name="salaryMin"
             type="number"
             defaultValue={state.values?.salaryMin ?? ""}
@@ -134,10 +140,11 @@ export default function NewJobForm() {
           )}
         </div>
         <div>
-          <label className="mb-1.5 block text-sm text-ink-muted">
+          <label htmlFor="job-salary-max" className="mb-1.5 block text-sm text-ink-muted">
             حداکثر حقوق (تومان)
           </label>
           <input
+            id="job-salary-max"
             name="salaryMax"
             type="number"
             defaultValue={state.values?.salaryMax ?? ""}

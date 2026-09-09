@@ -194,6 +194,7 @@ export default function RegisterPage() {
                 <label className={roleBtn("CANDIDATE", role === "CANDIDATE")}>
                   <input
                     type="radio"
+                    name="role"
                     checked={role === "CANDIDATE"}
                     onChange={() => setRole("CANDIDATE")}
                     className="sr-only"
@@ -212,6 +213,7 @@ export default function RegisterPage() {
                 <label className={roleBtn("EMPLOYER", role === "EMPLOYER")}>
                   <input
                     type="radio"
+                    name="role"
                     checked={role === "EMPLOYER"}
                     onChange={() => setRole("EMPLOYER")}
                     className="sr-only"
@@ -230,10 +232,11 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-ink-muted">
+                <label htmlFor="register-name" className="mb-1.5 block text-sm font-semibold text-ink-muted">
                   نام و نام خانوادگی
                 </label>
                 <input
+                  id="register-name"
                   placeholder="مثلاً علی رضایی"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -244,10 +247,11 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-ink-muted">
+                <label htmlFor="register-email" className="mb-1.5 block text-sm font-semibold text-ink-muted">
                   ایمیل
                 </label>
                 <input
+                  id="register-email"
                   placeholder="example@email.com"
                   type="email"
                   value={email}
@@ -259,10 +263,11 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-ink-muted">
+                <label htmlFor="register-password" className="mb-1.5 block text-sm font-semibold text-ink-muted">
                   رمز عبور
                 </label>
                 <input
+                  id="register-password"
                   placeholder="حداقل ۸ کاراکتر"
                   type="password"
                   value={password}
@@ -274,10 +279,11 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-ink-muted">
+                <label htmlFor="register-confirm" className="mb-1.5 block text-sm font-semibold text-ink-muted">
                   تکرار رمز عبور
                 </label>
                 <input
+                  id="register-confirm"
                   placeholder="تکرار رمز عبور"
                   type="password"
                   value={confirmPassword}

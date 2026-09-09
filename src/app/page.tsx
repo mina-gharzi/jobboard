@@ -184,6 +184,7 @@ export default async function Home() {
                       type="text"
                       name="q"
                       placeholder="عنوان شغل، مهارت یا کلمه کلیدی"
+                      aria-label="عنوان شغل، مهارت یا کلمه کلیدی"
                       className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/70 focus:outline-none"
                     />
                   </label>
@@ -197,6 +198,7 @@ export default async function Home() {
                       type="text"
                       name="city"
                       placeholder="شهر"
+                      aria-label="شهر"
                       className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/70 focus:outline-none"
                     />
                   </label>

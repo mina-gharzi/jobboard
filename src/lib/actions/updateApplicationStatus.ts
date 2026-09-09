@@ -47,7 +47,13 @@ export async function updateApplicationStatus(
     data: { status },
   });
 
+  // صفحه‌ی لیست درخواست‌های کارفرما
   revalidatePath(`/employer/jobs/${application.jobId}/applicants`);
+
+  // صفحه‌ی کارجو (بج وضعیت در لیست درخواست‌ها) و صفحه‌ی خودِ آگهی
+  // (باکس وضعیتِ درخواستِ او) تا تغییر سریع به‌روز شود.
+  revalidatePath("/candidate");
+  revalidatePath(`/jobs/${application.job.slug}`);
 
   return { success: true };
 }
