@@ -14,6 +14,11 @@ export type UpdateProfileState = {
     resumeUrl?: string;
     bio?: string;
   };
+  values?: {
+    phone: string;
+    resumeUrl: string;
+    bio: string;
+  };
 };
 
 export async function updateCandidateProfile(
@@ -30,11 +35,13 @@ export async function updateCandidateProfile(
     return { error: "این بخش فقط برای کارجوهاست" };
   }
 
-  const parsed = updateProfileSchema.safeParse({
+  const rawValues = {
     phone: toStr(formData.get("phone")),
     resumeUrl: toStr(formData.get("resumeUrl")),
     bio: toStr(formData.get("bio")),
-  });
+  };
+
+  const parsed = updateProfileSchema.safeParse(rawValues);
 
   if (!parsed.success) {
     const fe = parsed.error.flatten().fieldErrors;
@@ -44,6 +51,7 @@ export async function updateCandidateProfile(
         resumeUrl: fe.resumeUrl?.[0],
         bio: fe.bio?.[0],
       },
+      values: rawValues,
     };
   }
 
@@ -61,5 +69,8 @@ export async function updateCandidateProfile(
   revalidatePath("/candidate/profile");
   revalidatePath("/candidate");
 
-  return { success: true };
+  return {
+    success: true,
+    values: { phone: phone ?? "", resumeUrl: resumeUrl ?? "", bio: bio ?? "" },
+  };
 }

@@ -3,43 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-
-const R = 54;
-const C = 2 * Math.PI * R;
-
-function CompletionRing({ pct }: { pct: number }) {
-  const filled = Math.round(pct * 3 / 100);
-  return (
-    <div className="relative h-36 w-36 shrink-0">
-      <svg
-        className="h-full w-full -rotate-90"
-        viewBox="0 0 120 120"
-        fill="none"
-      >
-        <circle cx="60" cy="60" r={R} className="fill-white stroke-ink/[0.06]" strokeWidth="8" />
-        <circle
-          cx="60"
-          cy="60"
-          r={R}
-          className="stroke-gold"
-          strokeWidth="8"
-          strokeLinecap="round"
-          strokeDasharray={C}
-          strokeDashoffset={C - (pct / 100) * C}
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-3xl font-black leading-none text-ink">
-          {pct}
-          <span className="text-base font-bold text-ink-muted">٪</span>
-        </span>
-        <span className="mt-1 text-[11px] font-semibold text-ink-muted">
-          {filled} از ۳
-        </span>
-      </div>
-    </div>
-  );
-}
+import ProfileForm from "./ProfileForm";
 
 export default async function CandidateProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -60,16 +24,6 @@ export default async function CandidateProfilePage() {
 
   if (!user) redirect("/login");
 
-  const fields: { label: string; filled: boolean }[] = [
-    { label: "شماره تماس", filled: Boolean(user.phone) },
-    { label: "رزومه", filled: Boolean(user.resumeUrl) },
-    { label: "معرفی", filled: Boolean(user.bio) },
-  ];
-  const filledCount = fields.filter((f) => f.filled).length;
-  const completionPct = Math.round((filledCount / fields.length) * 100);
-
-  const initial = user.name?.trim()?.[0] ?? "؟";
-
   return (
     <div className="relative overflow-hidden">
       {/* decorative bg */}
@@ -79,7 +33,6 @@ export default async function CandidateProfilePage() {
       </div>
 
       <div className="mx-auto max-w-2xl px-6 pb-20 pt-10 md:px-10 md:pt-16">
-        {/* back link */}
         <Link
           href="/candidate"
           className="group inline-flex items-center gap-2 text-sm font-medium text-ink-muted transition hover:text-ink"
@@ -98,160 +51,13 @@ export default async function CandidateProfilePage() {
           بازگشت به درخواست‌های من
         </Link>
 
-        {/* ═══ profile card ═══ */}
-        <div className="mt-6 overflow-hidden rounded-[32px] border border-line bg-white/70 shadow-[0_40px_100px_-40px_rgba(44,57,71,0.28)] backdrop-blur">
-          {/* tall banner */}
-          <div className="relative h-44 overflow-hidden bg-linear-to-br from-gold/25 via-gold/8 to-slate/5 md:h-52">
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute -right-10 -top-20 h-56 w-56 rounded-full bg-gold/18 blur-3xl" />
-              <div className="absolute -left-16 -bottom-20 h-48 w-48 rounded-full bg-slate/12 blur-3xl" />
-              <div className="absolute right-[15%] top-[20%] h-12 w-12 rotate-12 rounded-2xl border border-gold/20 bg-white/40 shadow-lg backdrop-blur-sm animate-float" />
-              <div className="absolute left-[12%] bottom-[25%] h-9 w-9 rounded-full border border-dashed border-gold/30 animate-float-slow" />
-              <div className="absolute right-[28%] bottom-[15%] h-2 w-2 rounded-full bg-gold shadow-[0_0_12px_2px_rgba(194,165,109,0.5)] animate-float-delayed" />
-            </div>
-          </div>
-
-          <div className="relative px-6 md:px-8">
-            {/* avatar — big, centered */}
-            <div className="flex justify-center">
-              <div className="-mt-14 flex h-28 w-28 items-center justify-center overflow-hidden rounded-3xl border border-white bg-white text-4xl font-black text-slate-dark shadow-[0_24px_60px_-12px_rgba(44,57,71,0.35)] ring-[5px] ring-white/80">
-                {initial}
-              </div>
-            </div>
-
-            {/* name + email card */}
-            <div className="mx-auto mt-4 max-w-sm text-center">
-              <h1 className="font-display text-2xl font-black text-ink md:text-3xl">
-                {user.name}
-              </h1>
-              <p className="mt-1 text-sm text-ink-muted">{user.email}</p>
-            </div>
-
-            {/* completion ring + field chips */}
-            <div className="mx-auto mt-8 flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-              {/* ring */}
-              <CompletionRing pct={completionPct} />
-
-              {/* chips */}
-              <div className="flex flex-1 flex-col gap-2.5 pt-2">
-                {fields.map((f) => (
-                  <span
-                    key={f.label}
-                    className={`inline-flex items-center gap-3 rounded-2xl border px-4 py-2.5 text-sm font-semibold ${
-                      f.filled
-                        ? "border-emerald-200/60 bg-emerald-50/80 text-emerald-800"
-                        : "border-ink/8 bg-ink/[0.02] text-ink-muted"
-                    }`}
-                  >
-                    <svg
-                      className={`h-5 w-5 shrink-0 ${f.filled ? "text-emerald-500" : "text-ink-muted/30"}`}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      {f.filled ? (
-                        <path d="m5 13 4 4L19 7" />
-                      ) : (
-                        <circle cx="12" cy="12" r="4" />
-                      )}
-                    </svg>
-                    {f.label}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* info summary */}
-            <div className="mx-auto mt-6 max-w-lg">
-              <div className="grid grid-cols-1 gap-2.5">
-                {[
-                  {
-                    label: "شماره تماس",
-                    value: user.phone,
-                    icon: (
-                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.58 2.81.7A2 2 0 0 1 22 16.92z" />
-                      </svg>
-                    ),
-                    dir: "ltr" as const,
-                  },
-                  {
-                    label: "رزومه",
-                    value: user.resumeUrl,
-                    isLink: Boolean(user.resumeUrl),
-                    icon: (
-                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <path d="M14 2v6h6" />
-                        <path d="M16 13H8M16 17H8M10 9H8" />
-                      </svg>
-                    ),
-                  },
-                  {
-                    label: "معرفی",
-                    value: user.bio,
-                    icon: (
-                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                      </svg>
-                    ),
-                  },
-                ].map((row) => (
-                  <div
-                    key={row.label}
-                    className="flex items-start gap-3.5 rounded-2xl border border-line/60 bg-paper/60 px-4 py-3"
-                  >
-                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gold/10 text-gold">
-                      {row.icon}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
-                        {row.label}
-                      </p>
-                      {row.value ? (
-                        row.isLink ? (
-                          <a
-                            href={row.value}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-0.5 block truncate text-sm font-medium text-slate underline-offset-4 hover:underline"
-                          >
-                            {row.value}
-                          </a>
-                        ) : (
-                          <p
-                            dir={row.dir}
-                            className="mt-0.5 whitespace-pre-line text-sm leading-6 text-ink"
-                          >
-                            {row.value}
-                          </p>
-                        )
-                      ) : (
-                        <p className="mt-0.5 text-sm text-ink-muted/60">—</p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* edit button */}
-          <div className="border-t border-line/60 bg-paper/40 px-6 py-5 backdrop-blur md:px-8">
-            <Link
-              href="/candidate/profile/edit"
-              className="group inline-flex items-center gap-2 rounded-2xl bg-ink px-6 py-3 text-sm font-bold text-paper shadow-lg transition hover:-translate-y-0.5 hover:bg-ink/90 hover:shadow-[0_20px_40px_-16px_rgba(44,57,71,0.5)] active:translate-y-0"
-            >
-              <svg className="h-4 w-4 text-gold group-hover:text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
-              ویرایش اطلاعات
-            </Link>
-          </div>
-        </div>
+        <ProfileForm
+          name={user.name}
+          email={user.email}
+          phone={user.phone ?? ""}
+          resumeUrl={user.resumeUrl ?? ""}
+          bio={user.bio ?? ""}
+        />
       </div>
     </div>
   );

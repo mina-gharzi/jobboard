@@ -16,6 +16,13 @@ export type UpdateCompanyProfileState = {
     companyTeamSize?: string;
     logoUrl?: string;
   };
+  values?: {
+    name: string;
+    companyDescription: string;
+    companyWebsite: string;
+    companyTeamSize: string;
+    logoUrl: string;
+  };
 };
 
 export async function updateCompanyProfile(
@@ -32,13 +39,15 @@ export async function updateCompanyProfile(
     return { error: "این بخش فقط برای کارفرماهاست" };
   }
 
-  const parsed = updateCompanyProfileSchema.safeParse({
+  const rawValues = {
     name: toStr(formData.get("name")),
     companyDescription: toStr(formData.get("companyDescription")),
     companyWebsite: toStr(formData.get("companyWebsite")),
     companyTeamSize: toStr(formData.get("companyTeamSize")),
     logoUrl: toStr(formData.get("logoUrl")),
-  });
+  };
+
+  const parsed = updateCompanyProfileSchema.safeParse(rawValues);
 
   if (!parsed.success) {
     const fe = parsed.error.flatten().fieldErrors;
@@ -50,6 +59,7 @@ export async function updateCompanyProfile(
         companyTeamSize: fe.companyTeamSize?.[0],
         logoUrl: fe.logoUrl?.[0],
       },
+      values: rawValues,
     };
   }
 
@@ -74,5 +84,14 @@ export async function updateCompanyProfile(
   revalidatePath("/jobs");
   revalidatePath("/");
 
-  return { success: true };
+  return {
+    success: true,
+    values: {
+      name,
+      companyDescription: companyDescription ?? "",
+      companyWebsite: companyWebsite ?? "",
+      companyTeamSize: companyTeamSize ?? "",
+      logoUrl: logoUrl ?? "",
+    },
+  };
 }
