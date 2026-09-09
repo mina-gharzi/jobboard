@@ -26,7 +26,7 @@ export const auth = betterAuth({
         type: "string",
         required: false,
       },
-      resumeUrl: {
+      resumePdf: {
         type: "string",
         required: false,
       },

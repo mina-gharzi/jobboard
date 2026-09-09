@@ -6,10 +6,12 @@ import { Prisma } from "@/generated/prisma/client";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { applyToJobSchema, toStr } from "@/lib/validation";
+import { saveResumePdf } from "@/lib/resume";
 
 type ApplyState = {
   success: boolean;
   message: string;
+  attachment?: boolean;
 };
 
 export async function applyToJob(
@@ -54,12 +56,28 @@ export async function applyToJob(
     return { success: false, message: "شما قبلاً برای این آگهی اپلای کرده‌اید" };
   }
 
+  const fileEntry = formData.get("resumePdf");
+  const file = fileEntry instanceof File ? fileEntry : null;
+
+  let attachment: string | null = null;
+  if (file && file.size > 0) {
+    try {
+      attachment = await saveResumePdf(file, session.user.id);
+    } catch (error) {
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : "خطایی در ذخیره‌ی فایل رخ داد",
+      };
+    }
+  }
+
   try {
     await prisma.application.create({
       data: {
         jobId,
         candidateId: session.user.id,
         coverLetter: parsed.data.coverLetter || null,
+        resumePdf: attachment,
       },
     });
   } catch (error) {
@@ -86,5 +104,11 @@ export async function applyToJob(
   revalidatePath(`/jobs`);
   revalidatePath(`/jobs/${job.slug}`);
 
-  return { success: true, message: "درخواست شما با موفقیت ثبت شد" };
+  return {
+    success: true,
+    attachment: Boolean(attachment),
+    message: attachment
+      ? "درخواست شما همراه با رزومه با موفقیت ثبت شد"
+      : "درخواست شما با موفقیت ثبت شد",
+  };
 }

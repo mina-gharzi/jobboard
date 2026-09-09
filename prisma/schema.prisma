@@ -18,7 +18,7 @@ model User {
   updatedAt          DateTime      @updatedAt
   role               String        @default("CANDIDATE")
   phone              String?
-  resumeUrl          String?
+  resumePdf          String?
   bio                String?
   companyDescription String?
   companyWebsite     String?
@@ -104,6 +104,7 @@ model Application {
   jobId       String
   candidateId String
   coverLetter String?
+  resumePdf   String?
   status      ApplicationStatus @default(PENDING)
   createdAt   DateTime          @default(now())
   candidate   User              @relation("CandidateApplications", fields: [candidateId], references: [id])

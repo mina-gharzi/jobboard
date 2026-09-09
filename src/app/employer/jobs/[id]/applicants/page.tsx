@@ -49,7 +49,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
           take: PAGE_SIZE,
           include: {
             candidate: {
-              select: { name: true, email: true, phone: true, resumeUrl: true, bio: true },
+              select: { name: true, email: true, phone: true, resumePdf: true, bio: true },
             },
           },
         },
@@ -144,14 +144,48 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
                       {app.candidate.phone}
                     </p>
                   )}
-                  {app.candidate.resumeUrl && (
+                  {app.resumePdf && (
                     <a
-                      href={app.candidate.resumeUrl}
+                      href={app.resumePdf}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-1 inline-block text-sm text-slate underline"
+                      className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100"
                     >
-                      مشاهده‌ی رزومه
+                      <svg
+                        className="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <path d="M14 2v6h6" />
+                        <path d="m9 13 3 3 3-3" />
+                        <path d="M12 10v6" />
+                      </svg>
+                      مشاهده‌ی رزومه‌ی ارسالی
+                    </a>
+                  )}
+                  {app.candidate.resumePdf && (
+                    <a
+                      href={app.candidate.resumePdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex items-center gap-1.5 rounded-lg border border-slate/20 bg-slate/5 px-3 py-1.5 text-sm font-medium text-slate transition hover:border-slate/40 hover:bg-slate/10"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <path d="M14 2v6h6" />
+                        <path d="m9 13 3 3 3-3" />
+                        <path d="M12 10v6" />
+                      </svg>
+                      رزومه‌ی پروفایل
                     </a>
                   )}
                   {app.candidate.bio && (

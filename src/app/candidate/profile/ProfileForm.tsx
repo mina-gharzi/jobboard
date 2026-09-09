@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import {
   updateCandidateProfile,
   type UpdateProfileState,
@@ -8,11 +8,19 @@ import {
 
 const initialState: UpdateProfileState = {};
 
+const MAX_RESUME_SIZE = 5 * 1024 * 1024;
+
+function formatSize(bytes: number) {
+  return bytes >= 1024 * 1024
+    ? `${(bytes / (1024 * 1024)).toFixed(1)} مگابایت`
+    : `${Math.ceil(bytes / 1024)} کیلوبایت`;
+}
+
 type Props = {
   name: string;
   email: string;
   phone: string;
-  resumeUrl: string;
+  resumePdf: string;
   bio: string;
 };
 
@@ -47,14 +55,51 @@ function CompletionRing({ pct }: { pct: number }) {
   );
 }
 
-export default function ProfileForm({ name, email, phone, resumeUrl, bio }: Props) {
-  const isFirstTime = !phone && !resumeUrl && !bio;
+export default function ProfileForm({ name, email, phone, resumePdf, bio }: Props) {
+  const isFirstTime = !phone && !resumePdf && !bio;
   const [isEditing, setIsEditing] = useState(isFirstTime);
+  const resumeInputRef = useRef<HTMLInputElement>(null);
+  const [selectedResume, setSelectedResume] = useState<File | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
   const [state, formAction, isPending] = useActionState(
     updateCandidateProfile,
     initialState
   );
   const errors = state.fieldErrors ?? {};
+
+  // اعتبارسنجی سریع سمت کلاینت تا کاربر منتظر ارسال فرم نماند.
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null;
+
+    if (!file) {
+      setSelectedResume(null);
+      setFileError(null);
+      return;
+    }
+
+    if (file.size > MAX_RESUME_SIZE) {
+      setSelectedResume(null);
+      e.target.value = "";
+      setFileError("حجم فایل نمی‌تواند بیشتر از ۵ مگابایت باشد");
+      return;
+    }
+
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      setSelectedResume(null);
+      e.target.value = "";
+      setFileError("فقط فایل PDF مجاز است");
+      return;
+    }
+
+    setSelectedResume(file);
+    setFileError(null);
+  }
+
+  function clearSelectedFile() {
+    setSelectedResume(null);
+    setFileError(null);
+    if (resumeInputRef.current) resumeInputRef.current.value = "";
+  }
 
   // بعد از ثبت موفق، از حالت ویرایش خارج شو. این کار حین رندر انجام می‌شه
   // (الگوی توصیه‌شده‌ی React برای «adjusting state when a value changes»)،
@@ -71,14 +116,37 @@ export default function ProfileForm({ name, email, phone, resumeUrl, bio }: Prop
   // به رفرش کامل صفحه)؛ قبل از اولین submit، همون مقادیر اولیه از سرور.
   const effective = {
     phone: state.values?.phone ?? phone,
-    resumeUrl: state.values?.resumeUrl ?? resumeUrl,
+    resumePdf: state.values?.resumePdf ?? resumePdf,
     bio: state.values?.bio ?? bio,
   };
+
+  const resumeFileName = effective.resumePdf
+    ? effective.resumePdf.split("/").pop() ?? effective.resumePdf
+    : "";
+
+  type ProfileRow = {
+    label: string;
+    value: string;
+    dir?: "ltr";
+    display?: string;
+    isLink?: boolean;
+  };
+
+  const profileRows: ProfileRow[] = [
+    { label: "شماره تماس", value: effective.phone, dir: "ltr" },
+    {
+      label: "رزومه",
+      value: effective.resumePdf,
+      display: resumeFileName,
+      isLink: Boolean(effective.resumePdf),
+    },
+    { label: "معرفی", value: effective.bio },
+  ];
 
   const initial = name?.trim()?.[0] ?? "؟";
   const fields = [
     { label: "شماره تماس", filled: Boolean(effective.phone) },
-    { label: "رزومه", filled: Boolean(effective.resumeUrl) },
+    { label: "رزومه", filled: Boolean(effective.resumePdf) },
     { label: "معرفی", filled: Boolean(effective.bio) },
   ];
   const filledCount = fields.filter((f) => f.filled).length;
@@ -132,18 +200,96 @@ export default function ProfileForm({ name, email, phone, resumeUrl, bio }: Prop
               </div>
 
               <div>
-                <label htmlFor="profile-resume" className="mb-1.5 block text-sm text-ink-muted">لینک رزومه</label>
+                <label htmlFor="profile-resume" className="mb-1.5 block text-sm text-ink-muted">رزومه (PDF)</label>
+                {effective.resumePdf && (
+                  <div className="mb-2 flex items-center justify-between gap-3 rounded-md border border-line bg-paper/60 px-3 py-2.5">
+                    <a
+                      href={effective.resumePdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="truncate text-sm text-slate underline-offset-4 hover:underline"
+                      dir="ltr"
+                    >
+                      {resumeFileName}
+                    </a>
+                    <label
+                      htmlFor="remove-resume"
+                      className="flex shrink-0 cursor-pointer items-center gap-1.5 text-xs text-ink-muted transition hover:text-danger"
+                    >
+                      <input
+                        id="remove-resume"
+                        name="removeResume"
+                        type="checkbox"
+                        value="1"
+                        className="accent-slate"
+                      />
+                      حذف رزومه
+                    </label>
+                  </div>
+                )}
+                <label
+                  htmlFor="profile-resume"
+                  className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed bg-white/60 px-4 py-6 text-center transition hover:border-gold/50 hover:bg-gold/5 ${
+                    selectedResume ? "border-emerald-300 bg-emerald-50/40" : "border-slate/25"
+                  }`}
+                >
+                  {selectedResume ? (
+                    <>
+                      <svg
+                        className="h-8 w-8 text-emerald-600"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="m5 12 5 5L20 7" />
+                      </svg>
+                      <span className="text-sm font-semibold text-ink" dir="ltr">
+                        {selectedResume.name}
+                      </span>
+                      <span className="text-xs text-ink-muted">
+                        {formatSize(selectedResume.size)} • برای تغییر کلیک کنید
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        className="h-8 w-8 text-slate"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <path d="M17 8l-5-5-5 5" />
+                        <path d="M12 3v12" />
+                      </svg>
+                      <span className="text-sm font-semibold text-ink">انتخاب فایل رزومه</span>
+                      <span className="text-xs text-ink-muted">فقط PDF، حداکثر ۵ مگابایت</span>
+                    </>
+                  )}
+                </label>
                 <input
+                  ref={resumeInputRef}
                   id="profile-resume"
-                  name="resumeUrl"
-                  type="url"
-                  defaultValue={effective.resumeUrl}
-                  placeholder="لینک رزومه، لینکدین یا نمونه‌کار (Google Drive، LinkedIn و ...)"
-                  dir="ltr"
-                  className="input-field w-full rounded-md border p-3 text-sm"
+                  name="resumePdf"
+                  type="file"
+                  accept="application/pdf,.pdf"
+                  className="sr-only"
+                  onChange={handleFileChange}
                 />
-                {errors.resumeUrl && (
-                  <p className="mt-1.5 text-sm text-danger">{errors.resumeUrl}</p>
+                {fileError && <p className="mt-1.5 text-sm text-danger">{fileError}</p>}
+                {selectedResume && !state.success && (
+                  <button
+                    type="button"
+                    onClick={clearSelectedFile}
+                    className="mt-2 text-xs text-ink-muted transition hover:text-danger"
+                  >
+                    حذف فایل انتخاب‌شده
+                  </button>
+                )}
+                {errors.resumePdf && (
+                  <p className="mt-1.5 text-sm text-danger">{errors.resumePdf}</p>
                 )}
               </div>
 
@@ -219,15 +365,7 @@ export default function ProfileForm({ name, email, phone, resumeUrl, bio }: Prop
 
             <div className="mx-auto mt-6 max-w-lg">
               <div className="grid grid-cols-1 gap-2.5">
-                {[
-                  { label: "شماره تماس", value: effective.phone, dir: "ltr" as const },
-                  {
-                    label: "رزومه",
-                    value: effective.resumeUrl,
-                    isLink: Boolean(effective.resumeUrl),
-                  },
-                  { label: "معرفی", value: effective.bio },
-                ].map((row) => (
+                {profileRows.map((row) => (
                   <div
                     key={row.label}
                     className="flex items-start gap-3.5 rounded-2xl border border-line/60 bg-paper/60 px-4 py-3"
@@ -244,7 +382,7 @@ export default function ProfileForm({ name, email, phone, resumeUrl, bio }: Prop
                             rel="noopener noreferrer"
                             className="mt-0.5 block truncate text-sm font-medium text-slate underline-offset-4 hover:underline"
                           >
-                            {row.value}
+                            {row.display ?? row.value}
                           </a>
                         ) : (
                           <p

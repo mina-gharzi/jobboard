@@ -17,7 +17,7 @@ export default async function CandidateProfilePage() {
       name: true,
       email: true,
       phone: true,
-      resumeUrl: true,
+      resumePdf: true,
       bio: true,
     },
   });
@@ -55,7 +55,7 @@ export default async function CandidateProfilePage() {
           name={user.name}
           email={user.email}
           phone={user.phone ?? ""}
-          resumeUrl={user.resumeUrl ?? ""}
+          resumePdf={user.resumePdf ?? ""}
           bio={user.bio ?? ""}
         />
       </div>

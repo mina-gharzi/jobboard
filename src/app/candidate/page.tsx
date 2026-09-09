@@ -34,7 +34,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
     prisma.application.count({ where: { candidateId: session.user.id } }),
     prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { phone: true, resumeUrl: true, bio: true },
+      select: { phone: true, resumePdf: true, bio: true },
     }),
   ]);
 
@@ -45,7 +45,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
   }
 
   const isProfileIncomplete =
-    !profile?.phone || !profile?.resumeUrl || !profile?.bio;
+    !profile?.phone || !profile?.resumePdf || !profile?.bio;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">

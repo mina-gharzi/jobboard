@@ -120,14 +120,6 @@ export const updateProfileSchema = z.object({
     .regex(/^[0-9+\-\s]*$/, "شماره تماس فقط می‌تواند شامل عدد، فاصله، + و - باشد")
     .optional()
     .or(z.literal("")),
-  resumeUrl: z
-    .string()
-    .trim()
-    .max(500, "لینک بیش از حد طولانی است")
-    .url("لینک رزومه معتبر نیست (باید با http یا https شروع شود)")
-    .refine(isHttpUrl, "لینک رزومه باید با http یا https شروع شود")
-    .optional()
-    .or(z.literal("")),
   bio: z
     .string()
     .trim()

@@ -5,19 +5,20 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { updateProfileSchema, toStr } from "@/lib/validation";
+import { deleteResumePdf, saveResumePdf } from "@/lib/resume";
 
 export type UpdateProfileState = {
   success?: boolean;
   error?: string;
   fieldErrors?: {
     phone?: string;
-    resumeUrl?: string;
+    resumePdf?: string;
     bio?: string;
   };
   values?: {
     phone: string;
-    resumeUrl: string;
     bio: string;
+    resumePdf: string | null;
   };
 };
 
@@ -37,7 +38,6 @@ export async function updateCandidateProfile(
 
   const rawValues = {
     phone: toStr(formData.get("phone")),
-    resumeUrl: toStr(formData.get("resumeUrl")),
     bio: toStr(formData.get("bio")),
   };
 
@@ -48,21 +48,45 @@ export async function updateCandidateProfile(
     return {
       fieldErrors: {
         phone: fe.phone?.[0],
-        resumeUrl: fe.resumeUrl?.[0],
         bio: fe.bio?.[0],
       },
-      values: rawValues,
+      values: { phone: rawValues.phone, bio: rawValues.bio, resumePdf: null },
     };
   }
 
-  const { phone, resumeUrl, bio } = parsed.data;
+  const { phone, bio } = parsed.data;
+  const fileEntry = formData.get("resumePdf");
+  const file = fileEntry instanceof File ? fileEntry : null;
+  const shouldRemove = formData.get("removeResume") === "1";
+
+  const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+  if (!user) {
+    return { error: "حساب کاربری یافت نشد" };
+  }
+
+  let resumePdf = user.resumePdf;
+
+  if (file && file.size > 0) {
+    try {
+      resumePdf = await saveResumePdf(file, user.id);
+      await deleteResumePdf(user.resumePdf);
+    } catch (e) {
+      return {
+        fieldErrors: { resumePdf: e instanceof Error ? e.message : "خطایی در ذخیره‌ی فایل رخ داد" },
+        values: { phone: phone ?? "", bio: bio ?? "", resumePdf: user.resumePdf },
+      };
+    }
+  } else if (shouldRemove && resumePdf) {
+    await deleteResumePdf(resumePdf);
+    resumePdf = null;
+  }
 
   await prisma.user.update({
     where: { id: session.user.id },
     data: {
       phone: phone || null,
-      resumeUrl: resumeUrl || null,
       bio: bio || null,
+      resumePdf,
     },
   });
 
@@ -71,6 +95,6 @@ export async function updateCandidateProfile(
 
   return {
     success: true,
-    values: { phone: phone ?? "", resumeUrl: resumeUrl ?? "", bio: bio ?? "" },
+    values: { phone: phone ?? "", bio: bio ?? "", resumePdf },
   };
 }
