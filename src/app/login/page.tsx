@@ -24,7 +24,13 @@ export default function LoginPage() {
     setLoading(false);
 
     if (signInError) {
-      setError(signInError.message ?? "ورود انجام نشد");
+      if (signInError.code === "EMAIL_NOT_VERIFIED") {
+        setError(
+          "ایمیل شما هنوز تایید نشده. یک ایمیل تایید تازه براتون ارسال شد؛ لطفاً صندوق ورودی (یا اسپم) را بررسی کنید."
+        );
+      } else {
+        setError(signInError.message ?? "ورود انجام نشد");
+      }
       return;
     }
 
@@ -43,6 +49,7 @@ export default function LoginPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          autoComplete="email"
           className="input-field rounded-md border p-3 text-sm"
         />
         <input
@@ -51,6 +58,7 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          autoComplete="current-password"
           className="input-field rounded-md border p-3 text-sm"
         />
 

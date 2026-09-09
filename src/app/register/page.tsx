@@ -10,12 +10,20 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [registered, setRegistered] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    if (password !== confirmPassword) {
+      setError("رمز عبور و تکرار آن یکسان نیستند");
+      return;
+    }
+
     setLoading(true);
 
     const { error: signUpError } = await authClient.signUp.email({
@@ -32,8 +40,30 @@ export default function RegisterPage() {
       return;
     }
 
-    router.push("/");
-    router.refresh();
+    setRegistered(true);
+  }
+
+  if (registered) {
+    return (
+      <div className="mx-auto max-w-sm px-4 py-12">
+        <h1 className="mb-4 font-display text-2xl font-bold text-ink">
+          یک قدم مونده
+        </h1>
+        <p className="mb-6 text-sm text-ink-muted">
+          یک ایمیل تایید برای <span className="text-ink">{email}</span>{" "}
+          فرستادیم. برای فعال‌سازی کامل حساب، روی لینک داخل ایمیل کلیک کنید.
+        </p>
+        <button
+          onClick={() => {
+            router.push("/");
+            router.refresh();
+          }}
+          className="btn-primary rounded-md py-3 text-sm"
+        >
+          فعلاً برو به صفحه‌ی اصلی
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -67,6 +97,7 @@ export default function RegisterPage() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          autoComplete="name"
           className="input-field rounded-md border p-3 text-sm"
         />
         <input
@@ -75,6 +106,7 @@ export default function RegisterPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          autoComplete="email"
           className="input-field rounded-md border p-3 text-sm"
         />
         <input
@@ -83,6 +115,16 @@ export default function RegisterPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          autoComplete="new-password"
+          className="input-field rounded-md border p-3 text-sm"
+        />
+        <input
+          placeholder="تکرار رمز عبور"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+          autoComplete="new-password"
           className="input-field rounded-md border p-3 text-sm"
         />
 
