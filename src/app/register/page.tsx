@@ -168,7 +168,7 @@ export default function RegisterPage() {
 
         {/* ── فرم ثبت‌نام ── */}
         <div className="mx-auto w-full max-w-md lg:my-auto">
-          <div className="rounded-[32px] border border-line bg-white/70 p-6 shadow-[0_32px_80px_-32px_rgba(44,57,71,0.22)] backdrop-blur md:p-9">
+          <div className="rounded-4xl border border-line bg-white/70 p-6 shadow-[0_32px_80px_-32px_rgba(44,57,71,0.22)] backdrop-blur md:p-9">
             <div className="lg:hidden">
               <span className="inline-flex items-center gap-1.5 text-sm font-bold text-ink">
                 <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-ink">
