@@ -561,7 +561,7 @@ export default async function JobDetailPage({ params }: Props) {
                   >
                     <path d="m5 13 4 4L19 7" />
                   </svg>
-                  درخواستت ثبت شده — وضعیت را ببین
+                  درخواست شما ثبت شده — وضعیت را مشاهده کنید
                 </span>
               </>
             ) : session ? (
@@ -583,7 +583,7 @@ export default async function JobDetailPage({ params }: Props) {
               </>
             ) : (
               <>
-                <span>برای اپلای، ورود یا ثبت‌نام کن</span>
+                <span>برای ارسال درخواست، ورود یا ثبت‌نام کنید</span>
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gold">
                   <svg
                     className="h-3.5 w-3.5"
@@ -810,11 +810,11 @@ function ApplyBox({
           </span>
 
           <h3 className="mt-4 text-base font-bold text-ink">
-            درخواستت ثبت شده است
+            درخواست شما ثبت شده است
           </h3>
 
           <p className="mt-2 text-sm leading-6 text-ink-muted">
-            وضعیت درخواستت را از همین‌جا دنبال کن.
+            وضعیت درخواست خود را از همین‌جا پیگیری کنید.
           </p>
 
           <span
@@ -830,12 +830,12 @@ function ApplyBox({
         <div className="p-5">
           <div className="rounded-2xl bg-linear-to-br from-gold/10 via-white to-transparent p-5">
             <h3 className="text-base font-bold text-ink">
-              برای اپلای باید وارد شوی
+              برای ارسال درخواست باید وارد شوید
             </h3>
 
             <p className="mt-2 text-sm leading-7 text-ink-muted">
-              حساب کارجو بساز یا وارد شو تا در چند ثانیه برای این آگهی درخواست
-              بفرستی.
+              حساب کارجو بسازید یا وارد شوید تا در چند ثانیه برای این آگهی درخواست
+              ارسال کنید.
             </p>
 
             <div className="mt-4 flex flex-col gap-2.5">

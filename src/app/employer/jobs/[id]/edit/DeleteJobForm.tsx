@@ -11,7 +11,7 @@ export default function DeleteJobForm({ jobId }: { jobId: string }) {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     const confirmed = window.confirm(
-      "این آگهی و همه‌ی درخواست‌های ثبت‌شده برای آن برای همیشه حذف می‌شوند. مطمئنید؟"
+      "این آگهی و همه‌ی درخواست‌های ثبت‌شده برای آن برای همیشه حذف خواهند شد. آیا مطمئن هستید؟"
     );
     if (!confirmed) {
       e.preventDefault();

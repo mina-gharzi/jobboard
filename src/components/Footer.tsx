@@ -60,10 +60,10 @@ export default function Footer() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row md:px-10">
           <div className="text-center md:text-right">
             <p className="font-bold text-paper">
-              کارفرمایی؟ همین حالا آگهی رایگان ثبت کن.
+              کارفرما هستید؟ همین حالا آگهی رایگان ثبت کنید.
             </p>
             <p className="mt-1 text-xs text-paper/50">
-              جذب بهترین استعدادها را از همین امروز شروع کن.
+              جذب بهترین استعدادها را از همین امروز آغاز کنید.
             </p>
           </div>
           <Link

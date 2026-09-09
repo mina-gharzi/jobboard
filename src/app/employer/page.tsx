@@ -71,7 +71,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
           className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-gold/30 bg-gold/5 px-5 py-4 text-sm text-ink transition hover:bg-gold/10"
         >
           <span>
-            پروفایل شرکتت کامل نیست — لوگو، وب‌سایت یا توضیحات رو اضافه کن تا کارجوها بیشتر بهت اعتماد کنن.
+            پروفایل شرکت شما کامل نیست — لوگو، وب‌سایت یا توضیحات اضافه کنید تا کارجوها بیشتر به شما اعتماد کنند.
           </span>
           <span className="shrink-0 font-semibold text-gold">تکمیل پروفایل ←</span>
         </Link>

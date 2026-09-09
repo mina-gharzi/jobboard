@@ -153,22 +153,22 @@ export default async function Home() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-gold" />
               </span>
-              مسیر شغلی جدیدت از اینجا شروع می‌شود
+              مسیر شغلی جدید شما از این‌جا آغاز می‌شود
             </span>
 
             {/* headline */}
             <h1 className="mt-8 text-4xl font-black leading-tight tracking-tight text-ink sm:text-5xl md:text-6xl lg:text-7xl">
               <span className="animate-fade-in-up-delay-1 block">
-                فرصت‌ها را پیدا کن.
+                فرصت‌ها را پیدا کنید.
               </span>
               <span className="animate-fade-in-up-delay-2 mt-3 block bg-linear-to-l from-gold via-gold-hover to-gold bg-clip-text text-transparent">
-                آینده را بساز.
+                آینده را بسازید.
               </span>
             </h1>
 
             <p className="animate-fade-in-up-delay-2 mx-auto mt-6 max-w-2xl text-sm leading-8 text-ink-muted md:text-lg md:leading-9">
-              شغل مناسب خودت را پیدا کن، یا استعدادهایی را پیدا کن که تیم
-              بعدی‌ات به آن‌ها نیاز دارد.
+              شغل مناسب خود را پیدا کنید، یا استعدادهایی را جذب کنید که تیم
+              شما به آن‌ها نیاز دارد.
             </p>
 
             {/* ── Search ── */}
@@ -275,7 +275,7 @@ export default async function Home() {
               </h2>
               <p className="mt-3 max-w-md text-sm leading-7 text-ink-muted">
                 تازه‌ترین موقعیت‌های شغلی که شرکت‌ها منتشر کرده‌اند را همین‌جا
-                ببین. جدیدترین فرصت‌ها همیشه بالای لیست‌اند.
+                مشاهده کنید. جدیدترین فرصت‌ها همیشه در بالای لیست قرار دارند.
               </p>
             </div>
             <Link
@@ -331,15 +331,15 @@ export default async function Home() {
               </span>
 
               <h2 className="mt-6 text-3xl font-black leading-[1.4] text-paper md:text-5xl md:leading-[1.35]">
-                چه دنبال کار باشی،
+                چه به دنبال کار باشید،
                 <br />
-                چه دنبال نیروی جدید،
+                چه به دنبال نیروی جدید،
                 <br />
-                <span className="text-gradient-gold">همه‌چیز از اینجا شروع می‌شود.</span>
+                <span className="text-gradient-gold">همه‌چیز از این‌جا آغاز می‌شود.</span>
               </h2>
 
               <p className="mx-auto mt-6 max-w-xl text-sm leading-8 text-paper/60 md:text-base">
-                همین حالا اولین قدم را بردار؛ بقیه‌اش را به ما بسپار.
+                همین حالا اولین قدم را بردارید؛ ادامه‌ی مسیر را به ما بسپارید.
               </p>
 
               <div className="mt-12 flex flex-wrap items-center justify-center gap-4">

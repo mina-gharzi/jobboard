@@ -108,60 +108,155 @@ export default async function JobsPage({ searchParams }: Props) {
         <div className="absolute -left-40 top-32 h-96 w-96 rounded-full bg-slate/6 blur-[80px]" />
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 pb-24 pt-14 md:px-10 md:pt-20">
+      <div className="mx-auto max-w-7xl px-4 pb-16 pt-8 md:px-10 md:pb-24 md:pt-20">
         {/* ── header ── */}
-        <header className="mb-12 flex flex-wrap items-end justify-between gap-6">
+        <header className="mb-6 flex items-center justify-between gap-4 md:mb-12">
           <div>
-            <span className="inline-flex items-center gap-2 text-sm font-bold text-gold">
-              <span className="h-px w-8 rounded-full bg-gold/40" />
+            <h1 className="text-xl font-black text-ink md:text-4xl">
+              {hasFilters ? "نتیجه‌ی جستجوی شما" : "همه آگهی‌های استخدام"}
+            </h1>
+            <span className="mt-1 inline-flex items-center gap-1.5 text-xs font-bold text-gold md:text-sm">
+              <span className="h-px w-5 rounded-full bg-gold/40 md:w-8" />
               فرصت‌های شغلی
             </span>
-            <h1 className="mt-3 text-3xl font-black text-ink md:text-4xl">
-              {hasFilters ? "نتیجه‌ی جستجوی تو" : "همه آگهی‌های استخدام"}
-            </h1>
-
-            {hasFilters ? (
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                {filterChips.map(
-                  (chip) =>
-                    chip && (
-                      <Link
-                        key={chip.href}
-                        href={chip.href}
-                        className="group inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/60 py-1.5 pl-3 pr-4 text-xs font-semibold text-ink shadow-sm backdrop-blur-md transition hover:border-gold/40 hover:bg-gold/5"
-                      >
-                        {chip.label}
-                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-ink/10 text-ink-muted transition-colors group-hover:bg-gold/20 group-hover:text-gold">
-                          <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                            <path d="M18 6 6 18M6 6l12 12" />
-                          </svg>
-                        </span>
-                      </Link>
-                    )
-                )}
-                <span className="h-6 w-px bg-ink/10" />
-                <Link
-                  href="/jobs"
-                  className="text-xs font-semibold text-ink-muted transition-colors hover:text-gold"
-                >
-                  حذف همه فیلترها
-                </Link>
-              </div>
-            ) : null}
           </div>
 
-          <span className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/5 px-4 py-2 text-sm font-bold text-ink">
-            <svg className="h-4 w-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <span className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-gold/20 bg-gold/5 px-3 py-1.5 text-xs font-bold text-ink md:gap-2 md:px-4 md:py-2 md:text-sm">
+            <svg className="h-3.5 w-3.5 text-gold md:h-4 md:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="4" width="18" height="16" rx="3" />
               <path d="M9 12h6M12 9v6" />
             </svg>
-            {formatNumber(totalCount)} آگهی فعال
+            {formatNumber(totalCount)}
+            <span className="hidden sm:inline">آگهی فعال</span>
           </span>
         </header>
 
+        {hasFilters && (
+          <div className="mb-5 flex flex-wrap items-center gap-1.5 md:mb-0 md:gap-2">
+            {filterChips.map(
+              (chip) =>
+                chip && (
+                  <Link
+                    key={chip.href}
+                    href={chip.href}
+                    className="group inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-white/60 py-1 pl-2.5 pr-3 text-[11px] font-semibold text-ink shadow-sm backdrop-blur-md transition hover:border-gold/40 hover:bg-gold/5 md:gap-2 md:py-1.5 md:pl-3 md:pr-4 md:text-xs"
+                  >
+                    {chip.label}
+                    <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-ink/10 text-ink-muted transition-colors group-hover:bg-gold/20 group-hover:text-gold md:h-4 md:w-4">
+                      <svg className="h-2 w-2 md:h-2.5 md:w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                        <path d="M18 6 6 18M6 6l12 12" />
+                      </svg>
+                    </span>
+                  </Link>
+                )
+            )}
+            <Link
+              href="/jobs"
+              className="text-[11px] font-semibold text-ink-muted transition-colors hover:text-gold md:text-xs"
+            >
+              حذف همه
+            </Link>
+          </div>
+        )}
+
+        {/* ── search bar ── */}
+        <div className="mb-8 rounded-3xl border border-white/50 bg-white/70 p-2 shadow-[0_24px_80px_-24px_rgba(44,57,71,0.2)] backdrop-blur-2xl md:mb-10 md:rounded-4xl md:p-2.5">
+          <form action="/jobs" method="GET">
+            {/* mobile: two compact rows */}
+            <div className="flex flex-col gap-1.5 md:hidden">
+              <label className="group flex h-10 items-center gap-2 rounded-2xl border border-transparent bg-transparent px-3 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
+                <svg className="h-4 w-4 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-4-4" />
+                </svg>
+                <input
+                  type="text"
+                  name="q"
+                  defaultValue={q ?? ""}
+                  placeholder="عنوان شغل یا مهارت..."
+                  className="w-full bg-transparent text-xs text-ink placeholder:text-ink-muted/70 focus:outline-none"
+                />
+              </label>
+
+              <div className="flex gap-1.5">
+                <label className="group flex h-10 flex-1 items-center gap-2 rounded-2xl border border-transparent bg-transparent px-3 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
+                  <svg className="h-4 w-4 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                    <circle cx="12" cy="10" r="2.5" />
+                  </svg>
+                  <input
+                    type="text"
+                    name="city"
+                    defaultValue={city ?? ""}
+                    placeholder="شهر"
+                    className="w-full bg-transparent text-xs text-ink placeholder:text-ink-muted/70 focus:outline-none"
+                  />
+                </label>
+
+                {category && <input type="hidden" name="category" value={category} />}
+
+                <button
+                  type="submit"
+                  className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-2xl bg-ink px-4 text-xs font-bold text-paper transition hover:-translate-y-0.5 hover:bg-ink/90 active:translate-y-0"
+                >
+                  <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m20 20-4-4" />
+                  </svg>
+                  جستجو
+                </button>
+              </div>
+            </div>
+
+            {/* desktop: three-column row */}
+            <div className="hidden grid-cols-[1fr_0.85fr_auto] gap-2 md:grid">
+              <label className="group flex min-h-14 cursor-text items-center gap-3 rounded-3xl border border-transparent bg-transparent px-5 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
+                <svg className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-4-4" />
+                </svg>
+                <input
+                  type="text"
+                  name="q"
+                  defaultValue={q ?? ""}
+                  placeholder="عنوان شغل، مهارت یا کلمه کلیدی"
+                  className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/70 focus:outline-none"
+                />
+              </label>
+
+              <label className="group flex min-h-14 cursor-text items-center gap-3 rounded-3xl border border-transparent bg-transparent px-5 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
+                <svg className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
+                <input
+                  type="text"
+                  name="city"
+                  defaultValue={city ?? ""}
+                  placeholder="شهر"
+                  className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/70 focus:outline-none"
+                />
+              </label>
+
+              {category && <input type="hidden" name="category" value={category} />}
+
+              <button
+                type="submit"
+                className="group flex min-h-14 items-center justify-center gap-2 rounded-3xl bg-ink px-8 text-sm font-bold text-paper transition hover:-translate-y-0.5 hover:bg-ink/90 hover:shadow-[0_16px_32px_-12px_rgba(44,57,71,0.5)] active:translate-y-0"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-4-4" />
+                </svg>
+                جستجو
+              </button>
+            </div>
+          </form>
+        </div>
+
         {/* ── results ── */}
         {jobs.length === 0 ? (
-          <div className="flex flex-col items-center gap-4 rounded-[32px] border border-dashed border-ink/10 bg-white/50 px-8 py-20 text-center backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4 rounded-[32px] border border-dashed border-ink/10 bg-white/50 px-6 py-14 text-center backdrop-blur-sm md:px-8 md:py-20">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gold/10">
               <svg className="h-8 w-8 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="7" />
@@ -174,8 +269,8 @@ export default async function JobsPage({ searchParams }: Props) {
               </p>
               <p className="mt-1 text-sm text-ink-muted">
                 {hasFilters
-                  ? "سعی کن فیلترها رو ساده‌تر کنی یا کلمات دیگری امتحان کنی."
-                  : "اولین آگهی‌ها به‌زودی منتشر می‌شوند؛ دوباره سر بزن."}
+                  ? "فیلترها را ساده‌تر کنید یا کلمات دیگری امتحان کنید."
+                  : "اولین آگهی‌ها به‌زودی منتشر می‌شوند؛ لطفاً بعداً مجدداً مراجعه کنید."}
               </p>
             </div>
             {hasFilters && (
@@ -189,7 +284,7 @@ export default async function JobsPage({ searchParams }: Props) {
           </div>
         ) : (
           <>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
               {jobs.map((job, index) => (
                 <JobCard key={job.id} job={job} index={(page - 1) * PAGE_SIZE + index} />
               ))}
@@ -199,7 +294,7 @@ export default async function JobsPage({ searchParams }: Props) {
             {totalPages > 1 && (
               <nav
                 aria-label="صفحه‌بندی"
-                className="mt-14 flex flex-wrap items-center justify-center gap-2"
+                className="mt-8 flex flex-wrap items-center justify-center gap-2 md:mt-14"
               >
                 {page > 1 ? (
                   <Link

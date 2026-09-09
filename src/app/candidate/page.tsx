@@ -65,7 +65,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
           className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-gold/30 bg-gold/5 px-5 py-4 text-sm text-ink transition hover:bg-gold/10"
         >
           <span>
-            پروفایلت کامل نیست — شماره تماس، رزومه یا معرفی کوتاه رو اضافه کن تا شانس دیده‌شدنت پیش کارفرماها بیشتر بشه.
+            پروفایل شما کامل نیست — شماره تماس، رزومه یا معرفی کوتاه اضافه کنید تا شانس دیده‌شدن شما پیش کارفرماها افزایش یابد.
           </span>
           <span className="shrink-0 font-semibold text-gold">تکمیل پروفایل ←</span>
         </Link>

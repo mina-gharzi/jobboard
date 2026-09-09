@@ -133,7 +133,7 @@ export default function CompanyProfileForm({
           <div className="mx-auto mt-8 max-w-lg pb-8">
             {isFirstTime && (
               <p className="mb-5 rounded-md bg-gold/10 px-3 py-2 text-sm text-ink">
-                این اولین باره که وارد پروفایل شرکتت شدی — اطلاعاتت رو کامل کن تا کارجوها بهتر بشناسنت.
+                این اولین باری است که وارد پروفایل شرکت شده‌اید — اطلاعات خود را کامل کنید تا کارجوها بهتر با شما آشنا شوند.
               </p>
             )}
             {state.error && <p className="mb-4 text-sm text-danger">{state.error}</p>}
