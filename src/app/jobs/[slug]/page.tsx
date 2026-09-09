@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import ApplyForm from "./ApplyForm";
 import JobCard from "@/components/JobCard";
+import AvatarImage from "@/components/AvatarImage";
 import {
   remoteTypeLabels,
   formatSalary,
@@ -304,16 +305,11 @@ export default async function JobDetailPage({ params }: Props) {
                 <div className="flex items-start gap-4 md:gap-5">
                   {/* لوگوی شرکت */}
                   <div className="relative -mt-10 flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white bg-white text-2xl font-bold text-slate-dark shadow-[0_16px_40px_-8px_rgba(44,57,71,0.3)] ring-4 ring-white/70 md:h-20 md:w-20">
-                    {job.employer?.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={job.employer.image}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      initial
-                    )}
+                    <AvatarImage
+                      src={job.employer?.image}
+                      fallback={initial}
+                      imageClassName="h-full w-full object-cover"
+                    />
                   </div>
 
                   <div className="min-w-0 pt-2.5">
@@ -923,16 +919,11 @@ function CompanyInfoCard({
     <div className="rounded-3xl border border-line bg-white/70 p-5 shadow-[0_24px_64px_-40px_rgba(44,57,71,0.3)] backdrop-blur md:p-6">
       <div className="flex items-center gap-3">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-white text-lg font-bold text-slate-dark">
-          {employer.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={employer.image}
-              alt=""
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            initial
-          )}
+          <AvatarImage
+            src={employer.image}
+            fallback={initial}
+            imageClassName="h-full w-full object-cover"
+          />
         </div>
         <div className="min-w-0">
           <p className="font-bold text-ink">درباره‌ی {employer.name}</p>

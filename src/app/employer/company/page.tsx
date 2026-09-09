@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import AvatarImage from "@/components/AvatarImage";
 
 const R = 54;
 const C = 2 * Math.PI * R;
@@ -15,7 +16,7 @@ function CompletionRing({ pct, filled, total }: { pct: number; filled: number; t
         viewBox="0 0 120 120"
         fill="none"
       >
-        <circle cx="60" cy="60" r={R} className="fill-white stroke-ink/[0.06]" strokeWidth="8" />
+        <circle cx="60" cy="60" r={R} className="fill-white stroke-ink/6" strokeWidth="8" />
         <circle
           cx="60"
           cy="60"
@@ -100,7 +101,7 @@ export default async function CompanyProfilePage() {
         </Link>
 
         {/* ═══ profile card ═══ */}
-        <div className="mt-6 overflow-hidden rounded-[32px] border border-line bg-white/70 shadow-[0_40px_100px_-40px_rgba(44,57,71,0.28)] backdrop-blur">
+        <div className="mt-6 overflow-hidden rounded-4xl border border-line bg-white/70 shadow-[0_40px_100px_-40px_rgba(44,57,71,0.28)] backdrop-blur">
           {/* tall banner */}
           <div className="relative h-44 overflow-hidden bg-linear-to-br from-slate/18 via-gold/8 to-gold/12 md:h-52">
             <div className="pointer-events-none absolute inset-0">
@@ -116,16 +117,11 @@ export default async function CompanyProfilePage() {
             {/* logo — big, centered */}
             <div className="flex justify-center">
               <div className="-mt-14 flex h-28 w-28 items-center justify-center overflow-hidden rounded-3xl border border-white bg-white text-4xl font-black text-slate-dark shadow-[0_24px_60px_-12px_rgba(44,57,71,0.35)] ring-[5px] ring-white/80">
-                {user.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={user.image}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  initial
-                )}
+                <AvatarImage
+                  src={user.image}
+                  fallback={initial}
+                  imageClassName="h-full w-full object-cover"
+                />
               </div>
             </div>
 
@@ -157,7 +153,7 @@ export default async function CompanyProfilePage() {
                     className={`inline-flex items-center gap-3 rounded-2xl border px-4 py-2.5 text-sm font-semibold ${
                       f.filled
                         ? "border-emerald-200/60 bg-emerald-50/80 text-emerald-800"
-                        : "border-ink/8 bg-ink/[0.02] text-ink-muted"
+                        : "border-ink/8 bg-ink/2 text-ink-muted"
                     }`}
                   >
                     <svg

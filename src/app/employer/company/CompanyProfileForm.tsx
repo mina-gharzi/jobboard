@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import AvatarImage from "@/components/AvatarImage";
 import { COMPANY_TEAM_SIZES } from "@/lib/companyTeamSizes";
 import {
   updateCompanyProfile,
@@ -59,12 +60,11 @@ export default function CompanyProfileForm({
 
         <div className="flex items-center gap-3">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-paper text-lg font-bold text-slate-dark">
-            {logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={logoUrl} alt="" className="h-full w-full object-cover" />
-            ) : (
-              name.trim()[0] ?? "؟"
-            )}
+            <AvatarImage
+              src={logoUrl}
+              fallback={name.trim()[0] ?? "؟"}
+              imageClassName="h-full w-full object-cover"
+            />
           </div>
           <p className="font-semibold text-ink">{name}</p>
         </div>
