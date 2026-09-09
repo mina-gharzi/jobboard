@@ -177,6 +177,17 @@ body {
   to { opacity: 1; transform: translateX(0); }
 }
 
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, rgba(44, 57, 71, 0.06) 25%, rgba(44, 57, 71, 0.13) 50%, rgba(44, 57, 71, 0.06) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
