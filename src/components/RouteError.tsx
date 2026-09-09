@@ -13,7 +13,7 @@ export default function RouteError({
 }) {
   return (
     <div className="flex min-h-[60vh] items-center justify-center px-4 py-16">
-      <div className="w-full max-w-md rounded-[32px] border border-line bg-white/70 p-8 text-center shadow-[0_32px_80px_-32px_rgba(44,57,71,0.22)] backdrop-blur">
+      <div className="w-full max-w-md rounded-4xl border border-line bg-white/70 p-8 text-center shadow-[0_32px_80px_-32px_rgba(44,57,71,0.22)] backdrop-blur">
         <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-danger/10">
           <svg
             className="h-8 w-8 text-danger"
