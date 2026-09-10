@@ -5,6 +5,9 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import ProfileForm from "./ProfileForm";
 import { ChevronRight } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "پروفایل | جابینو" };
 
 export default async function CandidateProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() });

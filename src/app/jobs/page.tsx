@@ -6,6 +6,9 @@ import { redirect } from "next/navigation";
 import JobCard from "@/components/JobCard";
 import SaveJobButton from "@/components/SaveJobButton";
 import { buildSearchTerms } from "@/lib/search";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "آگهی‌های شغلی | جابینو" };
 import Pagination from "@/components/Pagination";
 import JobsSort from "./JobsSort";
 import JobsFilters from "./JobsFilters";

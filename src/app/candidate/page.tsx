@@ -9,6 +9,9 @@ import WithdrawApplicationButton from "@/components/WithdrawApplicationButton";
 import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
 import Pagination from "@/components/Pagination";
 import { Bookmark, TriangleAlert, Search, File, ChevronRight } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "پنل کارجو | جابینو" };
 
 const PAGE_SIZE = 6;
 

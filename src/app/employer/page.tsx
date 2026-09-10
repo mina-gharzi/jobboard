@@ -6,6 +6,9 @@ import Link from "next/link";
 import JobCard from "@/components/JobCard";
 import { jobStatusLabels, jobStatusBadge } from "@/lib/status";
 import Pagination from "@/components/Pagination";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "پنل کارفرما | جابینو" };
 import { Plus, TriangleAlert, SquarePlus, ChevronRight } from "lucide-react";
 
 const PAGE_SIZE = 6;

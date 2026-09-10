@@ -1,4 +1,7 @@
 import ResetPasswordForm from "./ResetPasswordForm";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "تغییر رمز عبور | جابینو" };
 
 type Props = {
   searchParams: Promise<{ token?: string; error?: string }>;

@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { FileText, MapPin, UserRound, Building2, AlertCircle, LogIn } from "lucide-react";
 import PasswordInput from "@/components/PasswordInput";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "ورود | جابینو" };
 
 export default function LoginPage() {
   const router = useRouter();

@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "فراموشی رمز عبور | جابینو" };
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");

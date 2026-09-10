@@ -9,6 +9,9 @@ import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
 import type { ApplicationStatus } from "@/generated/prisma/enums";
 import Pagination from "@/components/Pagination";
 import { Users, FileDown, ChevronRight } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "متقاضیان | جابینو" };
 
 const PAGE_SIZE = 10;
 

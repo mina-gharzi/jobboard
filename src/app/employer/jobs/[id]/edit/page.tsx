@@ -4,6 +4,9 @@ import { headers } from "next/headers";
 import { redirect, notFound } from "next/navigation";
 import EditJobForm from "./EditJobForm";
 import DeleteJobForm from "./DeleteJobForm";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "ویرایش آگهی | جابینو" };
 
 type Props = {
   params: Promise<{ id: string }>;

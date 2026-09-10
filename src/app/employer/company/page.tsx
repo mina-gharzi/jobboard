@@ -5,6 +5,9 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import CompanyProfileForm from "./CompanyProfileForm";
 import { ChevronRight } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "شرکت | جابینو" };
 
 export default async function CompanyProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() });
