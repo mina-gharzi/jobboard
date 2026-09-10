@@ -143,6 +143,14 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
                 ? `درخواستی با وضعیت «${applicationStatusLabels[status]}» یافت نشد.`
                 : "هنوز کسی برای این آگهی اپلای نکرده است."}
             </p>
+            {status && (
+              <Link
+                href={`/employer/jobs/${id}/applicants`}
+                className="mt-1 inline-flex items-center gap-2 rounded-2xl bg-ink px-5 py-2.5 text-sm font-bold text-paper transition hover:-translate-y-0.5 hover:bg-ink/90"
+              >
+                نمایش همه‌ی درخواست‌ها
+              </Link>
+            )}
           </div>
         ) : (
           <>
