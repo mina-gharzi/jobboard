@@ -32,7 +32,7 @@ export default function ApplicationStatusForm({
         <select
           name="status"
           defaultValue={status}
-          className="input-field rounded-md border p-2 text-sm"
+          className="w-full rounded-xl border border-ink/10 bg-white/70 px-3 py-2.5 text-sm text-ink shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
         >
           {applicationStatusOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -43,7 +43,7 @@ export default function ApplicationStatusForm({
         <button
           type="submit"
           disabled={isPending}
-          className="btn-primary rounded-md px-4 py-2 text-sm disabled:opacity-50"
+          className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-gold px-4 py-2 text-xs font-bold text-ink shadow-[0_12px_28px_-12px_rgba(194,165,109,0.6)] transition hover:-translate-y-0.5 hover:bg-gold-hover active:translate-y-0 disabled:opacity-50"
         >
           {isPending ? "در حال ثبت..." : "ثبت تغییر وضعیت"}
         </button>

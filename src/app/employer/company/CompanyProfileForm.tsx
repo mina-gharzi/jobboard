@@ -141,20 +141,20 @@ export default function CompanyProfileForm({
 
             <form action={formAction} className="flex flex-col gap-5">
               <div>
-                <label htmlFor="company-name" className="mb-1.5 block text-sm text-ink-muted">نام شرکت</label>
+                <label htmlFor="company-name" className="mb-1.5 block text-sm font-semibold text-ink-muted">نام شرکت</label>
                 <input
                   id="company-name"
                   name="name"
                   type="text"
                   defaultValue={effective.name}
                   required
-                  className="input-field w-full rounded-md border p-3 text-sm"
+                  className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
                 />
                 {errors.name && <p className="mt-1.5 text-sm text-danger">{errors.name}</p>}
               </div>
 
               <div>
-                <label htmlFor="company-logo" className="mb-1.5 block text-sm text-ink-muted">لینک لوگو</label>
+                <label htmlFor="company-logo" className="mb-1.5 block text-sm font-semibold text-ink-muted">لینک لوگو</label>
                 <input
                   id="company-logo"
                   name="logoUrl"
@@ -162,13 +162,13 @@ export default function CompanyProfileForm({
                   defaultValue={effective.logoUrl}
                   placeholder="لینک تصویر لوگوی شرکت"
                   dir="ltr"
-                  className="input-field w-full rounded-md border p-3 text-sm"
+                  className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
                 />
                 {errors.logoUrl && <p className="mt-1.5 text-sm text-danger">{errors.logoUrl}</p>}
               </div>
 
               <div>
-                <label htmlFor="company-website" className="mb-1.5 block text-sm text-ink-muted">وب‌سایت شرکت</label>
+                <label htmlFor="company-website" className="mb-1.5 block text-sm font-semibold text-ink-muted">وب‌سایت شرکت</label>
                 <input
                   id="company-website"
                   name="companyWebsite"
@@ -176,7 +176,7 @@ export default function CompanyProfileForm({
                   defaultValue={effective.companyWebsite}
                   placeholder="https://example.com"
                   dir="ltr"
-                  className="input-field w-full rounded-md border p-3 text-sm"
+                  className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
                 />
                 {errors.companyWebsite && (
                   <p className="mt-1.5 text-sm text-danger">{errors.companyWebsite}</p>
@@ -184,12 +184,12 @@ export default function CompanyProfileForm({
               </div>
 
               <div>
-                <label htmlFor="company-team" className="mb-1.5 block text-sm text-ink-muted">اندازه‌ی تیم</label>
+                <label htmlFor="company-team" className="mb-1.5 block text-sm font-semibold text-ink-muted">اندازه‌ی تیم</label>
                 <select
                   id="company-team"
                   name="companyTeamSize"
                   defaultValue={effective.companyTeamSize}
-                  className="input-field w-full rounded-md border p-3 text-sm"
+                  className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
                 >
                   <option value="">مشخص نشده</option>
                   {COMPANY_TEAM_SIZES.map((size) => (
@@ -204,7 +204,7 @@ export default function CompanyProfileForm({
               </div>
 
               <div>
-                <label htmlFor="company-desc" className="mb-1.5 block text-sm text-ink-muted">درباره‌ی شرکت</label>
+                <label htmlFor="company-desc" className="mb-1.5 block text-sm font-semibold text-ink-muted">درباره‌ی شرکت</label>
                 <textarea
                   id="company-desc"
                   name="companyDescription"
@@ -212,7 +212,7 @@ export default function CompanyProfileForm({
                   rows={5}
                   maxLength={800}
                   placeholder="چند جمله درباره‌ی شرکت، حوزه‌ی فعالیت و فرهنگ کاریتون بنویسید..."
-                  className="input-field w-full rounded-md border p-3 text-sm"
+                  className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
                 />
                 {errors.companyDescription && (
                   <p className="mt-1.5 text-sm text-danger">{errors.companyDescription}</p>
@@ -223,7 +223,7 @@ export default function CompanyProfileForm({
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="btn-primary w-fit rounded-md px-6 py-2.5 text-sm disabled:opacity-50"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gold px-5 py-3 text-sm font-bold text-ink shadow-[0_12px_28px_-12px_rgba(194,165,109,0.6)] transition hover:-translate-y-0.5 hover:bg-gold-hover hover:shadow-[0_16px_36px_-12px_rgba(194,165,109,0.7)] active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0"
                 >
                   {isPending ? "در حال ذخیره..." : "ذخیره‌ی تغییرات"}
                 </button>

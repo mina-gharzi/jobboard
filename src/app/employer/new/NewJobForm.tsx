@@ -16,14 +16,14 @@ export default function NewJobForm() {
   return (
     <form
       action={formAction}
-      className="mt-8 flex flex-col gap-6 rounded-2xl border border-line bg-white/70 p-6"
+      className="flex flex-col gap-5"
     >
       {state.errors.form && (
         <p className="text-sm text-danger">{state.errors.form}</p>
       )}
 
       <div>
-        <label htmlFor="job-title" className="mb-1.5 block text-sm text-ink-muted">عنوان شغل</label>
+        <label htmlFor="job-title" className="mb-1.5 block text-sm font-semibold text-ink-muted">عنوان شغل</label>
         <input
           id="job-title"
           name="title"
@@ -32,7 +32,7 @@ export default function NewJobForm() {
           required
           minLength={3}
           maxLength={150}
-          className="input-field w-full rounded-md border p-3 text-sm"
+          className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
         />
         {state.errors.title && (
           <p className="mt-1.5 text-sm text-danger">{state.errors.title}</p>
@@ -40,7 +40,7 @@ export default function NewJobForm() {
       </div>
 
       <div>
-        <label htmlFor="job-desc" className="mb-1.5 block text-sm text-ink-muted">توضیحات</label>
+        <label htmlFor="job-desc" className="mb-1.5 block text-sm font-semibold text-ink-muted">توضیحات</label>
         <textarea
           id="job-desc"
           name="description"
@@ -50,7 +50,7 @@ export default function NewJobForm() {
           required
           minLength={20}
           maxLength={5000}
-          className="input-field w-full rounded-md border p-3 text-sm"
+          className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
         />
         {state.errors.description && (
           <p className="mt-1.5 text-sm text-danger">
@@ -61,7 +61,7 @@ export default function NewJobForm() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="job-category" className="mb-1.5 block text-sm text-ink-muted">
+          <label htmlFor="job-category" className="mb-1.5 block text-sm font-semibold text-ink-muted">
             دسته‌بندی
           </label>
           <select
@@ -69,7 +69,7 @@ export default function NewJobForm() {
             name="category"
             defaultValue={state.values?.category ?? ""}
             required
-            className="input-field w-full rounded-md border p-3 text-sm"
+            className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
           >
             <option value="" disabled>
               انتخاب کنید
@@ -87,7 +87,7 @@ export default function NewJobForm() {
           )}
         </div>
         <div>
-          <label htmlFor="job-city" className="mb-1.5 block text-sm text-ink-muted">شهر</label>
+          <label htmlFor="job-city" className="mb-1.5 block text-sm font-semibold text-ink-muted">شهر</label>
           <input
             id="job-city"
             name="city"
@@ -96,7 +96,7 @@ export default function NewJobForm() {
             required
             minLength={2}
             maxLength={100}
-            className="input-field w-full rounded-md border p-3 text-sm"
+            className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
           />
           {state.errors.city && (
             <p className="mt-1.5 text-sm text-danger">{state.errors.city}</p>
@@ -105,7 +105,7 @@ export default function NewJobForm() {
       </div>
 
       <div>
-        <label htmlFor="job-remote" className="mb-1.5 block text-sm text-ink-muted">
+        <label htmlFor="job-remote" className="mb-1.5 block text-sm font-semibold text-ink-muted">
           نوع همکاری
         </label>
         <select
@@ -113,7 +113,7 @@ export default function NewJobForm() {
           name="remoteType"
           defaultValue={state.values?.remoteType ?? ""}
           required
-          className="input-field w-full rounded-md border p-3 text-sm"
+          className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
         >
           <option value="" disabled>
             انتخاب کنید
@@ -133,7 +133,7 @@ export default function NewJobForm() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="job-salary-min" className="mb-1.5 block text-sm text-ink-muted">
+          <label htmlFor="job-salary-min" className="mb-1.5 block text-sm font-semibold text-ink-muted">
             حداقل حقوق (تومان)
           </label>
           <input
@@ -143,7 +143,7 @@ export default function NewJobForm() {
             min={0}
             defaultValue={state.values?.salaryMin ?? ""}
             placeholder="اختیاری"
-            className="input-field w-full rounded-md border p-3 text-sm"
+            className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
           />
           {state.errors.salaryMin && (
             <p className="mt-1.5 text-sm text-danger">
@@ -152,7 +152,7 @@ export default function NewJobForm() {
           )}
         </div>
         <div>
-          <label htmlFor="job-salary-max" className="mb-1.5 block text-sm text-ink-muted">
+          <label htmlFor="job-salary-max" className="mb-1.5 block text-sm font-semibold text-ink-muted">
             حداکثر حقوق (تومان)
           </label>
           <input
@@ -162,7 +162,7 @@ export default function NewJobForm() {
             min={0}
             defaultValue={state.values?.salaryMax ?? ""}
             placeholder="اختیاری"
-            className="input-field w-full rounded-md border p-3 text-sm"
+            className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
           />
           {state.errors.salaryMax && (
             <p className="mt-1.5 text-sm text-danger">
@@ -175,7 +175,7 @@ export default function NewJobForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="btn-primary rounded-md py-3 text-sm disabled:opacity-50"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gold px-6 py-3.5 text-sm font-bold text-ink shadow-[0_12px_28px_-12px_rgba(194,165,109,0.6)] transition hover:-translate-y-0.5 hover:bg-gold-hover hover:shadow-[0_16px_36px_-12px_rgba(194,165,109,0.7)] active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0"
       >
         {isPending ? "در حال ثبت..." : "ثبت آگهی"}
       </button>

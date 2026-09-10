@@ -37,50 +37,66 @@ export default function ForgotPasswordPage() {
 
   if (sent) {
     return (
-      <div className="mx-auto max-w-sm px-4 py-12">
-        <h1 className="mb-4 font-display text-2xl font-bold text-ink">
-          ایمیل ارسال شد
-        </h1>
-        <p className="text-sm text-ink-muted">
-          اگر این ایمیل در سیستم ثبت شده باشد، لینک بازیابی رمز عبور برایش
-          ارسال شد. صندوق ورودی (و پوشه‌ی اسپم) خود را بررسی کنید.
-        </p>
+      <div className="relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute -right-40 -top-40 h-120 w-120 rounded-full bg-gold/8 blur-[80px]" />
+          <div className="absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-slate/6 blur-[80px]" />
+        </div>
+        <div className="mx-auto w-full max-w-md px-4 pb-20 pt-12 md:pt-20">
+          <div className="rounded-4xl border border-line bg-white/70 p-6 shadow-[0_32px_80px_-32px_rgba(44,57,71,0.22)] backdrop-blur md:p-9">
+            <h1 className="font-display text-2xl font-black text-ink md:text-3xl">
+              ایمیل ارسال شد
+            </h1>
+            <p className="mt-2 text-sm text-ink-muted">
+              اگر این ایمیل در سیستم ثبت شده باشد، لینک بازیابی رمز عبور برایش
+              ارسال شد. صندوق ورودی (و پوشه‌ی اسپم) خود را بررسی کنید.
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-sm px-4 py-12">
-      <h1 className="mb-2 font-display text-2xl font-bold text-ink">
-        فراموشی رمز عبور
-      </h1>
-      <p className="mb-6 text-sm text-ink-muted">
-        ایمیل حساب‌تان را وارد کنید تا لینک تعیین رمز عبور جدید برایتان
-        ارسال شود.
-      </p>
+    <div className="relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -right-40 -top-40 h-120 w-120 rounded-full bg-gold/8 blur-[80px]" />
+        <div className="absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-slate/6 blur-[80px]" />
+      </div>
+      <div className="mx-auto w-full max-w-md px-4 pb-20 pt-12 md:pt-20">
+        <div className="rounded-4xl border border-line bg-white/70 p-6 shadow-[0_32px_80px_-32px_rgba(44,57,71,0.22)] backdrop-blur md:p-9">
+          <h1 className="font-display text-2xl font-black text-ink md:text-3xl">
+            فراموشی رمز عبور
+          </h1>
+          <p className="mt-2 text-sm text-ink-muted">
+            ایمیل حساب‌تان را وارد کنید تا لینک تعیین رمز عبور جدید برایتان
+            ارسال شود.
+          </p>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          placeholder="ایمیل"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="email"
-          aria-label="ایمیل"
-          className="input-field rounded-md border p-3 text-sm"
-        />
+          <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+            <input
+              placeholder="ایمیل"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              aria-label="ایمیل"
+              className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
+            />
 
-        {error && <p className="text-sm text-danger">{error}</p>}
+            {error && <p className="text-sm text-danger">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn-primary rounded-md py-3 text-sm disabled:opacity-50"
-        >
-          {loading ? "در حال ارسال..." : "ارسال لینک بازیابی"}
-        </button>
-      </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gold px-6 py-3.5 text-sm font-bold text-ink shadow-[0_12px_28px_-12px_rgba(194,165,109,0.6)] transition hover:-translate-y-0.5 hover:bg-gold-hover hover:shadow-[0_16px_36px_-12px_rgba(194,165,109,0.7)] active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0"
+            >
+              {loading ? "در حال ارسال..." : "ارسال لینک بازیابی"}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

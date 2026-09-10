@@ -201,7 +201,7 @@ export default function ProfileForm({ name, email, phone, resumePdf, bio }: Prop
 
             <form action={formAction} onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div>
-                <label htmlFor="profile-phone" className="mb-1.5 block text-sm text-ink-muted">شماره تماس</label>
+                <label htmlFor="profile-phone" className="mb-1.5 block text-sm font-semibold text-ink-muted">شماره تماس</label>
                 <input
                   id="profile-phone"
                   name="phone"
@@ -209,13 +209,13 @@ export default function ProfileForm({ name, email, phone, resumePdf, bio }: Prop
                   defaultValue={effective.phone}
                   placeholder="مثلاً 09123456789"
                   dir="ltr"
-                  className="input-field w-full rounded-md border p-3 text-sm"
+                  className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
                 />
                 {errors.phone && <p className="mt-1.5 text-sm text-danger">{errors.phone}</p>}
               </div>
 
               <div>
-                <label htmlFor="profile-resume" className="mb-1.5 block text-sm text-ink-muted">رزومه (PDF)</label>
+                <label htmlFor="profile-resume" className="mb-1.5 block text-sm font-semibold text-ink-muted">رزومه (PDF)</label>
                 {effective.resumePdf && (
                   <div className="mb-2 flex items-center justify-between gap-3 rounded-md border border-line bg-paper/60 px-3 py-2.5">
                     <a
@@ -295,7 +295,7 @@ export default function ProfileForm({ name, email, phone, resumePdf, bio }: Prop
               </div>
 
               <div>
-                <label htmlFor="profile-bio" className="mb-1.5 block text-sm text-ink-muted">معرفی کوتاه</label>
+                <label htmlFor="profile-bio" className="mb-1.5 block text-sm font-semibold text-ink-muted">معرفی کوتاه</label>
                 <textarea
                   id="profile-bio"
                   name="bio"
@@ -303,7 +303,7 @@ export default function ProfileForm({ name, email, phone, resumePdf, bio }: Prop
                   rows={5}
                   maxLength={600}
                   placeholder="چند جمله درباره‌ی سابقه، مهارت‌ها و علاقه‌مندی‌های شغلی‌ات بنویس..."
-                  className="input-field w-full rounded-md border p-3 text-sm"
+                  className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
                 />
                 {errors.bio && <p className="mt-1.5 text-sm text-danger">{errors.bio}</p>}
               </div>
@@ -312,7 +312,7 @@ export default function ProfileForm({ name, email, phone, resumePdf, bio }: Prop
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="btn-primary w-fit rounded-md px-6 py-2.5 text-sm disabled:opacity-50"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gold px-5 py-3 text-sm font-bold text-ink shadow-[0_12px_28px_-12px_rgba(194,165,109,0.6)] transition hover:-translate-y-0.5 hover:bg-gold-hover hover:shadow-[0_16px_36px_-12px_rgba(194,165,109,0.7)] active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0"
                 >
                   {isPending ? "در حال ذخیره..." : "ذخیره‌ی تغییرات"}
                 </button>

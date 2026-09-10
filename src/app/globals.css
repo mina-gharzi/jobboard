@@ -45,57 +45,6 @@ body {
   min-height: 100vh;
 }
 
-/* دکمه‌ها */
-.btn-primary {
-  background: var(--primary);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: var(--primary-hover);
-}
-
-.btn-gold {
-  background: var(--accent);
-  color: #2c3947;
-}
-
-.btn-gold:hover {
-  background: var(--accent-hover);
-}
-
-/* خطوط جداکننده */
-.divider {
-  border-color: #d1d9e0;
-}
-
-.input-field {
-  border-color: #d1d9e0;
-  background: white;
-  color: #2c3947;
-}
-
-.input-field:focus {
-  border-color: var(--primary);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(84, 122, 149, 0.2);
-}
-
-/* متن‌ها - فقط ink و ink-muted برای متن */
-.text-main {
-  color: #2c3947;
-}
-
-.text-secondary {
-  color: #547a95;
-}
-
-/* طلایی فقط برای دکمه و اکسنت، نه متن */
-.accent-only {
-  background: #c2a56d;
-  color: #2c3947;
-}
-
 /* بج‌های وضعیت درخواست */
 .badge {
   display: inline-block;
@@ -134,6 +83,7 @@ body {
   border-color: rgba(84, 122, 149, 0.25);
   color: var(--color-slate-dark);
 }
+/* متن پیام‌های موفقیت / خطا در فرم‌ها */
 /* متن پیام‌های موفقیت / خطا در فرم‌ها */
 .text-success {
   color: var(--color-success-dark);
@@ -235,14 +185,6 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-/* Glass card */
-.glass-card {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* Mesh gradient background */

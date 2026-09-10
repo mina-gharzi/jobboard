@@ -39,7 +39,7 @@ export default function EditJobForm({ job }: { job: Job }) {
           required
           minLength={3}
           maxLength={150}
-          className="input-field w-full rounded-md border p-3 text-sm"
+          className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
         />
         {errors.title && <p className="mt-1.5 text-sm text-danger">{errors.title}</p>}
       </div>
@@ -54,7 +54,7 @@ export default function EditJobForm({ job }: { job: Job }) {
           required
           minLength={20}
           maxLength={5000}
-          className="input-field w-full rounded-md border p-3 text-sm"
+          className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
         />
         {errors.description && (
           <p className="mt-1.5 text-sm text-danger">{errors.description}</p>
@@ -67,7 +67,7 @@ export default function EditJobForm({ job }: { job: Job }) {
           defaultValue={job.category}
           aria-label="دسته‌بندی"
           required
-          className="input-field w-full rounded-md border p-3 text-sm"
+          className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
         >
           {JOB_CATEGORIES.map((c) => (
             <option key={c} value={c}>
@@ -87,7 +87,7 @@ export default function EditJobForm({ job }: { job: Job }) {
           required
           minLength={2}
           maxLength={100}
-          className="input-field w-full rounded-md border p-3 text-sm"
+          className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
         />
         {errors.city && <p className="mt-1.5 text-sm text-danger">{errors.city}</p>}
       </div>
@@ -98,7 +98,7 @@ export default function EditJobForm({ job }: { job: Job }) {
           defaultValue={job.remoteType}
           aria-label="نوع همکاری"
           required
-          className="input-field w-full rounded-md border p-3 text-sm"
+          className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
         >
           {remoteTypeOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -120,7 +120,7 @@ export default function EditJobForm({ job }: { job: Job }) {
             defaultValue={job.salaryMin ?? ""}
             placeholder="حداقل حقوق"
             aria-label="حداقل حقوق"
-            className="input-field w-full rounded-md border p-3 text-sm"
+            className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
           />
           {errors.salaryMin && (
             <p className="mt-1.5 text-sm text-danger">{errors.salaryMin}</p>
@@ -134,7 +134,7 @@ export default function EditJobForm({ job }: { job: Job }) {
             defaultValue={job.salaryMax ?? ""}
             placeholder="حداکثر حقوق"
             aria-label="حداکثر حقوق"
-            className="input-field w-full rounded-md border p-3 text-sm"
+            className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
           />
           {errors.salaryMax && (
             <p className="mt-1.5 text-sm text-danger">{errors.salaryMax}</p>
@@ -143,13 +143,13 @@ export default function EditJobForm({ job }: { job: Job }) {
       </div>
 
       <div>
-        <label htmlFor="edit-status" className="mb-1.5 block text-sm text-ink-muted">وضعیت آگهی</label>
+        <label htmlFor="edit-status" className="mb-1.5 block text-sm font-semibold text-ink-muted">وضعیت آگهی</label>
         <select
           id="edit-status"
           name="status"
           defaultValue={job.status}
           required
-          className="input-field w-full rounded-md border p-3 text-sm"
+          className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
         >
           {jobStatusOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -163,7 +163,7 @@ export default function EditJobForm({ job }: { job: Job }) {
       <button
         type="submit"
         disabled={isPending}
-        className="btn-primary rounded-md py-3 text-sm disabled:opacity-50"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gold px-6 py-3.5 text-sm font-bold text-ink shadow-[0_12px_28px_-12px_rgba(194,165,109,0.6)] transition hover:-translate-y-0.5 hover:bg-gold-hover hover:shadow-[0_16px_36px_-12px_rgba(194,165,109,0.7)] active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0"
       >
         {isPending ? "در حال ذخیره..." : "ذخیره‌ی تغییرات"}
       </button>
