@@ -5,16 +5,14 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import JobCard from "@/components/JobCard";
 import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
-import { TriangleAlert, ChevronRight, Search, File, ChevronLeft } from "lucide-react";
+import Pagination from "@/components/Pagination";
+import { TriangleAlert, Search, File, ChevronRight } from "lucide-react";
 
 const PAGE_SIZE = 6;
 
 type Props = {
   searchParams: Promise<{ page?: string }>;
 };
-
-const formatNumber = (value: number) =>
-  new Intl.NumberFormat("fa-IR").format(value);
 
 export default async function CandidateDashboard({ searchParams }: Props) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -89,7 +87,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
                 <TriangleAlert className="h-4.5 w-4.5" />
               </span>
               <span className="text-sm text-ink">
-                پروفایل شما کامل نیست — شماره تماس، رزومه یا معرفی کوتاه اضافه کنید تا شانس دیده‌شدن شما پیش کارفرماها افزایش یابد.
+                پروفایل شما کامل نیست — شماره تماس، رزومه یا معرفی کوتاه اضافه کنید تا شانس دیده‌شدن شما پش کارفرماها افزایش یابد.
               </span>
             </span>
             <span className="shrink-0 inline-flex items-center gap-1 text-sm font-bold text-gold">
@@ -147,40 +145,11 @@ export default async function CandidateDashboard({ searchParams }: Props) {
               ))}
             </ul>
 
-            {totalPages > 1 && (
-              <nav
-                aria-label="صفحه‌بندی"
-                className="mt-10 flex flex-wrap items-center justify-center gap-2 md:mt-14"
-              >
-                {page > 1 ? (
-                  <Link
-                    href={`/candidate?page=${page - 1}`}
-                    aria-label="صفحه‌ی قبل"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Link>
-                ) : (
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
-                )}
-
-                <span className="inline-flex h-11 min-w-24 items-center justify-center rounded-xl bg-ink px-4 text-sm font-bold text-paper shadow-[0_16px_32px_-16px_rgba(44,57,71,0.5)]">
-                  صفحه‌ی {formatNumber(page)} از {formatNumber(totalPages)}
-                </span>
-
-                {page < totalPages ? (
-                  <Link
-                    href={`/candidate?page=${page + 1}`}
-                    aria-label="صفحه‌ی بعد"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Link>
-                ) : (
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
-                )}
-              </nav>
-            )}
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              href={(p) => `/candidate?page=${p}`}
+            />
           </>
         )}
       </div>

@@ -7,7 +7,8 @@ import { formatRelativeTime } from "@/lib/format";
 import ApplicationStatusForm from "./ApplicationStatusForm";
 import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
 import type { ApplicationStatus } from "@/generated/prisma/enums";
-import { ChevronLeft, Users, FileDown, ChevronRight } from "lucide-react";
+import Pagination from "@/components/Pagination";
+import { Users, FileDown, ChevronRight } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
@@ -203,40 +204,13 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
               ))}
             </ul>
 
-            {totalPages > 1 && (
-              <nav
-                aria-label="صفحه‌بندی"
-                className="mt-10 flex flex-wrap items-center justify-center gap-2"
-              >
-                {page > 1 ? (
-                  <Link
-                    href={`/employer/jobs/${id}/applicants?page=${page - 1}${status ? `&status=${status}` : ""}`}
-                    aria-label="صفحه‌ی قبل"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Link>
-                ) : (
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
-                )}
-
-                <span className="inline-flex h-11 min-w-24 items-center justify-center rounded-xl bg-ink px-4 text-sm font-bold text-paper shadow-[0_16px_32px_-16px_rgba(44,57,71,0.5)]">
-                  صفحه‌ی {formatNumber(page)} از {formatNumber(totalPages)}
-                </span>
-
-                {page < totalPages ? (
-                  <Link
-                    href={`/employer/jobs/${id}/applicants?page=${page + 1}${status ? `&status=${status}` : ""}`}
-                    aria-label="صفحه‌ی بعد"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Link>
-                ) : (
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
-                )}
-              </nav>
-            )}
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              href={(p) =>
+                `/employer/jobs/${id}/applicants?page=${p}${status ? `&status=${status}` : ""}`
+              }
+            />
           </>
         )}
       </div>

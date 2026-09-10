@@ -3,7 +3,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import JobCard from "@/components/JobCard";
 import { buildSearchTerms } from "@/lib/search";
-import { ChevronLeft, ChevronRight, MapPin, PlusSquare, Search, X } from "lucide-react";
+import Pagination from "@/components/Pagination";
+import { MapPin, PlusSquare, Search, X } from "lucide-react";
 
 const PAGE_SIZE = 6;
 
@@ -269,58 +270,13 @@ export default async function JobsPage({ searchParams }: Props) {
               ))}
             </div>
 
-            {/* ── pagination ── */}
-            {totalPages > 1 && (
-              <nav
-                aria-label="صفحه‌بندی"
-                className="mt-8 flex flex-wrap items-center justify-center gap-2 md:mt-14"
-              >
-                {page > 1 ? (
-                  <Link
-                    href={buildHref({ q, city, category }, page - 1)}
-                    aria-label="صفحه‌ی قبل"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Link>
-                ) : (
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
-                )}
-
-                {pageItems.map((item, i) =>
-                  item === "..." ? (
-                    <span key={`gap-${i}`} className="px-1 text-sm text-ink-muted">
-                      …
-                    </span>
-                  ) : (
-                    <Link
-                      key={item}
-                      href={buildHref({ q, city, category }, item)}
-                      aria-current={item === page ? "page" : undefined}
-                      className={`inline-flex h-11 min-w-11 items-center justify-center rounded-xl px-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25 ${
-                        item === page
-                          ? "bg-ink text-paper shadow-[0_16px_32px_-16px_rgba(44,57,71,0.5)]"
-                          : "border border-ink/10 bg-white/60 text-ink hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
-                      }`}
-                    >
-                      {formatNumber(item)}
-                    </Link>
-                  )
-                )}
-
-                {page < totalPages ? (
-                  <Link
-                    href={buildHref({ q, city, category }, page + 1)}
-                    aria-label="صفحه‌ی بعد"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Link>
-                ) : (
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
-                )}
-              </nav>
-            )}
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              href={(p) => buildHref({ q, city, category }, p)}
+              pageItems={pageItems}
+              formatNumber={formatNumber}
+            />
           </>
         )}
       </div>

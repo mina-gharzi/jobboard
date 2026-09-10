@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import JobCard from "@/components/JobCard";
 import { jobStatusLabels, jobStatusBadge } from "@/lib/status";
-import { Plus, TriangleAlert, SquarePlus, ChevronRight, ChevronLeft } from "lucide-react";
+import Pagination from "@/components/Pagination";
+import { Plus, TriangleAlert, SquarePlus, ChevronRight } from "lucide-react";
 
 const PAGE_SIZE = 6;
 
@@ -164,40 +165,11 @@ export default async function EmployerDashboard({ searchParams }: Props) {
               ))}
             </ul>
 
-            {totalPages > 1 && (
-              <nav
-                aria-label="صفحه‌بندی"
-                className="mt-10 flex flex-wrap items-center justify-center gap-2 md:mt-14"
-              >
-                {page > 1 ? (
-                  <Link
-                    href={`/employer?page=${page - 1}`}
-                    aria-label="صفحه‌ی قبل"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Link>
-                ) : (
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
-                )}
-
-                <span className="inline-flex h-11 min-w-24 items-center justify-center rounded-xl bg-ink px-4 text-sm font-bold text-paper shadow-[0_16px_32px_-16px_rgba(44,57,71,0.5)]">
-                  صفحه‌ی {formatNumber(page)} از {formatNumber(totalPages)}
-                </span>
-
-                {page < totalPages ? (
-                  <Link
-                    href={`/employer?page=${page + 1}`}
-                    aria-label="صفحه‌ی بعد"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Link>
-                ) : (
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
-                )}
-              </nav>
-            )}
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              href={(p) => `/employer?page=${p}`}
+            />
           </>
         )}
       </div>
