@@ -117,7 +117,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
         )}
 
         {jobs.length === 0 ? (
-          <div className="flex flex-col items-center gap-4 rounded-[32px] border border-dashed border-ink/10 bg-white/50 px-6 py-14 text-center backdrop-blur-sm md:px-8 md:py-20">
+          <div className="flex flex-col items-center gap-4 rounded-4xl border border-dashed border-ink/10 bg-white/50 px-6 py-14 text-center backdrop-blur-sm md:px-8 md:py-20">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gold/10">
               <svg className="h-8 w-8 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="4" width="18" height="16" rx="3" />

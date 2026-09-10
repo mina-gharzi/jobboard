@@ -131,7 +131,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
         </div>
 
         {job.applications.length === 0 ? (
-          <div className="mt-10 flex flex-col items-center gap-3 rounded-[32px] border border-dashed border-ink/10 bg-white/50 px-6 py-14 text-center backdrop-blur-sm">
+          <div className="mt-10 flex flex-col items-center gap-3 rounded-4xl border border-dashed border-ink/10 bg-white/50 px-6 py-14 text-center backdrop-blur-sm">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gold/10">
               <svg className="h-7 w-7 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -219,7 +219,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
                     )}
                   </div>
 
-                  <p className="mt-4 rounded-2xl bg-ink/[0.03] px-4 py-3 text-sm leading-6 text-ink">
+                  <p className="mt-4 rounded-2xl bg-ink/3 px-4 py-3 text-sm leading-6 text-ink">
                     {app.coverLetter || <span className="text-ink-muted">بدون انگیزه‌نامه</span>}
                   </p>
 
