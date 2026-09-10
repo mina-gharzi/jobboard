@@ -8,7 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "Job Board",
+  title: "جابینو",
   description: "پلتفرم آگهی‌های استخدام",
 };
 

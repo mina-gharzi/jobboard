@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { updateCompanyProfileSchema, toStr } from "@/lib/validation";
+import { saveCompanyLogo, deleteCompanyLogo } from "@/lib/logo";
 
 export type UpdateCompanyProfileState = {
   success?: boolean;
@@ -14,7 +15,6 @@ export type UpdateCompanyProfileState = {
     companyDescription?: string;
     companyWebsite?: string;
     companyTeamSize?: string;
-    logoUrl?: string;
   };
   values?: {
     name: string;
@@ -44,7 +44,6 @@ export async function updateCompanyProfile(
     companyDescription: toStr(formData.get("companyDescription")),
     companyWebsite: toStr(formData.get("companyWebsite")),
     companyTeamSize: toStr(formData.get("companyTeamSize")),
-    logoUrl: toStr(formData.get("logoUrl")),
   };
 
   const parsed = updateCompanyProfileSchema.safeParse(rawValues);
@@ -57,14 +56,39 @@ export async function updateCompanyProfile(
         companyDescription: fe.companyDescription?.[0],
         companyWebsite: fe.companyWebsite?.[0],
         companyTeamSize: fe.companyTeamSize?.[0],
-        logoUrl: fe.logoUrl?.[0],
       },
-      values: rawValues,
+      values: { ...rawValues, logoUrl: "" },
     };
   }
 
-  const { name, companyDescription, companyWebsite, companyTeamSize, logoUrl } =
+  const { name, companyDescription, companyWebsite, companyTeamSize } =
     parsed.data;
+
+  const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+  if (!user) {
+    return { error: "حساب کاربری یافت نشد" };
+  }
+
+  let logoUrl = user.image;
+  const fileEntry = formData.get("logoFile");
+  const file = fileEntry instanceof File ? fileEntry : null;
+  const shouldRemoveLogo = formData.get("removeLogo") === "1";
+
+  if (file && file.size > 0) {
+    try {
+      const newUrl = await saveCompanyLogo(file, session.user.id);
+      await deleteCompanyLogo(user.image);
+      logoUrl = newUrl;
+    } catch (e) {
+      return {
+        error: e instanceof Error ? e.message : "خطایی در ذخیره‌ی لوگو رخ داد",
+        values: { ...rawValues, logoUrl: user.image ?? "" },
+      };
+    }
+  } else if (shouldRemoveLogo && logoUrl) {
+    await deleteCompanyLogo(logoUrl);
+    logoUrl = null;
+  }
 
   await prisma.user.update({
     where: { id: session.user.id },
@@ -73,12 +97,10 @@ export async function updateCompanyProfile(
       companyDescription: companyDescription || null,
       companyWebsite: companyWebsite || null,
       companyTeamSize: companyTeamSize || null,
-      image: logoUrl || null,
+      image: logoUrl,
     },
   });
 
-  // اسم و لوگوی شرکت روی کارت آگهی‌ها هم نمایش داده می‌شه، پس صفحات
-  // مرتبط هم باید رفرش بشن.
   revalidatePath("/employer/company");
   revalidatePath("/employer");
   revalidatePath("/jobs");

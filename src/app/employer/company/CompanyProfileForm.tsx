@@ -1,13 +1,21 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import AvatarImage from "@/components/AvatarImage";
 import { COMPANY_TEAM_SIZES } from "@/lib/companyTeamSizes";
 import {
   updateCompanyProfile,
   type UpdateCompanyProfileState,
 } from "@/lib/actions/updateCompanyProfile";
-import { Check, Circle } from "lucide-react";
+import { Check, Circle, Upload, X } from "lucide-react";
+
+const MAX_LOGO_SIZE = 2 * 1024 * 1024;
+
+function formatSize(bytes: number) {
+  return bytes >= 1024 * 1024
+    ? `${(bytes / (1024 * 1024)).toFixed(1)} مگابایت`
+    : `${Math.ceil(bytes / 1024)} کیلوبایت`;
+}
 
 const initialState: UpdateCompanyProfileState = {};
 
@@ -67,6 +75,53 @@ export default function CompanyProfileForm({
     initialState
   );
   const errors = state.fieldErrors ?? {};
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const [selectedLogo, setSelectedLogo] = useState<File | null>(null);
+  const [logoError, setLogoError] = useState<string | null>(null);
+  const [removeLogo, setRemoveLogo] = useState(false);
+
+  function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null;
+    setRemoveLogo(false);
+
+    if (!file) {
+      setSelectedLogo(null);
+      setLogoError(null);
+      return;
+    }
+
+    if (file.size > MAX_LOGO_SIZE) {
+      setSelectedLogo(null);
+      e.target.value = "";
+      setLogoError("حجم فایل لوگو نمی‌تواند بیشتر از ۲ مگابایت باشد");
+      return;
+    }
+
+    const allowed = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowed.includes(file.type)) {
+      setSelectedLogo(null);
+      e.target.value = "";
+      setLogoError("فقط فایل‌های JPEG، PNG و WebP مجاز هستند");
+      return;
+    }
+
+    setSelectedLogo(file);
+    setLogoError(null);
+  }
+
+  // ساخت دستی FormData: ورودی فایل را از state تزریق می‌کنیم تا مطمئن باشیم
+  // به سرور می‌رسد (همان الگوی رزومه در ApplyForm/ProfileForm).
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    if (selectedLogo) {
+      fd.set("logoFile", selectedLogo);
+    } else {
+      fd.delete("logoFile");
+    }
+    fd.set("removeLogo", removeLogo ? "1" : "0");
+    formAction(fd);
+  }
 
   // بعد از ثبت موفق، از حالت ویرایش خارج شو — حین رندر (نه داخل
   // useEffect) تا رندر اضافه ایجاد نشه.
@@ -139,7 +194,7 @@ export default function CompanyProfileForm({
             )}
             {state.error && <p className="mb-4 text-sm text-danger">{state.error}</p>}
 
-            <form action={formAction} className="flex flex-col gap-5">
+            <form action={formAction} onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div>
                 <label htmlFor="company-name" className="mb-1.5 block text-sm font-semibold text-ink-muted">نام شرکت</label>
                 <input
@@ -154,17 +209,77 @@ export default function CompanyProfileForm({
               </div>
 
               <div>
-                <label htmlFor="company-logo" className="mb-1.5 block text-sm font-semibold text-ink-muted">لینک لوگو</label>
+                <label htmlFor="company-logo" className="mb-1.5 block text-sm font-semibold text-ink-muted">لوگوی شرکت</label>
+                {effective.logoUrl && !selectedLogo && !removeLogo ? (
+                  <div className="flex items-center gap-3 rounded-2xl border border-ink/10 bg-paper/60 px-4 py-3">
+                    <div className="h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-line bg-white">
+                      <AvatarImage
+                        src={effective.logoUrl}
+                        fallback={effective.name?.trim()?.[0] ?? "؟"}
+                        imageClassName="h-full w-full object-contain"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-ink" dir="ltr">
+                        {effective.logoUrl}
+                      </p>
+                      <p className="text-[11px] text-ink-muted">برای تغییر، فایل جدید انتخاب کنید</p>
+                    </div>
+                  </div>
+                ) : (
+                  <label
+                    htmlFor="company-logo-file"
+                    className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed bg-white/60 px-4 py-6 text-center transition hover:border-gold/50 hover:bg-gold/5 ${
+                      selectedLogo ? "border-emerald-300 bg-emerald-50/40" : "border-slate/25"
+                    }`}
+                  >
+                    {selectedLogo ? (
+                      <>
+                        <Check className="h-7 w-7 text-emerald-600" />
+                        <span className="text-sm font-semibold text-ink" dir="ltr">
+                          {selectedLogo.name}
+                        </span>
+                        <span className="text-xs text-ink-muted">
+                          {formatSize(selectedLogo.size)} • برای تغییر کلیک کنید
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-7 w-7 text-slate" />
+                        <span className="text-sm font-semibold text-ink">بارگذاری لوگو</span>
+                        <span className="text-xs text-ink-muted">
+                          JPEG، PNG یا WebP — حداکثر ۲ مگابایت
+                        </span>
+                      </>
+                    )}
+                  </label>
+                )}
                 <input
-                  id="company-logo"
-                  name="logoUrl"
-                  type="url"
-                  defaultValue={effective.logoUrl}
-                  placeholder="لینک تصویر لوگوی شرکت"
-                  dir="ltr"
-                  className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
+                  ref={logoInputRef}
+                  id="company-logo-file"
+                  name="logoFile"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="sr-only"
+                  onChange={handleLogoChange}
                 />
-                {errors.logoUrl && <p className="mt-1.5 text-sm text-danger">{errors.logoUrl}</p>}
+                {logoError && <p className="mt-1.5 text-sm text-danger">{logoError}</p>}
+                {effective.logoUrl && !removeLogo && !selectedLogo && (
+                  <button
+                    type="button"
+                    onClick={() => setRemoveLogo(true)}
+                    className="mt-2 inline-flex items-center gap-1 text-xs text-ink-muted transition hover:text-danger"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                    حذف لوگوی فعلی
+                  </button>
+                )}
+                {(selectedLogo || removeLogo) && (
+                  <p className="mt-2 flex items-center gap-1 text-xs text-ink-muted">
+                    <X className="h-3.5 w-3.5" />
+                    {removeLogo ? "لوگوی فعلی حذف خواهد شد" : "لوگوی جدید جایگزین خواهد شد"}
+                  </p>
+                )}
               </div>
 
               <div>

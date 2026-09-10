@@ -128,7 +128,7 @@ export async function generateMetadata({ params }: Props) {
   const url = `${SITE_URL}/jobs/${job.slug}`;
 
   return {
-    title: `${job.title} — ${job.city} | Job Board`,
+    title: `${job.title} — ${job.city} | جابینو`,
     description,
     alternates: { canonical: url },
     // آگهی‌های DRAFT/CLOSED فقط برای صاحبشون قابل دیدن‌ان (پیش‌نمایش)؛
@@ -138,7 +138,7 @@ export async function generateMetadata({ params }: Props) {
       title: job.title,
       description,
       url,
-      siteName: "Job Board",
+      siteName: "جابینو",
       locale: "fa_IR",
       type: "website",
     },

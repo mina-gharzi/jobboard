@@ -156,12 +156,4 @@ export const updateCompanyProfileSchema = z.object({
     .enum(COMPANY_TEAM_SIZES)
     .optional()
     .or(z.literal("")),
-  logoUrl: z
-    .string()
-    .trim()
-    .max(500, "لینک بیش از حد طولانی است")
-    .url("لینک لوگو معتبر نیست (باید با http یا https شروع شود)")
-    .refine(isHttpUrl, "لینک لوگو باید با http یا https شروع شود")
-    .optional()
-    .or(z.literal("")),
 });
