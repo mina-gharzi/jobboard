@@ -14,7 +14,6 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [registered, setRegistered] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -45,7 +44,8 @@ export default function RegisterPage() {
       return;
     }
 
-    setRegistered(true);
+    router.push("/");
+    router.refresh();
   }
 
   const inputCls =
@@ -57,48 +57,6 @@ export default function RegisterPage() {
         ? "border-gold bg-gold/10 shadow-[0_12px_24px_-16px_rgba(194,165,109,0.6)]"
         : "border-ink/10 bg-white/60 hover:border-gold/30"
     }`;
-
-  if (registered) {
-    return (
-      <div className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -right-40 -top-40 h-120 w-120 rounded-full bg-gold/8 blur-[80px]" />
-          <div className="absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-slate/6 blur-[80px]" />
-        </div>
-
-        <div className="mx-auto flex max-w-md flex-col items-center px-6 py-20 text-center md:py-28">
-          <span className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-50/50">
-            <svg className="h-9 w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <path d="m9 11 3 3L22 4" />
-            </svg>
-          </span>
-
-          <h1 className="mt-7 text-2xl font-black text-ink md:text-3xl">
-            تایید ایمیل
-          </h1>
-          <p className="mt-3 max-w-sm text-sm leading-7 text-ink-muted">
-            یک ایمیل تایید برای{" "}
-            <span className="font-semibold text-ink">{email}</span> ارسال شد.
-            برای فعال‌سازی کامل حساب کاربری، روی لینک داخل ایمیل کلیک کنید.
-          </p>
-
-          <button
-            onClick={() => {
-              router.push("/");
-              router.refresh();
-            }}
-            className="mt-8 flex items-center gap-2 rounded-2xl bg-ink px-6 py-3.5 text-sm font-bold text-paper shadow-[0_16px_40px_-16px_rgba(44,57,71,0.5)] transition hover:-translate-y-0.5 hover:bg-ink/90 active:translate-y-0"
-          >
-            بازگشت به صفحه‌ی اصلی
-            <svg className="h-4 w-4 -scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative overflow-hidden">
