@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function ResetPasswordForm({ token }: { token: string }) {
   const router = useRouter();
@@ -37,9 +38,8 @@ export default function ResetPasswordForm({ token }: { token: string }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <input
+      <PasswordInput
         placeholder="رمز عبور جدید"
-        type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
@@ -47,9 +47,8 @@ export default function ResetPasswordForm({ token }: { token: string }) {
         aria-label="رمز عبور جدید"
         className="w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3.5 text-sm text-ink placeholder:text-ink-muted/60 shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"
       />
-      <input
+      <PasswordInput
         placeholder="تکرار رمز عبور جدید"
-        type="password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
         required

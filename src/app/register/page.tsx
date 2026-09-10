@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Check, FileText, CalendarDays, Building2, UserRound, AlertCircle, LogIn } from "lucide-react";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -208,10 +209,9 @@ export default function RegisterPage() {
                 <label htmlFor="register-password" className="mb-1.5 block text-sm font-semibold text-ink-muted">
                   رمز عبور
                 </label>
-                <input
+                <PasswordInput
                   id="register-password"
                   placeholder="حداقل ۸ کاراکتر"
-                  type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -228,10 +228,9 @@ export default function RegisterPage() {
                 <label htmlFor="register-confirm" className="mb-1.5 block text-sm font-semibold text-ink-muted">
                   تکرار رمز عبور
                 </label>
-                <input
+                <PasswordInput
                   id="register-confirm"
                   placeholder="تکرار رمز عبور"
-                  type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required

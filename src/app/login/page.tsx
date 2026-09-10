@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { FileText, MapPin, UserRound, Building2, AlertCircle, LogIn } from "lucide-react";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -145,10 +146,9 @@ export default function LoginPage() {
                     فراموشی رمز عبور؟
                   </a>
                 </div>
-                <input
+                <PasswordInput
                   id="login-password"
                   placeholder="••••••••"
-                  type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
