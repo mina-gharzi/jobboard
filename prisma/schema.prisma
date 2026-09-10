@@ -24,6 +24,7 @@ model User {
   companyWebsite     String?
   companyTeamSize    String?
   applications       Application[] @relation("CandidateApplications")
+  savedJobs          SavedJob[]    @relation("CandidateSavedJobs")
   jobs               Job[]         @relation("EmployerJobs")
   accounts           Account[]
   sessions           Session[]
@@ -93,10 +94,24 @@ model Job {
   status       JobStatus     @default(PUBLISHED)
   createdAt    DateTime      @default(now())
   applications Application[]
+  savedBy      SavedJob[]
   employer     User          @relation("EmployerJobs", fields: [employerId], references: [id])
 
   @@index([status, category, city])
   @@index([employerId])
+}
+
+model SavedJob {
+  id          String   @id @default(cuid())
+  jobId       String
+  candidateId String
+  createdAt   DateTime @default(now())
+  candidate   User     @relation("CandidateSavedJobs", fields: [candidateId], references: [id], onDelete: Cascade)
+  job         Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, candidateId])
+  @@index([candidateId])
+  @@map("saved_job")
 }
 
 model Application {

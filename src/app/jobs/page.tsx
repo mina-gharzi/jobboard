@@ -1,7 +1,10 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import JobCard from "@/components/JobCard";
+import SaveJobButton from "@/components/SaveJobButton";
 import { buildSearchTerms } from "@/lib/search";
 import Pagination from "@/components/Pagination";
 import JobsSort from "./JobsSort";
@@ -98,6 +101,21 @@ export default async function JobsPage({ searchParams }: Props) {
     }),
     prisma.job.count({ where }),
   ]);
+
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  // شناسه‌ی آگهی‌های ذخیره‌شده‌ی کارجو برای نمایش حالت «ذخیره شده» روی دکمه‌ها
+  let savedJobIds = new Set<string>();
+  if (jobs.length > 0 && session?.user.role === "CANDIDATE") {
+    const saved = await prisma.savedJob.findMany({
+      where: {
+        candidateId: session.user.id,
+        jobId: { in: jobs.map((job) => job.id) },
+      },
+      select: { jobId: true },
+    });
+    savedJobIds = new Set(saved.map((item) => item.jobId));
+  }
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
@@ -291,7 +309,20 @@ export default async function JobsPage({ searchParams }: Props) {
           <>
             <div className="grid gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
               {jobs.map((job, index) => (
-                <JobCard key={job.id} job={job} index={(page - 1) * PAGE_SIZE + index} />
+                <JobCard
+                  key={job.id}
+                  job={job}
+                  index={(page - 1) * PAGE_SIZE + index}
+                  footer={
+                    session?.user.role !== "EMPLOYER" ? (
+                      <SaveJobButton
+                        jobId={job.id}
+                        initialSaved={savedJobIds.has(job.id)}
+                        signedIn={Boolean(session?.user.id)}
+                      />
+                    ) : undefined
+                  }
+                />
               ))}
             </div>
 

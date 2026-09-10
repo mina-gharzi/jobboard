@@ -6,6 +6,7 @@ import Link from "next/link";
 import ApplyForm from "./ApplyForm";
 import JobCard from "@/components/JobCard";
 import AvatarImage from "@/components/AvatarImage";
+import SaveJobButton from "@/components/SaveJobButton";
 import {
   remoteTypeLabels,
   formatSalary,
@@ -220,6 +221,20 @@ export default async function JobDetailPage({ params }: Props) {
     take: 3,
   });
 
+  // شناسه‌ی آگهی‌های ذخیره‌شده‌ی کارجو، برای حالت «ذخیره شده» روی دکمه‌ها
+  let savedJobIds = new Set<string>();
+  if (session?.user.role === "CANDIDATE") {
+    const relatedIds = relatedJobs.map((related) => related.id);
+    const saved = await prisma.savedJob.findMany({
+      where: {
+        candidateId: session.user.id,
+        jobId: { in: [job.id, ...relatedIds] },
+      },
+      select: { jobId: true },
+    });
+    savedJobIds = new Set(saved.map((item) => item.jobId));
+  }
+
   const isCandidate = session?.user.role === "CANDIDATE";
   const hasApplied = isCandidate && existingApplication;
   const showMobileBar = session?.user.role !== "EMPLOYER";
@@ -303,14 +318,25 @@ export default async function JobDetailPage({ params }: Props) {
                   </div>
 
                   <div className="min-w-0 pt-2.5">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h1 className="font-display text-xl font-black leading-9 text-ink md:text-3xl">
-                        {job.title}
-                      </h1>
-                      {job.category && (
-                        <span className="rounded-full border border-slate/15 bg-slate/5 px-3 py-1 text-xs font-semibold text-slate-dark">
-                          {job.category}
-                        </span>
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h1 className="font-display text-xl font-black leading-9 text-ink md:text-3xl">
+                          {job.title}
+                        </h1>
+                        {job.category && (
+                          <span className="rounded-full border border-slate/15 bg-slate/5 px-3 py-1 text-xs font-semibold text-slate-dark">
+                            {job.category}
+                          </span>
+                        )}
+                      </div>
+
+                      {session?.user.role !== "EMPLOYER" && (
+                        <SaveJobButton
+                          jobId={job.id}
+                          initialSaved={savedJobIds.has(job.id)}
+                          signedIn={Boolean(session?.user.id)}
+                          className="-mt-1 shrink-0"
+                        />
                       )}
                     </div>
 
@@ -441,7 +467,19 @@ export default async function JobDetailPage({ params }: Props) {
 
                 <div className="mt-6 grid gap-5 sm:grid-cols-2">
                   {relatedJobs.map((related) => (
-                    <JobCard key={related.id} job={related} />
+                    <JobCard
+                      key={related.id}
+                      job={related}
+                      footer={
+                        session?.user.role !== "EMPLOYER" ? (
+                          <SaveJobButton
+                            jobId={related.id}
+                            initialSaved={savedJobIds.has(related.id)}
+                            signedIn={Boolean(session?.user.id)}
+                          />
+                        ) : undefined
+                      }
+                    />
                   ))}
                 </div>
               </section>
