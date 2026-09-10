@@ -225,7 +225,7 @@ export default async function JobDetailPage({ params }: Props) {
   const showMobileBar = session?.user.role !== "EMPLOYER";
 
   return (
-    <div className="relative pb-24 lg:pb-0">
+    <div className="relative pb-[calc(8.5rem_+_env(safe-area-inset-bottom))] lg:pb-0">
       {/* decorative background */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -right-40 -top-40 h-120 w-120 rounded-full bg-gold/8 blur-[80px]" />
@@ -475,7 +475,7 @@ export default async function JobDetailPage({ params }: Props) {
 
       {/* نوار اپلای موبایل */}
       {showMobileBar && (
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/5 bg-white/85 p-3 backdrop-blur-xl lg:hidden">
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/5 bg-white/85 px-3 pt-3 pb-[calc(env(safe-area-inset-bottom)_+_0.75rem)] backdrop-blur-xl lg:hidden">
           <a
             href="#apply"
             className="flex items-center justify-between gap-3 rounded-2xl bg-ink px-5 py-3 text-sm font-bold text-paper shadow-[0_16px_40px_-16px_rgba(44,57,71,0.5)] transition active:scale-[0.98]"

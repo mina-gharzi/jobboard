@@ -1,6 +1,6 @@
 export default function JobDetailLoading() {
   return (
-    <div className="relative pb-24 lg:pb-0">
+    <div className="relative pb-[calc(8.5rem_+_env(safe-area-inset-bottom))] lg:pb-0">
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -right-40 -top-40 h-120 w-120 rounded-full bg-gold/8 blur-[80px]" />
         <div className="absolute -left-40 top-1/3 h-96 w-96 rounded-full bg-slate/6 blur-[80px]" />
