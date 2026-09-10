@@ -20,6 +20,11 @@ export default function RegisterPage() {
     e.preventDefault();
     setError(null);
 
+    if (password.length < 8) {
+      setError("رمز عبور باید حداقل ۸ کاراکتر باشد");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("رمز عبور و تکرار آن یکسان نیستند");
       return;
@@ -210,9 +215,13 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  minLength={8}
                   autoComplete="new-password"
                   className={inputCls}
                 />
+                {password.length > 0 && password.length < 8 && (
+                  <p className="mt-1.5 text-xs text-danger">رمز عبور باید حداقل ۸ کاراکتر باشد</p>
+                )}
               </div>
 
               <div>
@@ -226,9 +235,13 @@ export default function RegisterPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
+                  minLength={8}
                   autoComplete="new-password"
                   className={inputCls}
                 />
+                {confirmPassword.length > 0 && password !== confirmPassword && (
+                  <p className="mt-1.5 text-xs text-danger">رمز عبور و تکرار آن یکسان نیستند</p>
+                )}
               </div>
 
               {error && (

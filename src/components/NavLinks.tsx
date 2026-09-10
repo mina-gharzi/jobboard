@@ -45,6 +45,9 @@ export default function NavLinks({ role }: { role: Role }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const mounted = useMounted();
   const menuRef = useRef<HTMLDivElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const wasOpenRef = useRef<HTMLElement | null>(null);
   const router = useRouter();
   const links = buildLinks(role);
 
@@ -64,6 +67,61 @@ export default function NavLinks({ role }: { role: Role }) {
     return () => {
       document.body.style.overflow = "";
     };
+  }, [open]);
+
+  // فوکوس: هنگام باز شدن، اولین عنصر تعاملی دراور فوکوس می‌شود و هنگام
+  // بستن، فوکوس به دکمه‌ی همبرگر برمی‌گردد.
+  useEffect(() => {
+    if (open) {
+      wasOpenRef.current = document.activeElement as HTMLElement | null;
+      const firstFocusable = drawerRef.current?.querySelector<HTMLElement>(
+        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      firstFocusable?.focus();
+      return;
+    }
+    if (wasOpenRef.current) {
+      wasOpenRef.current.focus();
+      wasOpenRef.current = null;
+    }
+  }, [open]);
+
+  // focus trap: Tab/Shift+Tab داخل دراور می‌ماند و Escape آن را می‌بندد.
+  useEffect(() => {
+    if (!open) return;
+    const focusableSelector =
+      'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (e.key !== "Tab") return;
+
+      const panelEl = drawerRef.current;
+      if (!panelEl) return;
+
+      const focusables = panelEl.querySelectorAll<HTMLElement>(focusableSelector);
+      if (focusables.length === 0) {
+        e.preventDefault();
+        return;
+      }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+
+      if (e.shiftKey && (active === first || !panelEl.contains(active))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open]);
 
   async function handleSignOut() {
@@ -169,8 +227,11 @@ export default function NavLinks({ role }: { role: Role }) {
 
       {/* دکمه همبرگر - موبایل */}
       <button
+        ref={triggerRef}
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "بستن منو" : "باز کردن منو"}
+        aria-expanded={open}
+        aria-controls="mobile-menu"
         className="flex h-10 w-10 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition-colors hover:border-gold/30 hover:bg-gold/5 md:hidden"
       >
         {open ? (
@@ -186,6 +247,7 @@ export default function NavLinks({ role }: { role: Role }) {
             {/* پس‌زمینه‌ی تیره پشت دراور */}
             <div
               onClick={() => setOpen(false)}
+              aria-hidden="true"
               className={`fixed inset-0 z-40 bg-ink/40 transition-opacity duration-300 md:hidden ${
                 open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
               }`}
@@ -193,6 +255,13 @@ export default function NavLinks({ role }: { role: Role }) {
 
             {/* دراور موبایل - از راست به چپ باز می‌شود */}
             <div
+              ref={drawerRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="منوی اصلی"
+              id="mobile-menu"
+              tabIndex={-1}
+              inert={!open}
               className={`fixed inset-y-0 right-0 z-50 flex w-80 max-w-[85%] flex-col gap-4 bg-paper px-6 py-6 text-sm font-medium shadow-2xl transition-transform duration-300 ease-out md:hidden ${
                 open ? "translate-x-0" : "translate-x-full"
               }`}

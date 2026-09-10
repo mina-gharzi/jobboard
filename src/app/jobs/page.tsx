@@ -4,12 +4,14 @@ import { redirect } from "next/navigation";
 import JobCard from "@/components/JobCard";
 import { buildSearchTerms } from "@/lib/search";
 import Pagination from "@/components/Pagination";
+import JobsSort from "./JobsSort";
+import { JOB_SORTS, type JobSort } from "./jobs-sort";
 import { MapPin, PlusSquare, Search, X } from "lucide-react";
 
 const PAGE_SIZE = 6;
 
 type Props = {
-  searchParams: Promise<{ q?: string; city?: string; category?: string; page?: string }>;
+  searchParams: Promise<{ q?: string; city?: string; category?: string; sort?: string; page?: string }>;
 };
 
 const formatNumber = (value: number) =>
@@ -20,6 +22,7 @@ function buildHref(params: Record<string, string | undefined>, page: number) {
   if (params.q) usp.set("q", params.q);
   if (params.city) usp.set("city", params.city);
   if (params.category) usp.set("category", params.category);
+  if (params.sort && params.sort !== "newest") usp.set("sort", params.sort);
   if (page > 1) usp.set("page", String(page));
   const qs = usp.toString();
   return qs ? `/jobs?${qs}` : "/jobs";
@@ -55,8 +58,11 @@ function getPageItems(current: number, total: number): PageItem[] {
 type FilterChip = { label: string; href: string } | null;
 
 export default async function JobsPage({ searchParams }: Props) {
-  const { q, city, category, page: pageRaw } = await searchParams;
+  const { q, city, category, sort: sortRaw, page: pageRaw } = await searchParams;
   const hasFilters = Boolean(q || city || category);
+  const sort: JobSort = JOB_SORTS.some((o) => o.value === sortRaw)
+    ? (sortRaw as JobSort)
+    : "newest";
   const page = Math.max(1, Number(pageRaw) || 1);
 
   const searchTerms = q ? buildSearchTerms(q) : [];
@@ -73,11 +79,20 @@ export default async function JobsPage({ searchParams }: Props) {
     ...(category && { category }),
   };
 
+  const orderBy =
+    sort === "oldest"
+      ? ({ createdAt: "asc" } as const)
+      : sort === "popular"
+        ? ({ applications: { _count: "desc" } } as const)
+        : sort === "salary"
+          ? ({ salaryMax: { sort: "desc", nulls: "last" } } as const)
+          : ({ createdAt: "desc" } as const);
+
   const [jobs, totalCount] = await Promise.all([
     prisma.job.findMany({
       where,
       include: { employer: { select: { name: true, image: true } } },
-      orderBy: { createdAt: "desc" },
+      orderBy,
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
     }),
@@ -91,13 +106,13 @@ export default async function JobsPage({ searchParams }: Props) {
   // redirect می‌کنیم؛ وگرنه یه صفحه‌ی خالی و گمراه‌کننده («آگهی‌ای پیدا
   // نشد») نشون داده می‌شه در حالی که واقعاً نتیجه‌ای برای فیلترها هست.
   if (totalCount > 0 && page > totalPages) {
-    redirect(buildHref({ q, city, category }, totalPages));
+    redirect(buildHref({ q, city, category, sort }, totalPages));
   }
 
   const filterChips: FilterChip[] = [
-    q ? { label: `جستجو: «${q}»`, href: buildHref({ city, category }, page) } : null,
-    city ? { label: `شهر: ${city}`, href: buildHref({ q, category }, page) } : null,
-    category ? { label: `دسته: ${category}`, href: buildHref({ q, city }, page) } : null,
+    q ? { label: `جستجو: «${q}»`, href: buildHref({ city, category, sort }, page) } : null,
+    city ? { label: `شهر: ${city}`, href: buildHref({ q, category, sort }, page) } : null,
+    category ? { label: `دسته: ${category}`, href: buildHref({ q, city, sort }, page) } : null,
   ];
 
   const pageItems = getPageItems(page, totalPages);
@@ -148,7 +163,7 @@ export default async function JobsPage({ searchParams }: Props) {
                 )
             )}
             <Link
-              href="/jobs"
+              href={buildHref({ sort }, 1)}
               className="text-[11px] font-semibold text-ink-muted transition-colors hover:text-gold focus-visible:outline-none focus-visible:rounded-sm focus-visible:ring-4 focus-visible:ring-gold/20 md:text-xs"
             >
               حذف همه
@@ -187,6 +202,7 @@ export default async function JobsPage({ searchParams }: Props) {
                 </label>
 
                 {category && <input type="hidden" name="category" value={category} />}
+                {sort !== "newest" && <input type="hidden" name="sort" value={sort} />}
 
                 <button
                   type="submit"
@@ -225,6 +241,7 @@ export default async function JobsPage({ searchParams }: Props) {
               </label>
 
               {category && <input type="hidden" name="category" value={category} />}
+              {sort !== "newest" && <input type="hidden" name="sort" value={sort} />}
 
               <button
                 type="submit"
@@ -235,6 +252,14 @@ export default async function JobsPage({ searchParams }: Props) {
               </button>
             </div>
           </form>
+        </div>
+
+        {/* ── sort toolbar ── */}
+        <div className="mb-4 flex items-center justify-between gap-3 md:mb-6">
+          <span className="text-xs font-bold text-ink-muted md:text-sm">
+            مرتب‌سازی:
+          </span>
+          <JobsSort sort={sort} q={q} city={city} category={category} />
         </div>
 
         {/* ── results ── */}
@@ -273,7 +298,7 @@ export default async function JobsPage({ searchParams }: Props) {
             <Pagination
               page={page}
               totalPages={totalPages}
-              href={(p) => buildHref({ q, city, category }, p)}
+              href={(p) => buildHref({ q, city, category, sort }, p)}
               pageItems={pageItems}
               formatNumber={formatNumber}
             />
