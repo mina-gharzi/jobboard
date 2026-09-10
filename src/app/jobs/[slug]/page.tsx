@@ -115,7 +115,8 @@ function buildJobPostingJsonLd(job: {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   const [job, session] = await Promise.all([
     getJob(slug),
     auth.api.getSession({ headers: await headers() }),
@@ -178,7 +179,8 @@ function MetaPill({
 }
 
 export default async function JobDetailPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   const job = await getJob(slug);
 
   const session = await auth.api.getSession({

@@ -23,31 +23,40 @@ const isHttpUrl = (val: string) => /^https?:\/\//i.test(val);
 
 const optionalSalary = z.preprocess((val) => {
   if (val === "" || val === null || val === undefined) return undefined;
-  return val;
-}, z.coerce
-  .number({ invalid_type_error: "مقدار حقوق باید عدد باشد" })
+  const s = typeof val === "string" ? val.trim() : val;
+  if (s === "") return undefined;
+  const n = typeof s === "number" ? s : Number(s);
+  // عددِ غیر-عددی (مثل «سلام») را همان‌طور بازمی‌گردانیم تا z.number پیام
+  // «باید عدد باشد» بدهد — z.coerce.number به‌جایش NaN می‌کرد و پیام انگلیسی
+  // "received NaN" نشان داده می‌شد.
+  return Number.isFinite(n) ? n : val;
+}, z
+  .number({ message: "مقدار حقوق باید عدد باشد" })
   .nonnegative("حقوق نمی‌تواند منفی باشد")
   .optional());
 
 // این Enumها مستقیماً از generated/prisma/enums.ts می‌آیند، نه رشته‌های
 // دستی جدا — اگر روزی مقداری به schema.prisma اضافه/حذف شود، همین‌جا و
 // فقط همین‌جا (بعد از prisma generate) به‌روزرسانی می‌شود.
+//
+// نکته: در Zod v4 گزینه‌ی errorMap پارامتر شناخته نمی‌شود؛ از message
+// استفاده می‌کنیم تا پیام فارسی واقعاً به کاربر نمایش داده شود.
 const remoteTypeSchema = z.nativeEnum(RemoteType, {
-  errorMap: () => ({ message: "نوع همکاری نامعتبر است" }),
+  message: "نوع همکاری نامعتبر است",
 });
 
 const jobStatusSchema = z.nativeEnum(JobStatus, {
-  errorMap: () => ({ message: "وضعیت آگهی نامعتبر است" }),
+  message: "وضعیت آگهی نامعتبر است",
 });
 
 const applicationStatusSchema = z.nativeEnum(ApplicationStatus, {
-  errorMap: () => ({ message: "وضعیت درخواست نامعتبر است" }),
+  message: "وضعیت درخواست نامعتبر است",
 });
 
 export const userRoleSchema = z.nativeEnum(Role);
 
 const categorySchema = z.enum(JOB_CATEGORIES, {
-  errorMap: () => ({ message: "دسته‌بندی نامعتبر است" }),
+  message: "دسته‌بندی نامعتبر است",
 });
 
 const jobFieldsSchema = z.object({

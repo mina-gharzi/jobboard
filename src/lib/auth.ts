@@ -20,7 +20,10 @@ export const auth = betterAuth({
   // هاستی، بعداً باید `secondaryStorage` (مثلاً Redis/Upstash) هم اضافه
   // بشه؛ فعلاً همین سطح محافظت به‌مراتب از نبودنش بهتره.
   rateLimit: {
-    enabled: true,
+    // در تست‌های E2E ری‌استارت مکرر سرور به‌مدت rate limit ثبت‌نام
+    // (۵/۱۰ دقیقه) گیر می‌کند. این seam به سرورِ ساختِ Playwright
+    // این امکان را می‌دهد که rate limiter را خاموش کند.
+    enabled: process.env.DISABLE_RATE_LIMIT !== "true",
     window: 60,
     max: 100,
     customRules: {

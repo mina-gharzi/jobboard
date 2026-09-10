@@ -6,9 +6,6 @@ import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Check, FileText, CalendarDays, Building2, UserRound, AlertCircle, LogIn } from "lucide-react";
 import PasswordInput from "@/components/PasswordInput";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = { title: "ثبت‌نام | جابینو" };
 
 export default function RegisterPage() {
   const router = useRouter();
