@@ -104,9 +104,9 @@ model Application {
   jobId       String
   candidateId String
   coverLetter String?
-  resumePdf   String?
   status      ApplicationStatus @default(PENDING)
   createdAt   DateTime          @default(now())
+  resumePdf   String?
   candidate   User              @relation("CandidateApplications", fields: [candidateId], references: [id])
   job         Job               @relation(fields: [jobId], references: [id])
 
