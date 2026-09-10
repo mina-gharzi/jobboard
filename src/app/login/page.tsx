@@ -189,8 +189,20 @@ export default function LoginPage() {
 
           <p className="mt-6 text-center text-xs text-ink-muted">
             با ورود به جابینو،{" "}
-            <span className="text-ink underline underline-offset-2">قوانین</span> و{" "}
-            <span className="text-ink underline underline-offset-2">حریم خصوصی</span> را می‌پذیرید.
+            <Link
+              href="/terms"
+              className="font-semibold text-ink underline-offset-4 transition hover:text-gold hover:underline focus-visible:outline-none focus-visible:rounded-sm focus-visible:ring-4 focus-visible:ring-gold/25"
+            >
+              قوانین
+            </Link>{" "}
+            و{" "}
+            <Link
+              href="/privacy"
+              className="font-semibold text-ink underline-offset-4 transition hover:text-gold hover:underline focus-visible:outline-none focus-visible:rounded-sm focus-visible:ring-4 focus-visible:ring-gold/25"
+            >
+              حریم خصوصی
+            </Link>{" "}
+            را می‌پذیرید.
           </p>
         </div>
       </div>

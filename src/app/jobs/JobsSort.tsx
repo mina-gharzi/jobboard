@@ -10,9 +10,18 @@ type Props = {
   q?: string;
   city?: string;
   category?: string;
+  remote?: string | null;
+  salary?: string | null;
 };
 
-export default function JobsSort({ sort, q, city, category }: Props) {
+export default function JobsSort({
+  sort,
+  q,
+  city,
+  category,
+  remote,
+  salary,
+}: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -22,6 +31,8 @@ export default function JobsSort({ sort, q, city, category }: Props) {
     if (city) usp.set("city", city);
     if (category) usp.set("category", category);
     if (e.target.value !== "newest") usp.set("sort", e.target.value);
+    if (remote && remote !== "all") usp.set("remote", remote);
+    if (salary && salary !== "all") usp.set("salary", salary);
     const qs = usp.toString();
     startTransition(() => router.push(qs ? `/jobs?${qs}` : "/jobs"));
   }

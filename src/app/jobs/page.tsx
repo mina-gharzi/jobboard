@@ -8,13 +8,25 @@ import SaveJobButton from "@/components/SaveJobButton";
 import { buildSearchTerms } from "@/lib/search";
 import Pagination from "@/components/Pagination";
 import JobsSort from "./JobsSort";
+import JobsFilters from "./JobsFilters";
 import { JOB_SORTS, type JobSort } from "./jobs-sort";
+import { parseRemote, parseSalaryKey, salaryWhere } from "./jobs-filters";
+import { remoteTypeLabels } from "@/lib/format";
+import type { Prisma } from "@/generated/prisma/client";
 import { MapPin, PlusSquare, Search, X } from "lucide-react";
 
 const PAGE_SIZE = 6;
 
 type Props = {
-  searchParams: Promise<{ q?: string; city?: string; category?: string; sort?: string; page?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    city?: string;
+    category?: string;
+    sort?: string;
+    remote?: string;
+    salary?: string;
+    page?: string;
+  }>;
 };
 
 const formatNumber = (value: number) =>
@@ -26,6 +38,8 @@ function buildHref(params: Record<string, string | undefined>, page: number) {
   if (params.city) usp.set("city", params.city);
   if (params.category) usp.set("category", params.category);
   if (params.sort && params.sort !== "newest") usp.set("sort", params.sort);
+  if (params.remote && params.remote !== "all") usp.set("remote", params.remote);
+  if (params.salary && params.salary !== "all") usp.set("salary", params.salary);
   if (page > 1) usp.set("page", String(page));
   const qs = usp.toString();
   return qs ? `/jobs?${qs}` : "/jobs";
@@ -61,25 +75,37 @@ function getPageItems(current: number, total: number): PageItem[] {
 type FilterChip = { label: string; href: string } | null;
 
 export default async function JobsPage({ searchParams }: Props) {
-  const { q, city, category, sort: sortRaw, page: pageRaw } = await searchParams;
-  const hasFilters = Boolean(q || city || category);
+  const {
+    q,
+    city,
+    category,
+    sort: sortRaw,
+    remote: remoteRaw,
+    salary: salaryRaw,
+    page: pageRaw,
+  } = await searchParams;
+  const hasFilters = Boolean(q || city || category || remoteRaw || salaryRaw);
   const sort: JobSort = JOB_SORTS.some((o) => o.value === sortRaw)
     ? (sortRaw as JobSort)
     : "newest";
+  const remote = parseRemote(remoteRaw);
+  const salaryRange = parseSalaryKey(salaryRaw);
   const page = Math.max(1, Number(pageRaw) || 1);
 
   const searchTerms = q ? buildSearchTerms(q) : [];
 
-  const where = {
-    status: "PUBLISHED" as const,
+  const where: Prisma.JobWhereInput = {
+    status: "PUBLISHED",
     ...(searchTerms.length && {
       OR: searchTerms.flatMap((term) => [
-        { title: { contains: term, mode: "insensitive" as const } },
-        { description: { contains: term, mode: "insensitive" as const } },
+        { title: { contains: term, mode: "insensitive" } },
+        { description: { contains: term, mode: "insensitive" } },
       ]),
     }),
-    ...(city && { city: { contains: city, mode: "insensitive" as const } }),
+    ...(city && { city: { contains: city, mode: "insensitive" } }),
     ...(category && { category }),
+    ...(remote && { remoteType: remote }),
+    ...(salaryRange && salaryWhere(salaryRange)),
   };
 
   const orderBy =
@@ -124,13 +150,27 @@ export default async function JobsPage({ searchParams }: Props) {
   // redirect می‌کنیم؛ وگرنه یه صفحه‌ی خالی و گمراه‌کننده («آگهی‌ای پیدا
   // نشد») نشون داده می‌شه در حالی که واقعاً نتیجه‌ای برای فیلترها هست.
   if (totalCount > 0 && page > totalPages) {
-    redirect(buildHref({ q, city, category, sort }, totalPages));
+    redirect(
+      buildHref({ q, city, category, sort, remote: remoteRaw, salary: salaryRaw }, totalPages)
+    );
   }
 
   const filterChips: FilterChip[] = [
-    q ? { label: `جستجو: «${q}»`, href: buildHref({ city, category, sort }, page) } : null,
-    city ? { label: `شهر: ${city}`, href: buildHref({ q, category, sort }, page) } : null,
-    category ? { label: `دسته: ${category}`, href: buildHref({ q, city, sort }, page) } : null,
+    q
+      ? { label: `جستجو: «${q}»`, href: buildHref({ city, category, sort, remote: remoteRaw, salary: salaryRaw }, page) }
+      : null,
+    city
+      ? { label: `شهر: ${city}`, href: buildHref({ q, category, sort, remote: remoteRaw, salary: salaryRaw }, page) }
+      : null,
+    category
+      ? { label: `دسته: ${category}`, href: buildHref({ q, city, sort, remote: remoteRaw, salary: salaryRaw }, page) }
+      : null,
+    remote
+      ? { label: `نوع همکاری: ${remoteTypeLabels[remote]}`, href: buildHref({ q, city, category, sort, salary: salaryRaw }, page) }
+      : null,
+    salaryRange
+      ? { label: `بازه حقوق: ${salaryRange.chipLabel}`, href: buildHref({ q, city, category, sort, remote: remoteRaw }, page) }
+      : null,
   ];
 
   const pageItems = getPageItems(page, totalPages);
@@ -221,6 +261,8 @@ export default async function JobsPage({ searchParams }: Props) {
 
                 {category && <input type="hidden" name="category" value={category} />}
                 {sort !== "newest" && <input type="hidden" name="sort" value={sort} />}
+                {remote && <input type="hidden" name="remote" value={remote} />}
+                {salaryRange && <input type="hidden" name="salary" value={salaryRange.value} />}
 
                 <button
                   type="submit"
@@ -260,6 +302,8 @@ export default async function JobsPage({ searchParams }: Props) {
 
               {category && <input type="hidden" name="category" value={category} />}
               {sort !== "newest" && <input type="hidden" name="sort" value={sort} />}
+              {remote && <input type="hidden" name="remote" value={remote} />}
+              {salaryRange && <input type="hidden" name="salary" value={salaryRange.value} />}
 
               <button
                 type="submit"
@@ -272,12 +316,30 @@ export default async function JobsPage({ searchParams }: Props) {
           </form>
         </div>
 
-        {/* ── sort toolbar ── */}
-        <div className="mb-4 flex items-center justify-between gap-3 md:mb-6">
-          <span className="text-xs font-bold text-ink-muted md:text-sm">
-            مرتب‌سازی:
-          </span>
-          <JobsSort sort={sort} q={q} city={city} category={category} />
+        {/* ── sort & filter toolbar ── */}
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 md:mb-6">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-ink-muted md:text-sm">
+              مرتب‌سازی:
+            </span>
+            <JobsSort
+              sort={sort}
+              q={q}
+              city={city}
+              category={category}
+              remote={remote}
+              salary={salaryRaw}
+            />
+          </div>
+
+          <JobsFilters
+            remote={remote}
+            salary={salaryRange ? salaryRange.value : null}
+            q={q}
+            city={city}
+            category={category}
+            sort={sort}
+          />
         </div>
 
         {/* ── results ── */}
@@ -329,7 +391,7 @@ export default async function JobsPage({ searchParams }: Props) {
             <Pagination
               page={page}
               totalPages={totalPages}
-              href={(p) => buildHref({ q, city, category, sort }, p)}
+              href={(p) => buildHref({ q, city, category, sort, remote: remoteRaw, salary: salaryRaw }, p)}
               pageItems={pageItems}
               formatNumber={formatNumber}
             />
