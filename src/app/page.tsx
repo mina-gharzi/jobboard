@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import JobCard from "@/components/JobCard";
 import { JOB_CATEGORIES } from "@/lib/categories";
+import { Building2, Briefcase, Check, ChevronLeft, Clock, MapPin, PlusSquare, Search, Users } from "lucide-react";
 
 const formatNumber = (value: number) =>
   new Intl.NumberFormat("fa-IR").format(value);
@@ -73,43 +74,19 @@ export default async function Home() {
     {
       label: "فرصت شغلی فعال",
       value: formatNumber(jobCount),
-      icon: (
-        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M9 12h6" />
-          <path d="M12 9v6" />
-          <rect x="3" y="4" width="18" height="16" rx="3" />
-        </svg>
-      ),
+      icon: <PlusSquare className="h-5 w-5" />,
       accent: "bg-gold/10 text-gold",
     },
     {
       label: "شرکت فعال",
       value: formatNumber(employerCount),
-      icon: (
-        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M3 21h18" />
-          <path d="M5 21V7l7-4 7 4v14" />
-          <path d="M9 9h2" />
-          <path d="M9 13h2" />
-          <path d="M9 17h2" />
-          <path d="M14 9h2" />
-          <path d="M14 13h2" />
-          <path d="M14 17h2" />
-        </svg>
-      ),
+      icon: <Building2 className="h-5 w-5" />,
       accent: "bg-slate/10 text-slate-dark",
     },
     {
       label: "کارجو",
       value: formatNumber(candidateCount),
-      icon: (
-        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-        </svg>
-      ),
+      icon: <Users className="h-5 w-5" strokeWidth={1.8} />,
       accent: "bg-amber-50 text-amber-700",
     },
   ];
@@ -127,18 +104,11 @@ export default async function Home() {
 
           {/* floating geometric shapes */}
           <div className="absolute right-[12%] top-[18%] hidden h-16 w-16 rotate-12 rounded-2xl border border-gold/20 bg-white/40 shadow-lg backdrop-blur-sm lg:block animate-float">
-            <svg className="m-3.5 h-9 w-9 text-gold/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="7" width="20" height="14" rx="2" />
-              <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-              <path d="m8.5 14 2.5 2.5 4.5-4.5" />
-            </svg>
+            <Briefcase className="m-3.5 h-9 w-9 text-gold/60" strokeWidth={1.5} />
           </div>
 
           <div className="absolute left-[10%] top-[30%] hidden h-14 w-14 rounded-full border border-slate/20 bg-white/40 shadow-lg backdrop-blur-sm lg:block animate-float-slow">
-            <svg className="m-3.5 h-7 w-7 text-slate-dark/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 7v5l3 2" />
-            </svg>
+            <Clock className="m-3.5 h-7 w-7 text-slate-dark/50" strokeWidth={1.8} />
           </div>
 
           <div className="absolute bottom-[28%] right-[30%] hidden h-11 w-11 rounded-xl bg-gold/15 shadow-lg backdrop-blur-sm lg:block animate-float-delayed" />
@@ -176,10 +146,7 @@ export default async function Home() {
               <form action="/jobs" method="GET">
                 <div className="grid grid-cols-1 gap-2 lg:grid-cols-[1fr_0.85fr_auto]">
                   <label className="group flex min-h-16 cursor-text items-center gap-3 rounded-3xl border border-transparent bg-transparent px-5 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
-                    <svg className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="11" cy="11" r="7" />
-                      <path d="m20 20-4-4" />
-                    </svg>
+                    <Search className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" />
                     <input
                       type="text"
                       name="q"
@@ -190,10 +157,7 @@ export default async function Home() {
                   </label>
 
                   <label className="group flex min-h-16 cursor-text items-center gap-3 rounded-3xl border border-transparent bg-transparent px-5 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
-                    <svg className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                      <circle cx="12" cy="10" r="2.5" />
-                    </svg>
+                    <MapPin className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" />
                     <input
                       type="text"
                       name="city"
@@ -207,10 +171,7 @@ export default async function Home() {
                     type="submit"
                     className="group flex min-h-16 items-center justify-center gap-2 rounded-3xl bg-ink px-8 text-sm font-bold text-paper transition hover:-translate-y-0.5 hover:bg-ink/90 hover:shadow-[0_16px_32px_-12px_rgba(44,57,71,0.5)] active:translate-y-0"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="11" cy="11" r="7" />
-                      <path d="m20 20-4-4" />
-                    </svg>
+                    <Search className="h-4 w-4" />
                     جستجوی شغل
                   </button>
                 </div>
@@ -285,9 +246,7 @@ export default async function Home() {
               className="group inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/70 px-6 py-3 text-sm font-semibold text-ink shadow-sm backdrop-blur-md transition hover:-translate-y-0.5 hover:border-gold hover:shadow-[0_16px_32px_-16px_rgba(194,165,109,0.4)]"
             >
               مشاهده همه آگهی‌ها
-              <svg className="h-4 w-4 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m15 18-6-6 6-6" />
-              </svg>
+              <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
             </Link>
           </div>
 
@@ -300,10 +259,7 @@ export default async function Home() {
           ) : (
             <div className="rounded-3xl border border-dashed border-ink/10 bg-white/50 p-16 text-center text-ink-muted backdrop-blur-sm">
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gold/10">
-                <svg className="h-7 w-7 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="4" width="18" height="16" rx="3" />
-                  <path d="M9 12h6M12 9v6" />
-                </svg>
+                <Search className="h-7 w-7 text-gold" strokeWidth={1.8} />
               </div>
               هنوز فرصت شغلی منتشر نشده است.
             </div>
@@ -381,21 +337,15 @@ export default async function Home() {
               {/* trust row */}
               <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-paper/40">
                 <span className="inline-flex items-center gap-1.5">
-                  <svg className="h-4 w-4 text-gold/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
+                  <Check className="h-4 w-4 text-gold/60" />
                   ثبت‌نام کاملاً رایگان
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <svg className="h-4 w-4 text-gold/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
+                  <Check className="h-4 w-4 text-gold/60" />
                   آگهی‌های به‌روز
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <svg className="h-4 w-4 text-gold/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
+                  <Check className="h-4 w-4 text-gold/60" />
                   بدون واسطه
                 </span>
               </div>

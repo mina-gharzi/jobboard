@@ -14,6 +14,7 @@ import {
 import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
 import type { ApplicationStatus } from "@/generated/prisma/enums";
 import { SITE_URL } from "@/lib/site";
+import { Activity, AlertTriangle, ArrowRight, Briefcase, Building2, Check, ChevronRight, Clock, CreditCard, FileText, Link as LinkIcon, LogIn, MapPin, ShieldCheck, Users } from "lucide-react";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -251,15 +252,10 @@ export default async function JobDetailPage({ params }: Props) {
           <div className="mb-6 rounded-2xl border border-amber-300/50 bg-amber-50/80 px-5 py-3 text-sm text-amber-800 backdrop-blur">
             <span className="inline-flex items-center gap-2">
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-200/60">
-                <svg
+                <AlertTriangle
                   className="h-3.5 w-3.5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                >
-                  <path d="M12 9v4M12 17h.01" />
-                </svg>
+                  strokeWidth={2.5}
+                />
               </span>
               این یک پیش‌نمایش است — این آگهی «{job.status === "DRAFT" ? "پیش‌نویس" : "بسته‌شده"}» است و برای عموم نمایش داده نمی‌شود.
             </span>
@@ -272,15 +268,9 @@ export default async function JobDetailPage({ params }: Props) {
           className="group inline-flex items-center gap-2 text-sm font-medium text-ink-muted transition hover:text-ink"
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/60 backdrop-blur transition group-hover:border-gold/30 group-hover:bg-gold/5">
-            <svg
+            <ChevronRight
               className="h-4 w-4 -scale-x-100"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="m9 6 6 6-6 6" />
-            </svg>
+            />
           </span>
           بازگشت به آگهی‌ها
         </Link>
@@ -326,15 +316,9 @@ export default async function JobDetailPage({ params }: Props) {
 
                     {job.employer?.name && (
                       <p className="mt-1.5 flex items-center gap-1.5 text-sm text-ink-muted">
-                        <svg
+                        <Building2
                           className="h-4 w-4 shrink-0"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M15 9h4a2 2 0 0 1 2 2v10" />
-                        </svg>
+                        />
 
                         {job.employer.name}
                       </p>
@@ -349,16 +333,9 @@ export default async function JobDetailPage({ params }: Props) {
                     <MetaPill
                       tint="gold"
                       icon={
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          className="h-full w-full"
-                        >
-                          <rect x="2" y="6" width="20" height="12" rx="2" />
-                          <path d="M2 10h20" />
-                        </svg>
+                    <CreditCard
+                      className="h-full w-full"
+                    />
                       }
                     >
                       <span className="font-bold">{salary}</span>
@@ -367,16 +344,9 @@ export default async function JobDetailPage({ params }: Props) {
                     <MetaPill
                       tint="gold"
                       icon={
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          className="h-full w-full"
-                        >
-                          <rect x="2" y="6" width="20" height="12" rx="2" />
-                          <path d="M2 10h20" />
-                        </svg>
+                    <CreditCard
+                      className="h-full w-full"
+                    />
                       }
                     >
                       حقوق توافقی
@@ -386,16 +356,9 @@ export default async function JobDetailPage({ params }: Props) {
                   {/* شهر */}
                   <MetaPill
                     icon={
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="h-full w-full"
-                      >
-                        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                        <circle cx="12" cy="10" r="2.5" />
-                      </svg>
+                    <MapPin
+                      className="h-full w-full"
+                    />
                     }
                   >
                     {job.city}
@@ -404,16 +367,9 @@ export default async function JobDetailPage({ params }: Props) {
                   {/* نوع همکاری / ریموت */}
                   <MetaPill
                     icon={
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="h-full w-full"
-                      >
-                        <rect x="3" y="7" width="18" height="13" rx="2" />
-                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                      </svg>
+                    <Briefcase
+                      className="h-full w-full"
+                    />
                     }
                   >
                     {remoteTypeLabels[job.remoteType]}
@@ -422,16 +378,9 @@ export default async function JobDetailPage({ params }: Props) {
                   {/* زمان انتشار */}
                   <MetaPill
                     icon={
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="h-full w-full"
-                      >
-                        <circle cx="12" cy="12" r="9" />
-                        <path d="M12 7v5l3 3" />
-                      </svg>
+                    <Clock
+                      className="h-full w-full"
+                    />
                     }
                   >
                     {formatRelativeTime(job.createdAt)}
@@ -443,23 +392,13 @@ export default async function JobDetailPage({ params }: Props) {
             {/* توضیحات */}
             <div className="mt-8 rounded-[32px] border border-line bg-white/60 p-6 backdrop-blur md:p-9">
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold/10 text-gold">
-                  <svg
-                    className="h-4.5 w-4.5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <path d="M14 2v6h6" />
-                    <path d="M16 13H8M16 17H8M10 9H8" />
-                  </svg>
-                </span>
-                <h2 className="font-display text-xl font-bold text-ink">
-                  شرح موقعیت شغلی
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold/10 text-gold">
+                    <FileText
+                      className="h-4.5 w-4.5"
+                    />
+                  </span>
+                  <h2 className="font-display text-xl font-bold text-ink">
+                    شرح موقعیت شغلی
                 </h2>
               </div>
 
@@ -486,17 +425,9 @@ export default async function JobDetailPage({ params }: Props) {
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold/10 text-gold">
-                      <svg
+                      <Activity
                         className="h-4.5 w-4.5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M2 12h6l2-5 4 10 2-5h6" />
-                      </svg>
+                      />
                     </span>
                     <h2 className="font-display text-xl font-bold text-ink md:text-2xl">
                       مشاغل مشابه
@@ -552,15 +483,10 @@ export default async function JobDetailPage({ params }: Props) {
             {hasApplied ? (
               <>
                 <span className="inline-flex items-center gap-2">
-                  <svg
+                  <Check
                     className="h-4 w-4 text-emerald-400"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                  >
-                    <path d="m5 13 4 4L19 7" />
-                  </svg>
+                    strokeWidth={2.5}
+                  />
                   درخواست شما ثبت شده — وضعیت را مشاهده کنید
                 </span>
               </>
@@ -568,34 +494,18 @@ export default async function JobDetailPage({ params }: Props) {
               <>
                 <span>همین حالا درخواست بده</span>
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gold">
-                  <svg
-                    className="h-3.5 w-3.5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m15 18-6-6 6-6" />
-                  </svg>
+                  <ArrowRight
+                    className="h-3.5 w-3.5 -scale-x-100"
+                  />
                 </span>
               </>
             ) : (
               <>
                 <span>برای ارسال درخواست، ورود یا ثبت‌نام کنید</span>
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gold">
-                  <svg
-                    className="h-3.5 w-3.5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m15 18-6-6 6-6" />
-                  </svg>
+                  <ArrowRight
+                    className="h-3.5 w-3.5 -scale-x-100"
+                  />
                 </span>
               </>
             )}
@@ -636,18 +546,9 @@ function QuickFactsCard({
         {/* حقوق */}
         <div className="flex items-center justify-between rounded-2xl bg-gold/10 px-4 py-3">
           <span className="inline-flex items-center gap-2 text-[13px] font-medium text-ink-muted">
-            <svg
+            <CreditCard
               className="h-4 w-4 text-gold"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="2" y="6" width="20" height="12" rx="2" />
-              <path d="M2 10h20" />
-            </svg>
+            />
             حقوق
           </span>
           <span className="text-sm font-black text-ink">
@@ -667,32 +568,14 @@ function QuickFactsCard({
 
             const icons: Record<string, React.ReactNode> = {
               city: (
-                <svg
+                <MapPin
                   className="h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                  <circle cx="12" cy="10" r="2.5" />
-                </svg>
+                />
               ),
               remoteType: (
-                <svg
+                <Briefcase
                   className="h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="3" y="7" width="18" height="13" rx="2" />
-                  <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                </svg>
+                />
               ),
               category: (
                 <svg
@@ -709,18 +592,9 @@ function QuickFactsCard({
                 </svg>
               ),
               createdAt: (
-                <svg
+                <Clock
                   className="h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M12 7v5l3 3" />
-                </svg>
+                />
               ),
             };
 
@@ -765,16 +639,9 @@ function ApplyBox({
         <div className="flex flex-col">
           <div className="flex items-center gap-3 border-b border-line bg-linear-to-l from-gold/10 via-gold/4 to-transparent px-5 py-4">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold text-ink shadow-[0_8px_20px_-8px_rgba(194,165,109,0.8)]">
-              <svg
+              <ShieldCheck
                 className="h-4.5 w-4.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M12 2 2 12l10 10 10-10z" />
-                <path d="m8 12 3 3 5-6" />
-              </svg>
+              />
             </span>
 
             <div>
@@ -798,15 +665,9 @@ function ApplyBox({
       {isCandidate && hasApplied && (
         <div className="flex flex-col items-center px-5 py-9 text-center">
           <span className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-50/50">
-            <svg
+            <Check
               className="h-6 w-6"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="m5 13 4 4L19 7" />
-            </svg>
+            />
           </span>
 
           <h3 className="mt-4 text-base font-bold text-ink">
@@ -844,15 +705,9 @@ function ApplyBox({
                 className="flex items-center justify-center gap-2 rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm font-bold text-ink transition hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-[0_12px_24px_-12px_rgba(44,57,71,0.25)]"
               >
                 ورود به حساب
-                <svg
+                <LogIn
                   className="h-4 w-4 -scale-x-100"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" />
-                </svg>
+                />
               </Link>
 
               <Link
@@ -870,16 +725,9 @@ function ApplyBox({
       {isEmployer && (
         <div className="flex items-start gap-3 p-5">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate/10 text-slate-dark">
-            <svg
+            <AlertTriangle
               className="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M12 9v4M12 17h.01" />
-              <path d="M10.3 3.8 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" />
-            </svg>
+            />
           </span>
 
           <div>
@@ -940,18 +788,10 @@ function CompanyInfoCard({
       <div className="mt-4 flex flex-col gap-2.5 border-t border-line pt-4 text-sm text-ink-muted">
         {employer.companyTeamSize && (
           <span className="inline-flex items-center gap-2">
-            <svg
+            <Users
               className="h-4 w-4 text-slate-dark/60"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
+              strokeWidth={1.8}
+            />
             تیم {employer.companyTeamSize} نفره
           </span>
         )}
@@ -962,16 +802,9 @@ function CompanyInfoCard({
             rel="noopener noreferrer"
             className="group inline-flex items-center gap-2 font-semibold text-slate underline-offset-4 hover:underline"
           >
-            <svg
+            <LinkIcon
               className="h-4 w-4 text-slate-dark/60 group-hover:text-gold"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-            </svg>
+            />
             {employer.companyWebsite}
           </a>
         )}

@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 import { deleteJob, type DeleteJobState } from "@/lib/actions/manageJob";
+import { Trash2 } from "lucide-react";
 
 const initialState: DeleteJobState = {};
 
@@ -62,12 +63,7 @@ export default function DeleteJobForm({ jobId }: { jobId: string }) {
           <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/20 bg-paper shadow-[0_48px_100px_-24px_rgba(44,57,71,0.6)]">
             <div className="p-6 text-center md:p-8">
               <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-danger/10">
-                <svg className="h-8 w-8 text-danger" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 6h18" />
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                  <path d="M10 11v6M14 11v6" />
-                </svg>
+                <Trash2 className="h-8 w-8 text-danger" strokeWidth={1.8} />
               </span>
 
               <h2 id="delete-job-title" className="mt-5 text-lg font-black text-ink md:text-xl">

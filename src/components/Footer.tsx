@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowDown, Check, Heart } from "lucide-react";
 
 const quickLinks = [
   { href: "/jobs", label: "همه آگهی‌ها" },
@@ -71,10 +72,7 @@ export default function Footer() {
             className="inline-flex shrink-0 items-center gap-2 rounded-2xl bg-gold px-6 py-3 text-sm font-bold text-ink shadow-lg shadow-gold/20 transition hover:-translate-y-0.5 hover:bg-gold-hover hover:shadow-[0_20px_40px_-12px_rgba(194,165,109,0.5)]"
           >
             ثبت آگهی رایگان
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 5v14" />
-              <path d="m5 12 7 7 7-7" />
-            </svg>
+            <ArrowDown className="h-4 w-4" />
           </Link>
         </div>
       </div>
@@ -96,9 +94,7 @@ export default function Footer() {
                 key={badge}
                 className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-paper/60"
               >
-                <svg className="h-3.5 w-3.5 text-gold/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 6 9 17l-5-5" />
-                </svg>
+                <Check className="h-3.5 w-3.5 text-gold/70" />
                 {badge}
               </span>
             ))}
@@ -116,9 +112,7 @@ export default function Footer() {
           <p>© {new Date().getFullYear()} جابینو. تمامی حقوق محفوظ است.</p>
           <p className="inline-flex items-center gap-1.5">
             ساخته‌شده با
-            <svg className="h-3.5 w-3.5 text-gold/70" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-            </svg>
+            <Heart className="h-3.5 w-3.5 text-gold/70" fill="currentColor" />
             برای بازار کار ایران
           </p>
         </div>

@@ -7,6 +7,7 @@ import {
   updateCompanyProfile,
   type UpdateCompanyProfileState,
 } from "@/lib/actions/updateCompanyProfile";
+import { Check, Circle } from "lucide-react";
 
 const initialState: UpdateCompanyProfileState = {};
 
@@ -259,15 +260,7 @@ export default function CompanyProfileForm({
                         : "border-ink/8 bg-ink/2 text-ink-muted"
                     }`}
                   >
-                    <svg
-                      className={`h-5 w-5 shrink-0 ${f.filled ? "text-emerald-500" : "text-ink-muted/30"}`}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      {f.filled ? <path d="m5 13 4 4L19 7" /> : <circle cx="12" cy="12" r="4" />}
-                    </svg>
+                    {f.filled ? <Check className={`h-5 w-5 shrink-0 text-emerald-500`} /> : <Circle className={`h-5 w-5 shrink-0 text-ink-muted/30`} />}
                     {f.label}
                   </span>
                 ))}

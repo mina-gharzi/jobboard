@@ -2,6 +2,7 @@
 
 import { useActionState, useRef, useState } from "react";
 import { applyToJob } from "@/lib/actions/applyToJob";
+import { Check, Upload } from "lucide-react";
 
 const MAX_RESUME_SIZE = 5 * 1024 * 1024;
 
@@ -95,15 +96,9 @@ export default function ApplyForm({ jobId }: { jobId: string }) {
       >
         {selectedResume ? (
           <>
-            <svg
+            <Check
               className="h-7 w-7 text-emerald-600"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="m5 12 5 5L20 7" />
-            </svg>
+            />
             <span className="text-sm font-semibold text-ink" dir="ltr">
               {selectedResume.name}
             </span>
@@ -113,17 +108,9 @@ export default function ApplyForm({ jobId }: { jobId: string }) {
           </>
         ) : (
           <>
-            <svg
+            <Upload
               className="h-7 w-7 text-slate"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <path d="M17 8l-5-5-5 5" />
-              <path d="M12 3v12" />
-            </svg>
+            />
             <span className="text-sm font-semibold text-ink">پیوست رزومه (اختیاری)</span>
             <span className="text-xs text-ink-muted">فقط PDF، حداکثر ۵ مگابایت</span>
           </>
@@ -159,15 +146,9 @@ export default function ApplyForm({ jobId }: { jobId: string }) {
       </button>
       {state.success ? (
         <div className="flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm leading-6 text-emerald-700">
-          <svg
+          <Check
             className="mt-0.5 h-4 w-4 shrink-0"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path d="m5 13 4 4L19 7" />
-          </svg>
+          />
           <span>
             {state.attachment
               ? "درخواست شما همراه با رزومه با موفقیت ثبت شد."

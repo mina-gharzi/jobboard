@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import ProfileForm from "./ProfileForm";
+import { ChevronRight } from "lucide-react";
 
 export default async function CandidateProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -38,15 +39,9 @@ export default async function CandidateProfilePage() {
           className="group inline-flex items-center gap-2 text-sm font-medium text-ink-muted transition hover:text-ink"
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/60 backdrop-blur transition group-hover:border-gold/30 group-hover:bg-gold/5">
-            <svg
+            <ChevronRight
               className="h-4 w-4 -scale-x-100"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="m9 6 6 6-6 6" />
-            </svg>
+            />
           </span>
           بازگشت به درخواست‌های من
         </Link>

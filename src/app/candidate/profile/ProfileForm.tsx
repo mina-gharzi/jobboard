@@ -5,6 +5,7 @@ import {
   updateCandidateProfile,
   type UpdateProfileState,
 } from "@/lib/actions/updateProfile";
+import { Check, Circle, Upload } from "lucide-react";
 
 const initialState: UpdateProfileState = {};
 
@@ -249,15 +250,9 @@ export default function ProfileForm({ name, email, phone, resumePdf, bio }: Prop
                 >
                   {selectedResume ? (
                     <>
-                      <svg
+                      <Check
                         className="h-8 w-8 text-emerald-600"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path d="m5 12 5 5L20 7" />
-                      </svg>
+                      />
                       <span className="text-sm font-semibold text-ink" dir="ltr">
                         {selectedResume.name}
                       </span>
@@ -267,17 +262,9 @@ export default function ProfileForm({ name, email, phone, resumePdf, bio }: Prop
                     </>
                   ) : (
                     <>
-                      <svg
+                      <Upload
                         className="h-8 w-8 text-slate"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                        <path d="M17 8l-5-5-5 5" />
-                        <path d="M12 3v12" />
-                      </svg>
+                      />
                       <span className="text-sm font-semibold text-ink">انتخاب فایل رزومه</span>
                       <span className="text-xs text-ink-muted">فقط PDF، حداکثر ۵ مگابایت</span>
                     </>
@@ -362,15 +349,15 @@ export default function ProfileForm({ name, email, phone, resumePdf, bio }: Prop
                         : "border-ink/8 bg-ink/2 text-ink-muted"
                     }`}
                   >
-                    <svg
-                      className={`h-5 w-5 shrink-0 ${f.filled ? "text-emerald-500" : "text-ink-muted/30"}`}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      {f.filled ? <path d="m5 13 4 4L19 7" /> : <circle cx="12" cy="12" r="4" />}
-                    </svg>
+                    {f.filled ? (
+                      <Check
+                        className={`h-5 w-5 shrink-0 ${f.filled ? "text-emerald-500" : "text-ink-muted/30"}`}
+                      />
+                    ) : (
+                      <Circle
+                        className={`h-5 w-5 shrink-0 ${f.filled ? "text-emerald-500" : "text-ink-muted/30"}`}
+                      />
+                    )}
                     {f.label}
                   </span>
                 ))}

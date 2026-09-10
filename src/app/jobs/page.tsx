@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import JobCard from "@/components/JobCard";
 import { buildSearchTerms } from "@/lib/search";
+import { ChevronLeft, ChevronRight, MapPin, PlusSquare, Search, X } from "lucide-react";
 
 const PAGE_SIZE = 6;
 
@@ -122,10 +123,7 @@ export default async function JobsPage({ searchParams }: Props) {
           </div>
 
           <span className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-gold/20 bg-gold/5 px-3 py-1.5 text-xs font-bold text-ink md:gap-2 md:px-4 md:py-2 md:text-sm">
-            <svg className="h-3.5 w-3.5 text-gold md:h-4 md:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="4" width="18" height="16" rx="3" />
-              <path d="M9 12h6M12 9v6" />
-            </svg>
+            <PlusSquare className="h-3.5 w-3.5 text-gold md:h-4 md:w-4" />
             {formatNumber(totalCount)}
             <span className="hidden sm:inline">آگهی فعال</span>
           </span>
@@ -143,9 +141,7 @@ export default async function JobsPage({ searchParams }: Props) {
                   >
                     {chip.label}
                     <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-ink/10 text-ink-muted transition-colors group-hover:bg-gold/20 group-hover:text-gold md:h-4 md:w-4">
-                      <svg className="h-2 w-2 md:h-2.5 md:w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                        <path d="M18 6 6 18M6 6l12 12" />
-                      </svg>
+                      <X className="h-2 w-2 md:h-2.5 md:w-2.5" strokeWidth={2.5} />
                     </span>
                   </Link>
                 )
@@ -165,10 +161,7 @@ export default async function JobsPage({ searchParams }: Props) {
             {/* mobile: two compact rows */}
             <div className="flex flex-col gap-1.5 md:hidden">
               <label className="group flex h-10 items-center gap-2 rounded-2xl border border-transparent bg-transparent px-3 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
-                <svg className="h-4 w-4 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m20 20-4-4" />
-                </svg>
+                <Search className="h-4 w-4 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" />
                 <input
                   type="text"
                   name="q"
@@ -181,10 +174,7 @@ export default async function JobsPage({ searchParams }: Props) {
 
               <div className="flex gap-1.5">
                 <label className="group flex h-10 flex-1 items-center gap-2 rounded-2xl border border-transparent bg-transparent px-3 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
-                  <svg className="h-4 w-4 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                    <circle cx="12" cy="10" r="2.5" />
-                  </svg>
+                  <MapPin className="h-4 w-4 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" />
                   <input
                     type="text"
                     name="city"
@@ -201,10 +191,7 @@ export default async function JobsPage({ searchParams }: Props) {
                   type="submit"
                   className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-2xl bg-ink px-4 text-xs font-bold text-paper transition hover:-translate-y-0.5 hover:bg-ink/90 active:translate-y-0"
                 >
-                  <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="7" />
-                    <path d="m20 20-4-4" />
-                  </svg>
+                  <Search className="h-3.5 w-3.5" />
                   جستجو
                 </button>
               </div>
@@ -213,10 +200,7 @@ export default async function JobsPage({ searchParams }: Props) {
             {/* desktop: three-column row */}
             <div className="hidden grid-cols-[1fr_0.85fr_auto] gap-2 md:grid">
               <label className="group flex min-h-14 cursor-text items-center gap-3 rounded-3xl border border-transparent bg-transparent px-5 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
-                <svg className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m20 20-4-4" />
-                </svg>
+                <Search className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" />
                 <input
                   type="text"
                   name="q"
@@ -228,10 +212,7 @@ export default async function JobsPage({ searchParams }: Props) {
               </label>
 
               <label className="group flex min-h-14 cursor-text items-center gap-3 rounded-3xl border border-transparent bg-transparent px-5 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
-                <svg className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                  <circle cx="12" cy="10" r="2.5" />
-                </svg>
+                <MapPin className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" />
                 <input
                   type="text"
                   name="city"
@@ -248,10 +229,7 @@ export default async function JobsPage({ searchParams }: Props) {
                 type="submit"
                 className="group flex min-h-14 items-center justify-center gap-2 rounded-3xl bg-ink px-8 text-sm font-bold text-paper transition hover:-translate-y-0.5 hover:bg-ink/90 hover:shadow-[0_16px_32px_-12px_rgba(44,57,71,0.5)] active:translate-y-0"
               >
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m20 20-4-4" />
-                </svg>
+                <Search className="h-4 w-4" />
                 جستجو
               </button>
             </div>
@@ -262,10 +240,7 @@ export default async function JobsPage({ searchParams }: Props) {
         {jobs.length === 0 ? (
           <div className="flex flex-col items-center gap-4 rounded-4xl border border-dashed border-ink/10 bg-white/50 px-6 py-14 text-center backdrop-blur-sm md:px-8 md:py-20">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gold/10">
-              <svg className="h-8 w-8 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="7" />
-                <path d="m20 20-4-4" />
-              </svg>
+              <Search className="h-8 w-8 text-gold" strokeWidth={1.8} />
             </div>
             <div>
               <p className="font-bold text-ink">
@@ -305,9 +280,7 @@ export default async function JobsPage({ searchParams }: Props) {
                     href={buildHref({ q, city, category }, page - 1)}
                     className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m9 18 6-6-6-6" />
-                    </svg>
+                    <ChevronLeft className="h-4 w-4" />
                   </Link>
                 ) : (
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
@@ -339,9 +312,7 @@ export default async function JobsPage({ searchParams }: Props) {
                     href={buildHref({ q, city, category }, page + 1)}
                     className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m15 18-6-6 6-6" />
-                    </svg>
+                    <ChevronRight className="h-4 w-4" />
                   </Link>
                 ) : (
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />

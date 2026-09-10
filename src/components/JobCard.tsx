@@ -1,5 +1,20 @@
 import Link from "next/link";
 import {
+  Building,
+  Building2,
+  Briefcase,
+  Code,
+  CreditCard,
+  Gauge,
+  GraduationCap,
+  Handshake,
+  Headphones,
+  MapPin,
+  Megaphone,
+  Sparkles,
+  Users,
+} from "lucide-react";
+import {
   remoteTypeLabels,
   formatSalary,
   formatRelativeTime,
@@ -39,10 +54,7 @@ const categoryVisuals: { keywords: string[]; visual: CategoryVisual }[] = [
       ring: "ring-sky-200/50",
       text: "text-sky-600",
       icon: (
-        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="m16 18 6-6-6-6" />
-          <path d="m8 6-6 6 6 6" />
-        </svg>
+        <Code className="h-6 w-6" strokeWidth={1.5} />
       ),
     },
   },
@@ -56,9 +68,7 @@ const categoryVisuals: { keywords: string[]; visual: CategoryVisual }[] = [
       ring: "ring-violet-200/50",
       text: "text-violet-600",
       icon: (
-        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
-        </svg>
+        <Sparkles className="h-6 w-6" strokeWidth={1.5} />
       ),
     },
   },
@@ -72,10 +82,7 @@ const categoryVisuals: { keywords: string[]; visual: CategoryVisual }[] = [
       ring: "ring-amber-200/50",
       text: "text-amber-600",
       icon: (
-        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M3 11l18-5v12L3 13v-2z" />
-          <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
-        </svg>
+        <Megaphone className="h-6 w-6" strokeWidth={1.5} />
       ),
     },
   },
@@ -86,10 +93,7 @@ const categoryVisuals: { keywords: string[]; visual: CategoryVisual }[] = [
       ring: "ring-emerald-200/50",
       text: "text-emerald-600",
       icon: (
-        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3l5-5" />
-          <path d="M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3l5-5" />
-        </svg>
+        <Handshake className="h-6 w-6" strokeWidth={1.5} />
       ),
     },
   },
@@ -102,10 +106,7 @@ const categoryVisuals: { keywords: string[]; visual: CategoryVisual }[] = [
       ring: "ring-teal-200/50",
       text: "text-teal-600",
       icon: (
-        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="5" width="20" height="14" rx="2" />
-          <path d="M2 10h20" />
-        </svg>
+        <CreditCard className="h-6 w-6" strokeWidth={1.5} />
       ),
     },
   },
@@ -118,12 +119,7 @@ const categoryVisuals: { keywords: string[]; visual: CategoryVisual }[] = [
       ring: "ring-rose-200/50",
       text: "text-rose-600",
       icon: (
-        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-        </svg>
+        <Users className="h-6 w-6" strokeWidth={1.5} />
       ),
     },
   },
@@ -134,10 +130,7 @@ const categoryVisuals: { keywords: string[]; visual: CategoryVisual }[] = [
       ring: "ring-indigo-200/50",
       text: "text-indigo-600",
       icon: (
-        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-          <path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5" />
-        </svg>
+        <GraduationCap className="h-6 w-6" strokeWidth={1.5} />
       ),
     },
   },
@@ -148,10 +141,7 @@ const categoryVisuals: { keywords: string[]; visual: CategoryVisual }[] = [
       ring: "ring-cyan-200/50",
       text: "text-cyan-600",
       icon: (
-        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
-          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
-        </svg>
+        <Headphones className="h-6 w-6" strokeWidth={1.5} />
       ),
     },
   },
@@ -162,11 +152,7 @@ const categoryVisuals: { keywords: string[]; visual: CategoryVisual }[] = [
       ring: "ring-orange-200/50",
       text: "text-orange-600",
       icon: (
-        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 12V6" />
-          <path d="M18.5 15.5a6.5 6.5 0 1 1-13 0" />
-          <path d="M8 15.5h8" />
-        </svg>
+        <Gauge className="h-6 w-6" strokeWidth={1.5} />
       ),
     },
   },
@@ -177,10 +163,7 @@ const fallbackVisual: CategoryVisual = {
   ring: "ring-slate/20",
   text: "text-slate-dark",
   icon: (
-    <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-      <rect x="6" y="12" width="12" height="8" rx="1" />
-    </svg>
+    <Building className="h-6 w-6" strokeWidth={1.5} />
   ),
 };
 
@@ -238,15 +221,7 @@ export default function JobCard({
 
             {job.employer?.name && (
               <p className="mt-1 flex items-center gap-1.5 truncate text-[13px] text-ink-muted">
-                <svg
-                  className="h-3.5 w-3.5 shrink-0"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M15 9h4a2 2 0 0 1 2 2v10" />
-                </svg>
+                <Building2 className="h-3.5 w-3.5 shrink-0" />
                 <span className="truncate">{job.employer.name}</span>
               </p>
             )}
@@ -262,45 +237,20 @@ export default function JobCard({
         <div className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-line pt-3.5">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] text-ink-muted">
             <span className="inline-flex items-center gap-1.5">
-              <svg
-                className="h-4 w-4 shrink-0"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                <circle cx="12" cy="10" r="2.5" />
-              </svg>
+              <MapPin className="h-4 w-4 shrink-0" />
+
               {job.city}
             </span>
 
             <span className="inline-flex items-center gap-1.5">
-              <svg
-                className="h-4 w-4 shrink-0"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <rect x="3" y="7" width="18" height="13" rx="2" />
-                <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-              </svg>
+              <Briefcase className="h-4 w-4 shrink-0" />
               {remoteTypeLabels[job.remoteType]}
             </span>
 
             {salary && (
               <span className="inline-flex items-center gap-1.5 font-semibold text-ink">
-                <svg
-                  className="h-4 w-4 shrink-0 text-ink-muted"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <rect x="2" y="6" width="20" height="12" rx="2" />
-                  <path d="M2 10h20" />
-                </svg>
+                <CreditCard className="h-4 w-4 shrink-0 text-ink-muted" />
+
                 {salary}
               </span>
             )}

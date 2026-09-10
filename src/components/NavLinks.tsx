@@ -5,11 +5,11 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { LogoMark } from "./icons";
+import { Building2, ChevronDown, Home, LogOut, Menu, UserRound, X } from "lucide-react";
 
 const emptySubscribe = () => () => {};
 
-// روش رسمی ری‌اکت برای تشخیص «آیا کامپوننت روی کلاینت هیدرات شده»
-// بدون setState داخل useEffect و بدون خطای hydration mismatch
 function useMounted() {
   return useSyncExternalStore(
     emptySubscribe,
@@ -40,26 +40,9 @@ function roleLabel(role: Role) {
   return role === "EMPLOYER" ? "کارفرما" : "کارجو";
 }
 
-function UserIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <circle cx="12" cy="8" r="3.5" />
-      <path d="M4.5 20c1.6-3.5 4.6-5.5 7.5-5.5s5.9 2 7.5 5.5" />
-    </svg>
-  );
-}
-
-function ChevronIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
 export default function NavLinks({ role }: { role: Role }) {
-  const [open, setOpen] = useState(false); // پنل موبایل
-  const [menuOpen, setMenuOpen] = useState(false); // دراپ‌داون کاربر (دسکتاپ)
+  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const mounted = useMounted();
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -117,9 +100,9 @@ export default function NavLinks({ role }: { role: Role }) {
               onClick={() => setMenuOpen((o) => !o)}
               className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-semibold shadow-sm transition-colors ${roleBadgeClasses}`}
             >
-              <UserIcon className="h-4 w-4" />
+              <UserRound className="h-4 w-4" />
               {roleLabel(role)}
-              <ChevronIcon className={`h-3.5 w-3.5 transition-transform ${menuOpen ? "rotate-180" : ""}`} />
+              <ChevronDown className={`h-3.5 w-3.5 transition-transform ${menuOpen ? "rotate-180" : ""}`} />
             </button>
 
             {menuOpen && (
@@ -132,10 +115,7 @@ export default function NavLinks({ role }: { role: Role }) {
                   onClick={() => setMenuOpen(false)}
                   className="mt-1 flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-ink transition-colors hover:bg-gold/10"
                 >
-                  <svg className="h-4 w-4 text-slate-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M3 12l9-9 9 9" />
-                    <path d="M5 10v10h14V10" />
-                  </svg>
+                  <Home className="h-4 w-4 text-slate-dark" />
                   داشبورد من
                 </Link>
                 {role === "CANDIDATE" && (
@@ -144,10 +124,7 @@ export default function NavLinks({ role }: { role: Role }) {
                     onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-ink transition-colors hover:bg-gold/10"
                   >
-                    <svg className="h-4 w-4 text-slate-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="8" r="3.5" />
-                      <path d="M4.5 20c1.6-3.5 4.6-5.5 7.5-5.5s5.9 2 7.5 5.5" />
-                    </svg>
+                    <UserRound className="h-4 w-4 text-slate-dark" />
                     پروفایل من
                   </Link>
                 )}
@@ -157,10 +134,7 @@ export default function NavLinks({ role }: { role: Role }) {
                     onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-ink transition-colors hover:bg-gold/10"
                   >
-                    <svg className="h-4 w-4 text-slate-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M3 21h18M5 21V7l7-4 7 4v14" />
-                      <path d="M9 9h.01M9 13h.01M15 9h.01M15 13h.01" />
-                    </svg>
+                    <Building2 className="h-4 w-4 text-slate-dark" />
                     پروفایل شرکت
                   </Link>
                 )}
@@ -169,10 +143,7 @@ export default function NavLinks({ role }: { role: Role }) {
                   onClick={handleSignOut}
                   className="mt-1 flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-right text-sm text-danger-dark transition-colors hover:bg-danger/10"
                 >
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <path d="m16 17 5-5-5-5M21 12H9" />
-                  </svg>
+                  <LogOut className="h-4 w-4" />
                   خروج
                 </button>
               </div>
@@ -203,13 +174,9 @@ export default function NavLinks({ role }: { role: Role }) {
         className="flex h-10 w-10 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition-colors hover:border-gold/30 hover:bg-gold/5 md:hidden"
       >
         {open ? (
-          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M6 6l12 12M18 6 6 18" />
-          </svg>
+          <X className="h-5 w-5" />
         ) : (
-          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
+          <Menu className="h-5 w-5" />
         )}
       </button>
 
@@ -233,19 +200,7 @@ export default function NavLinks({ role }: { role: Role }) {
               <div className="mb-2 flex items-center justify-between">
                 <span className="flex items-center gap-2 font-display text-lg font-bold text-ink">
                   <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink">
-                    <svg
-                      className="h-4 w-4 text-gold"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M3 21h18M5 21V7l7-4 7 4v14" />
-                      <path d="M9 9h2M9 13h2M9 17h2" />
-                      <path d="M14 9h2M14 13h2M14 17h2" />
-                    </svg>
+                    <LogoMark className="h-4 w-4 text-gold" />
                   </span>
                   منو
                 </span>
@@ -254,9 +209,7 @@ export default function NavLinks({ role }: { role: Role }) {
                   aria-label="بستن منو"
                   className="flex h-9 w-9 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink-muted transition-colors hover:border-gold/30 hover:bg-gold/5"
                 >
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M6 6l12 12M18 6 6 18" />
-                  </svg>
+                  <X className="h-5 w-5" />
                 </button>
               </div>
 
@@ -278,7 +231,7 @@ export default function NavLinks({ role }: { role: Role }) {
                   <span
                     className={`inline-flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${roleBadgeClasses}`}
                   >
-                    <UserIcon className="h-3.5 w-3.5" />
+                    <UserRound className="h-3.5 w-3.5" />
                     {roleLabel(role)}
                   </span>
 
@@ -287,10 +240,7 @@ export default function NavLinks({ role }: { role: Role }) {
                     onClick={() => setOpen(false)}
                     className="flex items-center gap-2.5 rounded-xl px-2 py-2 text-ink transition-colors hover:text-gold"
                   >
-                    <svg className="h-4 w-4 text-slate-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M3 12l9-9 9 9" />
-                      <path d="M5 10v10h14V10" />
-                    </svg>
+                    <Home className="h-4 w-4 text-slate-dark" />
                     داشبورد من
                   </Link>
 
@@ -300,10 +250,7 @@ export default function NavLinks({ role }: { role: Role }) {
                       onClick={() => setOpen(false)}
                       className="flex items-center gap-2.5 rounded-xl px-2 py-2 text-ink transition-colors hover:text-gold"
                     >
-                      <svg className="h-4 w-4 text-slate-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="8" r="3.5" />
-                        <path d="M4.5 20c1.6-3.5 4.6-5.5 7.5-5.5s5.9 2 7.5 5.5" />
-                      </svg>
+                      <UserRound className="h-4 w-4 text-slate-dark" />
                       پروفایل من
                     </Link>
                   )}
@@ -314,10 +261,7 @@ export default function NavLinks({ role }: { role: Role }) {
                       onClick={() => setOpen(false)}
                       className="flex items-center gap-2.5 rounded-xl px-2 py-2 text-ink transition-colors hover:text-gold"
                     >
-                      <svg className="h-4 w-4 text-slate-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M3 21h18M5 21V7l7-4 7 4v14" />
-                        <path d="M9 9h.01M9 13h.01M15 9h.01M15 13h.01" />
-                      </svg>
+                      <Building2 className="h-4 w-4 text-slate-dark" />
                       پروفایل شرکت
                     </Link>
                   )}
@@ -326,10 +270,7 @@ export default function NavLinks({ role }: { role: Role }) {
                     onClick={handleSignOut}
                     className="mt-2 flex items-center gap-2.5 rounded-xl px-2 py-2 text-right font-semibold text-danger-dark transition-colors hover:text-danger"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                      <path d="m16 17 5-5-5-5M21 12H9" />
-                    </svg>
+                    <LogOut className="h-4 w-4" />
                     خروج
                   </button>
                 </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { Check, FileText, CalendarDays, Building2, UserRound, AlertCircle, LogIn } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -88,30 +89,15 @@ export default function RegisterPage() {
             {[
               {
                 text: "ارسال درخواست‌ها با یک کلیک",
-                icon: (
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="m5 13 4 4L19 7" />
-                  </svg>
-                ),
+                icon: <Check className="h-4 w-4" />,
               },
               {
                 text: "پروفایل حرفه‌ای و رزومه",
-                icon: (
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <path d="M14 2v6h6" />
-                    <path d="M16 13H8M16 17H8M10 9H8" />
-                  </svg>
-                ),
+                icon: <FileText className="h-4 w-4" />,
               },
               {
                 text: "دسترسی به آگهی‌های به‌روز",
-                icon: (
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="4" width="18" height="16" rx="2" />
-                    <path d="M3 10h18M8 14h.01M12 14h.01M16 14h.01" />
-                  </svg>
-                ),
+                icon: <CalendarDays className="h-4 w-4" />,
               },
             ].map((item) => (
               <div key={item.text} className="flex items-center gap-3">
@@ -130,12 +116,8 @@ export default function RegisterPage() {
             <div className="lg:hidden">
               <span className="inline-flex items-center gap-1.5 text-sm font-bold text-ink">
                 <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-ink">
-                  <svg className="h-4 w-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 21h18M5 21V7l7-4 7 4v14" />
-                    <path d="M9 9h2M9 13h2M9 17h2" />
-                    <path d="M14 9h2M14 13h2M14 17h2" />
-                  </svg>
-                </span>
+                    <Building2 className="h-4 w-4 text-gold" />
+                  </span>
                 جابینو
               </span>
             </div>
@@ -162,10 +144,7 @@ export default function RegisterPage() {
                     className="sr-only"
                   />
                   <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${role === "CANDIDATE" ? "bg-gold text-ink" : "bg-ink/5 text-ink-muted"}`}>
-                    <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="8" r="3.5" />
-                      <path d="M4.5 20c1.6-3.5 4.6-5.5 7.5-5.5s5.9 2 7.5 5.5" />
-                    </svg>
+                    <UserRound className="h-4.5 w-4.5" />
                   </span>
                   <span className={`text-sm font-bold ${role === "CANDIDATE" ? "text-ink" : "text-ink-muted"}`}>
                     کارجو هستم
@@ -181,11 +160,7 @@ export default function RegisterPage() {
                     className="sr-only"
                   />
                   <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${role === "EMPLOYER" ? "bg-gold text-ink" : "bg-ink/5 text-ink-muted"}`}>
-                    <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 21h18M5 21V7l7-4 7 4v14" />
-                      <path d="M9 9h2M9 13h2M9 17h2" />
-                      <path d="M14 9h2M14 13h2M14 17h2" />
-                    </svg>
+                    <Building2 className="h-4.5 w-4.5" />
                   </span>
                   <span className={`text-sm font-bold ${role === "EMPLOYER" ? "text-ink" : "text-ink-muted"}`}>
                     کارفرما هستم
@@ -258,10 +233,7 @@ export default function RegisterPage() {
 
               {error && (
                 <p className="flex items-start gap-2 rounded-2xl border border-danger/20 bg-danger/5 px-4 py-3 text-sm text-danger-dark">
-                  <svg className="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="9" />
-                    <path d="M12 8v4M12 16h.01" />
-                  </svg>
+                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                   {error}
                 </p>
               )}
@@ -282,9 +254,7 @@ export default function RegisterPage() {
                 ) : (
                   <>
                     ثبت‌نام
-                    <svg className="h-4 w-4 -scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" />
-                    </svg>
+                    <LogIn className="h-4 w-4 -scale-x-100" />
                   </>
                 )}
               </button>

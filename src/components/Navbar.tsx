@@ -2,6 +2,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import NavLinks from "./NavLinks";
+import { LogoMark } from "./icons";
 import { userRoleSchema } from "@/lib/validation";
 
 export default async function Navbar() {
@@ -18,20 +19,7 @@ export default async function Navbar() {
         >
           {/* لوگو با نشان طلایی */}
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-ink shadow-[0_8px_20px_-8px_rgba(44,57,71,0.4)]">
-            <svg
-              className="h-5 w-5 text-gold"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M3 21h18" />
-              <path d="M5 21V7l7-4 7 4v14" />
-              <path d="M9 9h2M9 13h2M9 17h2" />
-              <path d="M14 9h2M14 13h2M14 17h2" />
-            </svg>
+            <LogoMark className="h-5 w-5 text-gold" />
           </span>
           <span>جابینو</span>
         </Link>

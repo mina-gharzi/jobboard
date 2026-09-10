@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import JobCard from "@/components/JobCard";
 import { jobStatusLabels, jobStatusBadge } from "@/lib/status";
+import { Plus, TriangleAlert, SquarePlus, ChevronRight, ChevronLeft } from "lucide-react";
 
 const PAGE_SIZE = 6;
 
@@ -83,9 +84,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
               href="/employer/new"
               className="inline-flex items-center gap-2 rounded-2xl bg-ink px-5 py-2.5 text-sm font-bold text-paper shadow-[0_16px_32px_-16px_rgba(44,57,71,0.5)] transition hover:-translate-y-0.5 hover:bg-ink/90 active:translate-y-0"
             >
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
+              <Plus className="h-4 w-4" strokeWidth={2.5} />
               ثبت آگهی جدید
             </Link>
           </div>
@@ -98,10 +97,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
           >
             <span className="flex items-center gap-3">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gold/15 text-gold">
-                <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 9v4M12 17h.01" />
-                  <path d="M10.3 3.8 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" />
-                </svg>
+                <TriangleAlert className="h-4.5 w-4.5" />
               </span>
               <span className="text-sm text-ink">
                 پروفایل شرکت شما کامل نیست — لوگو، وب‌سایت یا توضیحات اضافه کنید تا کارجوها بیشتر به شما اعتماد کنند.
@@ -109,9 +105,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
             </span>
             <span className="shrink-0 inline-flex items-center gap-1 text-sm font-bold text-gold">
               تکمیل پروفایل
-              <svg className="h-4 w-4 -scale-x-100 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m9 6 6 6-6 6" />
-              </svg>
+              <ChevronRight className="h-4 w-4 -scale-x-100 transition-transform group-hover:-translate-x-1" />
             </span>
           </Link>
         )}
@@ -119,10 +113,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
         {jobs.length === 0 ? (
           <div className="flex flex-col items-center gap-4 rounded-4xl border border-dashed border-ink/10 bg-white/50 px-6 py-14 text-center backdrop-blur-sm md:px-8 md:py-20">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gold/10">
-              <svg className="h-8 w-8 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="4" width="18" height="16" rx="3" />
-                <path d="M9 12h6M12 9v6" />
-              </svg>
+              <SquarePlus className="h-8 w-8 text-gold" strokeWidth={1.8} />
             </div>
             <div>
               <p className="font-bold text-ink">هنوز آگهی‌ای ثبت نکرده‌اید.</p>
@@ -184,9 +175,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
                     aria-label="صفحه‌ی قبل"
                     className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m9 18 6-6-6-6" />
-                    </svg>
+                    <ChevronRight className="h-4 w-4" />
                   </Link>
                 ) : (
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
@@ -202,9 +191,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
                     aria-label="صفحه‌ی بعد"
                     className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m15 18-6-6 6-6" />
-                    </svg>
+                    <ChevronLeft className="h-4 w-4" />
                   </Link>
                 ) : (
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />

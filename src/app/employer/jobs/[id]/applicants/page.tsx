@@ -7,6 +7,7 @@ import { formatRelativeTime } from "@/lib/format";
 import ApplicationStatusForm from "./ApplicationStatusForm";
 import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
 import type { ApplicationStatus } from "@/generated/prisma/enums";
+import { ChevronLeft, Users, FileDown, ChevronRight } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
@@ -101,9 +102,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
           className="group inline-flex items-center gap-2 text-sm font-medium text-ink-muted transition hover:text-ink"
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/60 backdrop-blur transition group-hover:border-gold/30 group-hover:bg-gold/5">
-            <svg className="h-4 w-4 -scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="m9 6 6 6-6 6" />
-            </svg>
+            <ChevronRight className="h-4 w-4 -scale-x-100" />
           </span>
           بازگشت به آگهی‌های من
         </Link>
@@ -133,11 +132,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
         {job.applications.length === 0 ? (
           <div className="mt-10 flex flex-col items-center gap-3 rounded-4xl border border-dashed border-ink/10 bg-white/50 px-6 py-14 text-center backdrop-blur-sm">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gold/10">
-              <svg className="h-7 w-7 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-              </svg>
+              <Users className="h-7 w-7 text-gold" strokeWidth={1.8} />
             </div>
             <p className="font-bold text-ink">
               {status
@@ -176,18 +171,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100"
                         >
-                          <svg
-                            className="h-4 w-4"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <path d="M14 2v6h6" />
-                            <path d="m9 13 3 3 3-3" />
-                            <path d="M12 10v6" />
-                          </svg>
+                          <FileDown className="h-4 w-4" />
                           مشاهده‌ی رزومه‌ی ارسالی
                         </a>
                       )}
@@ -198,18 +182,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1.5 rounded-xl border border-slate/20 bg-slate/5 px-3 py-1.5 text-sm font-medium text-slate transition hover:border-slate/40 hover:bg-slate/10"
                         >
-                          <svg
-                            className="h-4 w-4"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <path d="M14 2v6h6" />
-                            <path d="m9 13 3 3 3-3" />
-                            <path d="M12 10v6" />
-                          </svg>
+                          <FileDown className="h-4 w-4" />
                           رزومه‌ی پروفایل
                         </a>
                       )}
@@ -241,9 +214,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
                     aria-label="صفحه‌ی قبل"
                     className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m9 18 6-6-6-6" />
-                    </svg>
+                    <ChevronRight className="h-4 w-4" />
                   </Link>
                 ) : (
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
@@ -259,9 +230,7 @@ export default async function ApplicantsPage({ params, searchParams }: Props) {
                     aria-label="صفحه‌ی بعد"
                     className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m15 18-6-6 6-6" />
-                    </svg>
+                    <ChevronLeft className="h-4 w-4" />
                   </Link>
                 ) : (
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />

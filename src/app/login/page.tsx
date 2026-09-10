@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { FileText, MapPin, UserRound, Building2, AlertCircle, LogIn } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -72,30 +73,15 @@ export default function LoginPage() {
             {[
               {
                 text: "پیگیری وضعیت درخواست‌ها",
-                icon: (
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <path d="M14 2v6h6" />
-                    <path d="M16 13H8M16 17H8M10 9H8" />
-                  </svg>
-                ),
+                icon: <FileText className="h-4 w-4" />,
               },
               {
                 text: "دسترسی به جدیدترین آگهی‌ها",
-                icon: (
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 21C7 17 3 13.5 3 9a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 19 9c0 4.5-4 8-7 12z" />
-                  </svg>
-                ),
+                icon: <MapPin className="h-4 w-4" />,
               },
               {
                 text: "مدیریت پروفایل و رزومه",
-                icon: (
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="8" r="3.5" />
-                    <path d="M4.5 20c1.6-3.5 4.6-5.5 7.5-5.5s5.9 2 7.5 5.5" />
-                  </svg>
-                ),
+                icon: <UserRound className="h-4 w-4" />,
               },
             ].map((item) => (
               <div key={item.text} className="flex items-center gap-3">
@@ -113,13 +99,9 @@ export default function LoginPage() {
           <div className="rounded-4xl border border-line bg-white/70 p-6 shadow-[0_32px_80px_-32px_rgba(44,57,71,0.22)] backdrop-blur md:p-9">
             <div className="lg:hidden">
               <span className="inline-flex items-center gap-1.5 text-sm font-bold text-ink">
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-ink">
-                  <svg className="h-4 w-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 21h18M5 21V7l7-4 7 4v14" />
-                    <path d="M9 9h2M9 13h2M9 17h2" />
-                    <path d="M14 9h2M14 13h2M14 17h2" />
-                  </svg>
-                </span>
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-ink">
+                    <Building2 className="h-4 w-4 text-gold" />
+                  </span>
                 جابینو
               </span>
             </div>
@@ -177,10 +159,7 @@ export default function LoginPage() {
 
               {error && (
                 <p className="flex items-start gap-2 rounded-2xl border border-danger/20 bg-danger/5 px-4 py-3 text-sm text-danger-dark">
-                  <svg className="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="9" />
-                    <path d="M12 8v4M12 16h.01" />
-                  </svg>
+                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                   {error}
                 </p>
               )}
@@ -201,9 +180,7 @@ export default function LoginPage() {
                 ) : (
                   <>
                     ورود
-                    <svg className="h-4 w-4 -scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" />
-                    </svg>
+                    <LogIn className="h-4 w-4 -scale-x-100" />
                   </>
                 )}
               </button>

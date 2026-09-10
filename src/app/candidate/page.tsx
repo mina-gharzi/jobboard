@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import JobCard from "@/components/JobCard";
 import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
+import { TriangleAlert, ChevronRight, Search, File, ChevronLeft } from "lucide-react";
 
 const PAGE_SIZE = 6;
 
@@ -85,10 +86,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
           >
             <span className="flex items-center gap-3">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gold/15 text-gold">
-                <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 9v4M12 17h.01" />
-                  <path d="M10.3 3.8 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" />
-                </svg>
+                <TriangleAlert className="h-4.5 w-4.5" />
               </span>
               <span className="text-sm text-ink">
                 پروفایل شما کامل نیست — شماره تماس، رزومه یا معرفی کوتاه اضافه کنید تا شانس دیده‌شدن شما پیش کارفرماها افزایش یابد.
@@ -96,9 +94,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
             </span>
             <span className="shrink-0 inline-flex items-center gap-1 text-sm font-bold text-gold">
               تکمیل پروفایل
-              <svg className="h-4 w-4 -scale-x-100 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m9 6 6 6-6 6" />
-              </svg>
+              <ChevronRight className="h-4 w-4 -scale-x-100 transition-transform group-hover:-translate-x-1" />
             </span>
           </Link>
         )}
@@ -106,10 +102,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
         {applications.length === 0 ? (
           <div className="flex flex-col items-center gap-4 rounded-4xl border border-dashed border-ink/10 bg-white/50 px-6 py-14 text-center backdrop-blur-sm md:px-8 md:py-20">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gold/10">
-              <svg className="h-8 w-8 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="7" />
-                <path d="m20 20-3.5-3.5" />
-              </svg>
+              <Search className="h-8 w-8 text-gold" strokeWidth={1.8} />
             </div>
             <div>
               <p className="font-bold text-ink">هنوز برای هیچ آگهی‌ای اپلای نکرده‌اید.</p>
@@ -143,16 +136,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 text-xs font-medium text-slate underline-offset-4 hover:text-gold hover:underline"
                           >
-                            <svg
-                              className="h-3.5 w-3.5"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            >
-                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                              <path d="M14 2v6h6" />
-                            </svg>
+                            <File className="h-3.5 w-3.5" />
                             رزومه‌ی ارسالی
                           </a>
                         )}
@@ -174,9 +158,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
                     aria-label="صفحه‌ی قبل"
                     className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m9 18 6-6-6-6" />
-                    </svg>
+                    <ChevronRight className="h-4 w-4" />
                   </Link>
                 ) : (
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
@@ -192,9 +174,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
                     aria-label="صفحه‌ی بعد"
                     className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m15 18-6-6 6-6" />
-                    </svg>
+                    <ChevronLeft className="h-4 w-4" />
                   </Link>
                 ) : (
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/5 text-ink-muted/30" />
