@@ -193,7 +193,7 @@ export default async function JobsPage({ searchParams }: Props) {
             <h1 className="text-xl font-black text-ink md:text-4xl">
               {hasFilters ? "نتیجه‌ی جستجوی شما" : "همه آگهی‌های استخدام"}
             </h1>
-            <span className="mt-1 inline-flex items-center gap-1.5 text-xs font-bold text-gold md:text-sm">
+            <span className="mt-1 inline-flex items-center gap-1.5 text-xs font-bold text-ink-muted md:text-sm">
               <span className="h-px w-5 rounded-full bg-gold/40 md:w-8" />
               فرصت‌های شغلی
             </span>

@@ -47,7 +47,7 @@ export default async function CompanyProfilePage() {
         </Link>
 
         <header className="mb-8">
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-gold md:text-sm">
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-ink-muted md:text-sm">
             <span className="h-px w-5 rounded-full bg-gold/40 md:w-8" />
             پنل کارفرما
           </span>

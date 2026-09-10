@@ -79,7 +79,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
         {/* ── هدر ── */}
         <header className="mb-6 flex flex-wrap items-center justify-between gap-4 md:mb-8">
           <div>
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-gold md:text-sm">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-ink-muted md:text-sm">
               <span className="h-px w-5 rounded-full bg-gold/40 md:w-8" />
               پنل کارجو
             </span>
@@ -138,7 +138,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
                 پروفایل شما کامل نیست — شماره تماس، رزومه یا معرفی کوتاه اضافه کنید تا شانس دیده‌شدن شما پش کارفرماها افزایش یابد.
               </span>
             </span>
-            <span className="shrink-0 inline-flex items-center gap-1 text-sm font-bold text-gold">
+            <span className="shrink-0 inline-flex items-center gap-1 text-sm font-bold text-slate-dark">
               تکمیل پروفایل
               <ChevronRight className="h-4 w-4 -scale-x-100 transition-transform group-hover:-translate-x-1" />
             </span>
@@ -163,7 +163,7 @@ export default async function CandidateDashboard({ searchParams }: Props) {
                       job={item.job}
                       footer={
                         <div className="flex w-full flex-wrap items-center justify-between gap-3">
-                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-gold">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted">
                             <Bookmark className="h-3.5 w-3.5 fill-gold" />
                             ذخیره‌شده
                           </span>

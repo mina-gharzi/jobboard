@@ -111,7 +111,7 @@ export default function LoginPage() {
               <h1 className="text-2xl font-black text-ink md:text-3xl">ورود به حساب</h1>
               <p className="mt-2 text-sm text-ink-muted">
                 هنوز حساب کاربری ندارید؟{" "}
-                <Link href="/register" className="font-bold text-gold hover:text-gold-hover">
+                <Link href="/register" className="font-bold text-slate-dark transition-colors hover:text-gold">
                   ثبت‌نام کنید
                 </Link>
               </p>

@@ -68,7 +68,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
         {/* ── هدر ── */}
         <header className="mb-8 flex flex-wrap items-center justify-between gap-4 md:mb-12">
           <div>
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-gold md:text-sm">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-ink-muted md:text-sm">
               <span className="h-px w-5 rounded-full bg-gold/40 md:w-8" />
               پنل کارفرما
             </span>
@@ -107,7 +107,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
                 پروفایل شرکت شما کامل نیست — لوگو، وب‌سایت یا توضیحات اضافه کنید تا کارجوها بیشتر به شما اعتماد کنند.
               </span>
             </span>
-            <span className="shrink-0 inline-flex items-center gap-1 text-sm font-bold text-gold">
+            <span className="shrink-0 inline-flex items-center gap-1 text-sm font-bold text-slate-dark">
               تکمیل پروفایل
               <ChevronRight className="h-4 w-4 -scale-x-100 transition-transform group-hover:-translate-x-1" />
             </span>

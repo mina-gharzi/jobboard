@@ -25,11 +25,19 @@ export default function ApplicationStatusForm({
   return (
     <form
       action={formAction}
+      aria-label="تغییر وضعیت درخواست"
       className="mt-4 flex flex-col gap-2 border-t border-line pt-4"
     >
       <div className="flex items-center gap-3">
         <input type="hidden" name="applicationId" value={applicationId} />
+        <label
+          htmlFor={`applicant-status-${applicationId}`}
+          className="sr-only"
+        >
+          وضعیت درخواست
+        </label>
         <select
+          id={`applicant-status-${applicationId}`}
           name="status"
           defaultValue={status}
           className="w-full rounded-xl border border-ink/10 bg-white/70 px-3 py-2.5 text-sm text-ink shadow-sm backdrop-blur transition focus:border-gold/40 focus:outline-none focus:ring-4 focus:ring-gold/10"

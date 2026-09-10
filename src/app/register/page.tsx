@@ -132,7 +132,7 @@ export default function RegisterPage() {
               <h1 className="text-2xl font-black text-ink md:text-3xl">ثبت‌نام</h1>
               <p className="mt-2 text-sm text-ink-muted">
                 قبلاً ثبت‌نام کرده‌اید؟{" "}
-                <Link href="/login" className="font-bold text-gold hover:text-gold-hover">
+                <Link href="/login" className="font-bold text-slate-dark transition-colors hover:text-gold">
                   وارد شوید
                 </Link>
               </p>

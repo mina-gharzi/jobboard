@@ -20,7 +20,7 @@ export default async function NewJobPage() {
       </div>
       <div className="mx-auto max-w-2xl px-4 pb-20 pt-8 md:px-10 md:pt-16">
         <header className="mb-8">
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-gold md:text-sm">
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-ink-muted md:text-sm">
             <span className="h-px w-5 rounded-full bg-gold/40 md:w-8" />
             آگهی‌ها
           </span>

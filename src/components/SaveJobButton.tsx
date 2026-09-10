@@ -42,7 +42,7 @@ export default function SaveJobButton({
       title={saved ? "حذف از ذخیره‌ها" : "ذخیره آگهی"}
       className={`inline-flex items-center justify-center gap-1.5 rounded-2xl border px-3 py-2 text-xs font-bold transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25 disabled:opacity-50 md:text-sm ${
         saved
-          ? "border-gold/40 bg-gold/10 text-gold hover:bg-gold/15"
+          ? "border-gold/40 bg-gold/10 text-ink hover:bg-gold/15"
           : "border-ink/10 bg-white/70 text-ink-muted shadow-sm backdrop-blur hover:border-gold/40 hover:text-gold"
       } ${className}`}
     >

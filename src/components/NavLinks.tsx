@@ -45,6 +45,7 @@ export default function NavLinks({ role }: { role: Role }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const mounted = useMounted();
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef<HTMLElement | null>(null);
@@ -64,6 +65,34 @@ export default function NavLinks({ role }: { role: Role }) {
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuOpen]);
+
+  // کیبورد: Escape منوی دسکتاپ را می‌بندد.
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setMenuOpen(false);
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [menuOpen]);
+
+  // هنگام باز شدن منو، فوکوس به اولین آیتم می‌رود؛ هنگام بسته شدن به دکمه
+  // برمی‌گردد (بدون فوکوس زدن در بار اول رندر که منو هنوز بسته است).
+  const menuWasOpenRef = useRef(false);
+  useEffect(() => {
+    if (menuOpen) {
+      menuWasOpenRef.current = true;
+      const first = menuRef.current?.querySelector<HTMLElement>(
+        'a[href], button:not([disabled])'
+      );
+      first?.focus();
+      return;
+    }
+    if (menuWasOpenRef.current) {
+      menuWasOpenRef.current = false;
+      menuTriggerRef.current?.focus();
+    }
   }, [menuOpen]);
 
   useEffect(() => {
@@ -166,7 +195,11 @@ export default function NavLinks({ role }: { role: Role }) {
         {role ? (
           <div className="relative" ref={menuRef}>
             <button
+              ref={menuTriggerRef}
               onClick={() => setMenuOpen((o) => !o)}
+              aria-expanded={menuOpen}
+              aria-haspopup="menu"
+              aria-controls="account-menu"
               className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-semibold shadow-sm transition-colors ${roleBadgeClasses}`}
             >
               <UserRound className="h-4 w-4" />
@@ -175,7 +208,12 @@ export default function NavLinks({ role }: { role: Role }) {
             </button>
 
             {menuOpen && (
-              <div className="absolute inset-e-0 top-full mt-3 w-52 overflow-hidden rounded-2xl border border-line bg-white/90 p-1.5 shadow-[0_24px_64px_-24px_rgba(44,57,71,0.3)] backdrop-blur-xl">
+              <div
+                id="account-menu"
+                role="menu"
+                aria-label="منوی حساب کاربری"
+                className="absolute inset-e-0 top-full mt-3 w-52 overflow-hidden rounded-2xl border border-line bg-white/90 p-1.5 shadow-[0_24px_64px_-24px_rgba(44,57,71,0.3)] backdrop-blur-xl"
+              >
                 <span className="block border-b border-line px-3 pb-2.5 pt-2 text-xs font-semibold text-ink-muted">
                   {roleLabel(role)} خوش آمدی
                 </span>
