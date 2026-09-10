@@ -84,7 +84,6 @@ body {
   color: var(--color-slate-dark);
 }
 /* متن پیام‌های موفقیت / خطا در فرم‌ها */
-/* متن پیام‌های موفقیت / خطا در فرم‌ها */
 .text-success {
   color: var(--color-success-dark);
 }

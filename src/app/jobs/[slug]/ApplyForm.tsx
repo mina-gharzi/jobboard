@@ -12,8 +12,15 @@ function formatSize(bytes: number) {
     : `${Math.ceil(bytes / 1024)} کیلوبایت`;
 }
 
-export default function ApplyForm({ jobId }: { jobId: string }) {
+export default function ApplyForm({
+  jobId,
+  idPrefix = "",
+}: {
+  jobId: string;
+  idPrefix?: string;
+}) {
   const applyWithJobId = applyToJob.bind(null, jobId);
+  const makeId = (suffix: string) => `${idPrefix}apply-${suffix}`;
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedResume, setSelectedResume] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -76,11 +83,11 @@ export default function ApplyForm({ jobId }: { jobId: string }) {
       </h3>
 
       <div>
-        <label htmlFor="apply-cover-letter" className="mb-1.5 block text-sm font-semibold text-ink-muted">
+        <label htmlFor={makeId("cover-letter")} className="mb-1.5 block text-sm font-semibold text-ink-muted">
           متن انگیزه‌نامه (اختیاری)
         </label>
         <textarea
-          id="apply-cover-letter"
+          id={makeId("cover-letter")}
           name="coverLetter"
           placeholder="چرا برای این موقعیت مناسب هستید؟"
           rows={4}
@@ -89,7 +96,7 @@ export default function ApplyForm({ jobId }: { jobId: string }) {
       </div>
 
       <label
-        htmlFor="apply-resume"
+        htmlFor={makeId("resume")}
         className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed bg-white/60 px-4 py-5 text-center transition hover:border-gold/50 hover:bg-gold/5 ${
           selectedResume ? "border-emerald-300 bg-emerald-50/40" : "border-slate/25"
         }`}
@@ -118,7 +125,7 @@ export default function ApplyForm({ jobId }: { jobId: string }) {
       </label>
       <input
         ref={inputRef}
-        id="apply-resume"
+        id={makeId("resume")}
         name="resumePdf"
         type="file"
         accept="application/pdf,.pdf"

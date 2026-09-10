@@ -441,6 +441,7 @@ export default async function JobDetailPage({ params }: Props) {
                 session={session}
                 jobId={job.id}
                 existingApplication={existingApplication}
+                formIdPrefix="mobile"
               />
               <div className="mt-6">
                 <CompanyInfoCard employer={job.employer} />
@@ -663,10 +664,12 @@ function ApplyBox({
   session,
   jobId,
   existingApplication,
+  formIdPrefix = "",
 }: {
   session: Awaited<ReturnType<typeof auth.api.getSession>>;
   jobId: string;
   existingApplication: { status: ApplicationStatus } | null;
+  formIdPrefix?: string;
 }) {
   const isCandidate = session?.user.role === "CANDIDATE";
   const isEmployer = session?.user.role === "EMPLOYER";
@@ -696,7 +699,7 @@ function ApplyBox({
           </div>
 
           <div className="p-5">
-            <ApplyForm jobId={jobId} />
+            <ApplyForm jobId={jobId} idPrefix={formIdPrefix} />
           </div>
         </div>
       )}

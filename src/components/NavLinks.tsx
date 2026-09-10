@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { LogoMark } from "./icons";
 import { Building2, ChevronDown, Home, LogOut, Menu, UserRound, X } from "lucide-react";
@@ -49,7 +49,11 @@ export default function NavLinks({ role }: { role: Role }) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef<HTMLElement | null>(null);
   const router = useRouter();
+  const pathname = usePathname();
   const links = buildLinks(role);
+
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -145,10 +149,17 @@ export default function NavLinks({ role }: { role: Role }) {
           <Link
             key={link.href}
             href={link.href}
-            className="group relative text-ink-muted transition-colors hover:text-ink"
+            aria-current={isActive(link.href) ? "page" : undefined}
+            className={`group relative transition-colors ${
+              isActive(link.href) ? "text-ink" : "text-ink-muted hover:text-ink"
+            }`}
           >
             {link.label}
-            <span className="pointer-events-none absolute -bottom-1.5 right-0 h-0.5 w-0 rounded-full bg-gold transition-all duration-300 group-hover:w-full" />
+            <span
+              className={`pointer-events-none absolute -bottom-1.5 right-0 h-0.5 rounded-full bg-gold transition-all duration-300 ${
+                isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
+              }`}
+            />
           </Link>
         ))}
 
@@ -288,7 +299,12 @@ export default function NavLinks({ role }: { role: Role }) {
                     key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="rounded-xl border border-ink/5 bg-white/50 px-4 py-3 text-ink transition-colors hover:border-gold/30 hover:bg-gold/5"
+                    aria-current={isActive(link.href) ? "page" : undefined}
+                    className={`rounded-xl border px-4 py-3 transition-colors ${
+                      isActive(link.href)
+                        ? "border-gold/40 bg-gold/10 font-bold text-ink"
+                        : "border-ink/5 bg-white/50 text-ink hover:border-gold/30 hover:bg-gold/5"
+                    }`}
                   >
                     {link.label}
                   </Link>
