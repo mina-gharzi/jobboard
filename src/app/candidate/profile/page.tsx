@@ -36,7 +36,7 @@ export default async function CandidateProfilePage() {
       <div className="mx-auto max-w-2xl px-6 pb-20 pt-10 md:px-10 md:pt-16">
         <Link
           href="/candidate"
-          className="group inline-flex items-center gap-2 text-sm font-medium text-ink-muted transition hover:text-ink"
+          className="group inline-flex items-center gap-2 rounded-xl text-sm font-medium text-ink-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/60 backdrop-blur transition group-hover:border-gold/30 group-hover:bg-gold/5">
             <ChevronRight

@@ -137,7 +137,7 @@ export default async function JobsPage({ searchParams }: Props) {
                   <Link
                     key={chip.href}
                     href={chip.href}
-                    className="group inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-white/60 py-1 pl-2.5 pr-3 text-[11px] font-semibold text-ink shadow-sm backdrop-blur-md transition hover:border-gold/40 hover:bg-gold/5 md:gap-2 md:py-1.5 md:pl-3 md:pr-4 md:text-xs"
+                    className="group inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-white/60 py-1 pl-2.5 pr-3 text-[11px] font-semibold text-ink shadow-sm backdrop-blur-md transition hover:border-gold/40 hover:bg-gold/5 focus-visible:outline-none focus-visible:border-gold/40 focus-visible:ring-4 focus-visible:ring-gold/20 md:gap-2 md:py-1.5 md:pl-3 md:pr-4 md:text-xs"
                   >
                     {chip.label}
                     <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-ink/10 text-ink-muted transition-colors group-hover:bg-gold/20 group-hover:text-gold md:h-4 md:w-4">
@@ -148,7 +148,7 @@ export default async function JobsPage({ searchParams }: Props) {
             )}
             <Link
               href="/jobs"
-              className="text-[11px] font-semibold text-ink-muted transition-colors hover:text-gold md:text-xs"
+              className="text-[11px] font-semibold text-ink-muted transition-colors hover:text-gold focus-visible:outline-none focus-visible:rounded-sm focus-visible:ring-4 focus-visible:ring-gold/20 md:text-xs"
             >
               حذف همه
             </Link>
@@ -278,7 +278,8 @@ export default async function JobsPage({ searchParams }: Props) {
                 {page > 1 ? (
                   <Link
                     href={buildHref({ q, city, category }, page - 1)}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
+                    aria-label="صفحه‌ی قبل"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </Link>
@@ -296,7 +297,7 @@ export default async function JobsPage({ searchParams }: Props) {
                       key={item}
                       href={buildHref({ q, city, category }, item)}
                       aria-current={item === page ? "page" : undefined}
-                      className={`inline-flex h-11 min-w-11 items-center justify-center rounded-xl px-3 text-sm font-bold transition ${
+                      className={`inline-flex h-11 min-w-11 items-center justify-center rounded-xl px-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25 ${
                         item === page
                           ? "bg-ink text-paper shadow-[0_16px_32px_-16px_rgba(44,57,71,0.5)]"
                           : "border border-ink/10 bg-white/60 text-ink hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
@@ -310,7 +311,8 @@ export default async function JobsPage({ searchParams }: Props) {
                 {page < totalPages ? (
                   <Link
                     href={buildHref({ q, city, category }, page + 1)}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
+                    aria-label="صفحه‌ی بعد"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </Link>

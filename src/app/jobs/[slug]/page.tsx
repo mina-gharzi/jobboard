@@ -265,7 +265,7 @@ export default async function JobDetailPage({ params }: Props) {
         {/* مسیر بازگشت */}
         <Link
           href="/jobs"
-          className="group inline-flex items-center gap-2 text-sm font-medium text-ink-muted transition hover:text-ink"
+          className="group inline-flex items-center gap-2 rounded-xl text-sm font-medium text-ink-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/60 backdrop-blur transition group-hover:border-gold/30 group-hover:bg-gold/5">
             <ChevronRight
@@ -478,7 +478,7 @@ export default async function JobDetailPage({ params }: Props) {
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/5 bg-white/85 px-3 pt-3 pb-[calc(env(safe-area-inset-bottom)_+_0.75rem)] backdrop-blur-xl lg:hidden">
           <a
             href="#apply"
-            className="flex items-center justify-between gap-3 rounded-2xl bg-ink px-5 py-3 text-sm font-bold text-paper shadow-[0_16px_40px_-16px_rgba(44,57,71,0.5)] transition active:scale-[0.98]"
+            className="flex items-center justify-between gap-3 rounded-2xl bg-ink px-5 py-3 text-sm font-bold text-paper shadow-[0_16px_40px_-16px_rgba(44,57,71,0.5)] transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/40"
           >
             {hasApplied ? (
               <>

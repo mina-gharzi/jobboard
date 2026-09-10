@@ -243,7 +243,7 @@ export default async function Home() {
             </div>
             <Link
               href="/jobs"
-              className="group inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/70 px-6 py-3 text-sm font-semibold text-ink shadow-sm backdrop-blur-md transition hover:-translate-y-0.5 hover:border-gold hover:shadow-[0_16px_32px_-16px_rgba(194,165,109,0.4)]"
+              className="group inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/70 px-6 py-3 text-sm font-semibold text-ink shadow-sm backdrop-blur-md transition hover:-translate-y-0.5 hover:border-gold hover:shadow-[0_16px_32px_-16px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:border-gold/40 focus-visible:ring-4 focus-visible:ring-gold/25"
             >
               مشاهده همه آگهی‌ها
               <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />

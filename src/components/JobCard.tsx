@@ -191,14 +191,14 @@ export default function JobCard({
   const visual = getCategoryVisual(job.category);
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white/70 transition duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-[0_24px_48px_-16px_rgba(44,57,71,0.14)]">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white/70 transition duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-[0_24px_48px_-16px_rgba(44,57,71,0.14)] has-focus-visible:border-gold/40 has-focus-visible:ring-4 has-focus-visible:ring-gold/25">
       {/* نوار طلایی هنگام hover */}
       <span
         aria-hidden
         className="pointer-events-none absolute inset-y-6 right-0 w-0.75 origin-bottom scale-y-0 rounded-full bg-gold transition-transform duration-300 group-hover:scale-y-100"
       />
 
-      <Link href={`/jobs/${job.slug}`} className="flex-1 p-5">
+      <Link href={`/jobs/${job.slug}`} className="flex-1 p-5 focus-visible:outline-none">
         <div className="flex items-start gap-3.5">
           {/* آیکون دسته‌بندی */}
           <div

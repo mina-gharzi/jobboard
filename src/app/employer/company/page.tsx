@@ -173,7 +173,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
                   <Link
                     href={`/employer?page=${page - 1}`}
                     aria-label="صفحه‌ی قبل"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </Link>
@@ -189,7 +189,7 @@ export default async function EmployerDashboard({ searchParams }: Props) {
                   <Link
                     href={`/employer?page=${page + 1}`}
                     aria-label="صفحه‌ی بعد"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)]"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-white/60 text-ink transition hover:border-gold hover:text-gold hover:shadow-[0_12px_24px_-12px_rgba(194,165,109,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/25"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </Link>
