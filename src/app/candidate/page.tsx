@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import JobCard from "@/components/JobCard";
 import SaveJobButton from "@/components/SaveJobButton";
+import WithdrawApplicationButton from "@/components/WithdrawApplicationButton";
 import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
 import Pagination from "@/components/Pagination";
 import { Bookmark, TriangleAlert, Search, File, ChevronRight } from "lucide-react";
@@ -193,24 +194,31 @@ export default async function CandidateDashboard({ searchParams }: Props) {
                 <li key={app.id}>
                   <JobCard
                     job={app.job}
-                    footer={
-                      <div className="flex flex-wrap items-center gap-3">
-                        <span className={applicationStatusBadge[app.status]}>
-                          {applicationStatusLabels[app.status]}
-                        </span>
-                        {app.resumePdf && (
-                          <a
-                            href={app.resumePdf}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs font-medium text-slate underline-offset-4 hover:text-gold hover:underline"
-                          >
-                            <File className="h-3.5 w-3.5" />
-                            رزومه‌ی ارسالی
-                          </a>
-                        )}
-                      </div>
-                    }
+footer={
+  <div className="flex flex-wrap items-center gap-3">
+    <span className={applicationStatusBadge[app.status]}>
+      {applicationStatusLabels[app.status]}
+    </span>
+    {app.resumePdf && (
+      <a
+        href={app.resumePdf}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-xs font-medium text-slate underline-offset-4 hover:text-gold hover:underline"
+      >
+        <File className="h-3.5 w-3.5" />
+        رزومه‌ی ارسالی
+      </a>
+    )}
+    {["PENDING", "REVIEWED"].includes(
+      app.status
+    ) && (
+      <span className="ms-auto">
+        <WithdrawApplicationButton applicationId={app.id} />
+      </span>
+    )}
+  </div>
+}
                   />
                 </li>
               ))}
