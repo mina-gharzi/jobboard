@@ -36,6 +36,9 @@ export default function EditJobForm({ job }: { job: Job }) {
           defaultValue={job.title}
           placeholder="عنوان شغل"
           aria-label="عنوان شغل"
+          required
+          minLength={3}
+          maxLength={150}
           className="input-field w-full rounded-md border p-3 text-sm"
         />
         {errors.title && <p className="mt-1.5 text-sm text-danger">{errors.title}</p>}
@@ -48,6 +51,9 @@ export default function EditJobForm({ job }: { job: Job }) {
           placeholder="توضیحات"
           aria-label="توضیحات"
           rows={6}
+          required
+          minLength={20}
+          maxLength={5000}
           className="input-field w-full rounded-md border p-3 text-sm"
         />
         {errors.description && (
@@ -60,6 +66,7 @@ export default function EditJobForm({ job }: { job: Job }) {
           name="category"
           defaultValue={job.category}
           aria-label="دسته‌بندی"
+          required
           className="input-field w-full rounded-md border p-3 text-sm"
         >
           {JOB_CATEGORIES.map((c) => (
@@ -77,6 +84,9 @@ export default function EditJobForm({ job }: { job: Job }) {
           defaultValue={job.city}
           placeholder="شهر"
           aria-label="شهر"
+          required
+          minLength={2}
+          maxLength={100}
           className="input-field w-full rounded-md border p-3 text-sm"
         />
         {errors.city && <p className="mt-1.5 text-sm text-danger">{errors.city}</p>}
@@ -87,6 +97,7 @@ export default function EditJobForm({ job }: { job: Job }) {
           name="remoteType"
           defaultValue={job.remoteType}
           aria-label="نوع همکاری"
+          required
           className="input-field w-full rounded-md border p-3 text-sm"
         >
           {remoteTypeOptions.map((opt) => (
@@ -105,6 +116,7 @@ export default function EditJobForm({ job }: { job: Job }) {
           <input
             name="salaryMin"
             type="number"
+            min={0}
             defaultValue={job.salaryMin ?? ""}
             placeholder="حداقل حقوق"
             aria-label="حداقل حقوق"
@@ -118,6 +130,7 @@ export default function EditJobForm({ job }: { job: Job }) {
           <input
             name="salaryMax"
             type="number"
+            min={0}
             defaultValue={job.salaryMax ?? ""}
             placeholder="حداکثر حقوق"
             aria-label="حداکثر حقوق"
@@ -135,6 +148,7 @@ export default function EditJobForm({ job }: { job: Job }) {
           id="edit-status"
           name="status"
           defaultValue={job.status}
+          required
           className="input-field w-full rounded-md border p-3 text-sm"
         >
           {jobStatusOptions.map((opt) => (

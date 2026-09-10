@@ -29,6 +29,9 @@ export default function NewJobForm() {
           name="title"
           defaultValue={state.values?.title ?? ""}
           placeholder="مثلاً توسعه‌دهنده‌ی فرانت‌اند"
+          required
+          minLength={3}
+          maxLength={150}
           className="input-field w-full rounded-md border p-3 text-sm"
         />
         {state.errors.title && (
@@ -44,6 +47,9 @@ export default function NewJobForm() {
           defaultValue={state.values?.description ?? ""}
           placeholder="شرح موقعیت شغلی، مهارت‌های مورد نیاز و..."
           rows={6}
+          required
+          minLength={20}
+          maxLength={5000}
           className="input-field w-full rounded-md border p-3 text-sm"
         />
         {state.errors.description && (
@@ -62,6 +68,7 @@ export default function NewJobForm() {
             id="job-category"
             name="category"
             defaultValue={state.values?.category ?? ""}
+            required
             className="input-field w-full rounded-md border p-3 text-sm"
           >
             <option value="" disabled>
@@ -86,6 +93,9 @@ export default function NewJobForm() {
             name="city"
             defaultValue={state.values?.city ?? ""}
             placeholder="مثلاً تهران"
+            required
+            minLength={2}
+            maxLength={100}
             className="input-field w-full rounded-md border p-3 text-sm"
           />
           {state.errors.city && (
@@ -102,6 +112,7 @@ export default function NewJobForm() {
           id="job-remote"
           name="remoteType"
           defaultValue={state.values?.remoteType ?? ""}
+          required
           className="input-field w-full rounded-md border p-3 text-sm"
         >
           <option value="" disabled>
@@ -129,6 +140,7 @@ export default function NewJobForm() {
             id="job-salary-min"
             name="salaryMin"
             type="number"
+            min={0}
             defaultValue={state.values?.salaryMin ?? ""}
             placeholder="اختیاری"
             className="input-field w-full rounded-md border p-3 text-sm"
@@ -147,6 +159,7 @@ export default function NewJobForm() {
             id="job-salary-max"
             name="salaryMax"
             type="number"
+            min={0}
             defaultValue={state.values?.salaryMax ?? ""}
             placeholder="اختیاری"
             className="input-field w-full rounded-md border p-3 text-sm"
