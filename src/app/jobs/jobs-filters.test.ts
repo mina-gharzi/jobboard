@@ -5,7 +5,7 @@ import {
   parseSalaryKey,
   salaryWhere,
 } from "./jobs-filters";
-import { RemoteType } from "@/generated/prisma/enums";
+import { RemoteType } from "@/generated/prisma";
 
 describe("parseRemote", () => {
   it("مقادیر معتبر enum را پذیرفت و برمی‌گرداند", () => {

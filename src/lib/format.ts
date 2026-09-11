@@ -1,4 +1,4 @@
-import { RemoteType } from "@/generated/prisma/enums";
+import { RemoteType } from "@/generated/prisma";
 
 export const remoteTypeLabels: Record<RemoteType, string> = {
   ONSITE: "حضوری",

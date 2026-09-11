@@ -5,7 +5,7 @@ import { updateJob, type UpdateJobState } from "@/lib/actions/manageJob";
 import { jobStatusOptions } from "@/lib/status";
 import { remoteTypeOptions } from "@/lib/format";
 import { JOB_CATEGORIES } from "@/lib/categories";
-import type { RemoteType, JobStatus } from "@/generated/prisma/enums";
+import type { RemoteType, JobStatus } from "@/generated/prisma";
 
 const initialState: UpdateJobState = {};
 

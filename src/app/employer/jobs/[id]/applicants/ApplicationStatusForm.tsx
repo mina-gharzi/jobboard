@@ -6,7 +6,7 @@ import {
   type UpdateStatusState,
 } from "@/lib/actions/updateApplicationStatus";
 import { applicationStatusOptions } from "@/lib/status";
-import type { ApplicationStatus } from "@/generated/prisma/enums";
+import type { ApplicationStatus } from "@/generated/prisma";
 
 const initialState: UpdateStatusState = {};
 

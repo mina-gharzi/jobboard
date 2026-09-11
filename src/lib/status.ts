@@ -1,4 +1,4 @@
-import { JobStatus, ApplicationStatus } from "@/generated/prisma/enums";
+import { JobStatus, ApplicationStatus } from "@/generated/prisma";
 
 export const jobStatusLabels: Record<JobStatus, string> = {
   DRAFT: "پیش‌نویس",

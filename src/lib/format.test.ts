@@ -5,7 +5,7 @@ import {
   remoteTypeLabels,
   remoteTypeOptions,
 } from "./format";
-import { RemoteType } from "@/generated/prisma/enums";
+import { RemoteType } from "@/generated/prisma";
 
 describe("remoteTypeLabels", () => {
   it("تمام اعضای enum را به فارسی ترجمه می‌کند", () => {

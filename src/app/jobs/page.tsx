@@ -15,7 +15,7 @@ import JobsFilters from "./JobsFilters";
 import { JOB_SORTS, type JobSort } from "./jobs-sort";
 import { parseRemote, parseSalaryKey, salaryWhere } from "./jobs-filters";
 import { remoteTypeLabels } from "@/lib/format";
-import type { Prisma } from "@/generated/prisma/client";
+import type { Prisma } from "@/generated/prisma";
 import { MapPin, PlusSquare, Search, X } from "lucide-react";
 
 const PAGE_SIZE = 6;

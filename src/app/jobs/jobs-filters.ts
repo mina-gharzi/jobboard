@@ -1,6 +1,6 @@
-import { RemoteType } from "@/generated/prisma/enums";
+import { RemoteType } from "@/generated/prisma";
 import { remoteTypeLabels } from "@/lib/format";
-import type { Prisma } from "@/generated/prisma/client";
+import type { Prisma } from "@/generated/prisma";
 
 /* ───────── فیلتر نوع همکاری ───────── */
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { RemoteType, JobStatus, ApplicationStatus, Role } from "@/generated/prisma/enums";
+import { RemoteType, JobStatus, ApplicationStatus, Role } from "@/generated/prisma";
 import { JOB_CATEGORIES } from "@/lib/categories";
 import { COMPANY_TEAM_SIZES } from "@/lib/companyTeamSizes";
 

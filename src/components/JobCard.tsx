@@ -19,7 +19,7 @@ import {
   formatSalary,
   formatRelativeTime,
 } from "@/lib/format";
-import type { RemoteType } from "@/generated/prisma/enums";
+import type { RemoteType } from "@/generated/prisma";
 
 export type JobCardData = {
   slug: string;

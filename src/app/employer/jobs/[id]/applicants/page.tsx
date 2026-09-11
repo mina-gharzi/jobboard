@@ -6,7 +6,7 @@ import Link from "next/link";
 import { formatRelativeTime } from "@/lib/format";
 import ApplicationStatusForm from "./ApplicationStatusForm";
 import { applicationStatusLabels, applicationStatusBadge } from "@/lib/status";
-import type { ApplicationStatus } from "@/generated/prisma/enums";
+import type { ApplicationStatus } from "@/generated/prisma";
 import Pagination from "@/components/Pagination";
 import { Users, FileDown, ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
