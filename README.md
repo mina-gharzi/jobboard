@@ -1,10 +1,31 @@
 # Jobino — Job Board Platform
 
-> A full-stack job board platform built with Next.js, TypeScript, Prisma, Better Auth, and PostgreSQL.
+A full-stack job board platform built with Next.js, TypeScript, Prisma, Better Auth, and PostgreSQL.
 
-Jobino is a full-stack job board application designed around realistic hiring workflows between **job seekers** and **employers**.
+🔗 **Live Demo:** [jobboard-6p9y.vercel.app](https://jobboard-6p9y.vercel.app)
 
-The project focuses not only on UI implementation, but also on authentication, authorization, database relationships, validation, file uploads, search, testing, accessibility, and reliable end-to-end workflows.
+---
+
+Jobino is a full-stack job board application designed around realistic hiring workflows between **job seekers** and **employers**. The project focuses not only on UI implementation, but also on authentication, authorization, database relationships, validation, file uploads, search, testing, accessibility, and reliable end-to-end workflows.
+
+![Jobino screenshot](./public/screenshot.jpg)
+
+## 📚 Table of Contents
+
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Architecture](#️-architecture)
+- [Main User Flows](#-main-user-flows)
+- [Database](#️-database)
+- [Resume Upload](#-resume-upload)
+- [Accessibility](#-accessibility)
+- [SEO](#-seo)
+- [Testing](#-testing)
+- [Getting Started](#-getting-started)
+- [Code Quality](#-code-quality)
+- [Project Goals](#-project-goals)
+- [Future Improvements](#-future-improvements)
+- [Author](#-author)
 
 ---
 
@@ -12,51 +33,45 @@ The project focuses not only on UI implementation, but also on authentication, a
 
 ### 👤 Authentication & Roles
 
-* User registration and authentication
-* Separate **Candidate** and **Employer** roles
-* Role-based access control
-* Protected dashboard routes
-* Session-based authentication with Better Auth
-* Ownership checks for employer resources
+- User registration and authentication
+- Separate **Candidate** and **Employer** roles
+- Role-based access control
+- Protected dashboard routes
+- Session-based authentication with Better Auth
+- Ownership checks for employer resources
 
 ### 💼 Job Management
 
-Employers can:
+**Employers can:**
+- Create job listings
+- Edit existing jobs
+- Manage published jobs
+- View applicants
+- Review candidate applications
+- Update application statuses
 
-* Create job listings
-* Edit existing jobs
-* Manage published jobs
-* View applicants
-* Review candidate applications
-* Update application statuses
-
-Candidates can:
-
-* Browse available jobs
-* Search and filter jobs
-* View detailed job information
-* Apply to jobs
-* Withdraw applications
-* Save jobs for later
-* Track application status
+**Candidates can:**
+- Browse available jobs
+- Search and filter jobs
+- View detailed job information
+- Apply to jobs
+- Withdraw applications
+- Save jobs for later
+- Track application status
 
 ### 📄 Applications & Resumes
 
-* Cover letter support
-* Application status workflow
-* Resume upload support
-* PDF resume validation
-* Secure file URL handling
-* Candidate application history
+- Cover letter support
+- Application status workflow
+- Resume upload support
+- PDF resume validation
+- Secure file URL handling
+- Candidate application history
 
-Application workflow:
+Application status workflow:
 
-```text
-PENDING
-   ↓
-REVIEWED
-   ↓
-ACCEPTED
+```
+PENDING → REVIEWED → ACCEPTED
 ```
 
 Candidates can also withdraw an application when the current status allows it.
@@ -65,120 +80,61 @@ Candidates can also withdraw an application when the current status allows it.
 
 Job search supports:
 
-* Keyword search
-* Location filtering
-* Remote-work filtering
-* Salary filtering
-* Pagination
-* Persian text normalization
+- Keyword search
+- Location filtering
+- Remote-work filtering
+- Salary filtering
+- Pagination
+- Persian text normalization
 
-The search implementation handles Persian text variations such as:
-
-* نیم‌فاصله
-* فاصله معمولی
-* ZWNJ variants
-
-This makes search more reliable for Persian job titles and descriptions.
+The search implementation handles Persian text variations such as نیم‌فاصله, regular spaces, and ZWNJ variants — making search more reliable for Persian job titles and descriptions.
 
 ### 🛡️ Validation & Security
 
-The application uses server-side validation and authorization checks throughout the main workflows.
+- Zod schema validation
+- Role-based authorization
+- Resource ownership checks
+- HTTP/HTTPS URL validation
+- Protection against unsafe URL schemes
+- Safe JSON-LD generation
+- Database uniqueness constraints
+- Handling Prisma unique-constraint conflicts
+- Protected E2E cleanup endpoint
+- Rate-limit control for sensitive auth routes
 
-Implemented protections include:
+### ♿ Accessibility
 
-* Zod schema validation
-* Role-based authorization
-* Resource ownership checks
-* HTTP/HTTPS URL validation
-* Protection against unsafe URL schemes
-* Safe JSON-LD generation
-* Database uniqueness constraints
-* Handling Prisma unique-constraint conflicts
-* Protected E2E cleanup endpoint
-* Rate-limit control for automated E2E execution
+- Semantic HTML
+- Accessible form labels
+- Keyboard navigation
+- Focus states
+- Error, loading, and empty states handled explicitly
 
-### 🧪 Testing
+### 🔍 SEO
 
-Jobino uses two testing layers.
-
-#### Unit Tests — Vitest
-
-Unit tests cover pure application logic including:
-
-* Salary formatting
-* Relative date formatting
-* Remote type labels
-* Persian search normalization
-* Search filter parsing
-* Salary range matching
-* Job validation
-* Application validation
-* Application status validation
-* URL validation
-
-Current unit-test coverage includes **62 tests**.
-
-#### End-to-End Tests — Playwright
-
-The E2E suite tests a realistic hiring workflow:
-
-```text
-Register Employer
-       ↓
-Register Candidate
-       ↓
-Create Jobs
-       ↓
-Apply to Jobs
-       ↓
-Save / Withdraw
-       ↓
-Review Application
-       ↓
-Accept Application
-       ↓
-Verify Candidate Status
-```
-
-The E2E environment also includes automatic cleanup of test records.
+- Dynamic metadata
+- Sitemap and robots configuration
+- JSON-LD structured data for job pages, generated safely to avoid unsafe content injection
 
 ---
 
 ## 🧰 Tech Stack
 
-### Frontend
-
-* Next.js 16
-* React 19
-* TypeScript
-* Tailwind CSS
-* Lucide React
-* Vazirmatn / Persian font support
-
-### Backend
-
-* Next.js server-side architecture
-* Prisma ORM
-* PostgreSQL
-* Better Auth
-* Zod
-
-### Testing & Code Quality
-
-* Vitest
-* Playwright
-* ESLint
-* TypeScript
-* Husky
-* lint-staged
+| Layer | Technologies |
+|---|---|
+| **Frontend** | Next.js 16 · React 19 · TypeScript · Tailwind CSS · Lucide React · Vazirmatn (Persian font) |
+| **Backend** | Next.js Server Actions · Prisma ORM · PostgreSQL · Better Auth · Zod |
+| **Storage** | Vercel Blob (resume uploads) |
+| **Testing** | Vitest (unit) · Playwright (E2E) |
+| **Code Quality** | ESLint · TypeScript · Husky · lint-staged |
 
 ---
 
 ## 🏗️ Architecture
 
-The project follows a feature-oriented Next.js application structure.
+The project follows a feature-oriented Next.js application structure:
 
-```text
+```
 jobboard/
 ├── e2e/
 │   ├── fixtures/
@@ -193,7 +149,6 @@ jobboard/
 ├── src/
 │   ├── app/
 │   │   ├── api/
-│   │   ├── auth/
 │   │   ├── candidate/
 │   │   ├── employer/
 │   │   ├── jobs/
@@ -215,151 +170,72 @@ jobboard/
 
 ## 🔄 Main User Flows
 
-### Candidate Flow
-
-```text
-Register
-  ↓
-Candidate Dashboard
-  ↓
-Browse Jobs
-  ↓
-Search / Filter
-  ↓
-View Job
-  ↓
-Apply
-  ↓
-Track Application
-  ↓
-Accepted / Rejected / Withdrawn
+**Candidate flow**
+```
+Register → Candidate Dashboard → Browse Jobs → Search / Filter
+  → View Job → Apply → Track Application → Accepted / Rejected / Withdrawn
 ```
 
-### Employer Flow
-
-```text
-Register
-  ↓
-Employer Dashboard
-  ↓
-Create Job
-  ↓
-Manage Jobs
-  ↓
-View Applicants
-  ↓
-Review Application
-  ↓
-Update Status
+**Employer flow**
+```
+Register → Employer Dashboard → Create Job → Manage Jobs
+  → View Applicants → Review Application → Update Status
 ```
 
 ---
 
 ## 🗄️ Database
 
-Prisma is used as the ORM for database access and relational data management.
+Prisma is used as the ORM for database access and relational data management. Core entities include Users, Sessions, Jobs, Applications, Saved Jobs, candidate profiles, and company profiles.
 
-The application models core entities such as:
-
-* Users
-* Sessions
-* Jobs
-* Applications
-* Saved Jobs
-* Candidate profiles
-* Company profiles
-
-Database-level constraints are used alongside application validation to maintain data integrity.
-
-For example, duplicate applications are handled both through validation logic and database uniqueness constraints.
+Database-level constraints are used alongside application-level validation to maintain data integrity — for example, duplicate applications are prevented both through validation logic and a database uniqueness constraint.
 
 ---
 
 ## 📁 Resume Upload
 
-Jobino supports resume uploads through Vercel Blob.
+Resume uploads are handled through **Vercel Blob**:
 
-The upload flow includes:
-
-1. File type validation
-2. File size validation
+1. File type validation (PDF only)
+2. File size validation (max 5 MB)
 3. Upload to Blob storage
 4. Secure URL handling
-5. Association with the candidate application
+5. Association with the candidate's application
 
-The E2E suite also supports testing resume uploads when the required Blob environment variable is available.
-
----
-
-## ♿ Accessibility
-
-The UI has been reviewed with accessibility in mind, including:
-
-* Semantic HTML
-* Accessible form labels
-* Keyboard navigation
-* Focus states
-* Button states
-* Error messaging
-* Loading states
-* Empty states
-* Accessible interactive elements
+The E2E suite also covers resume uploads when the required Blob environment variable is available.
 
 ---
 
-## 🔍 SEO
+## 🧪 Testing
 
-The application includes:
+### Unit Tests — Vitest
+Covers pure application logic: salary formatting, relative date formatting, Persian search normalization, filter parsing, salary range matching, and validation schemas for jobs, applications, and application status.
 
-* Dynamic metadata
-* Sitemap
-* Robots configuration
-* Job structured data
-* JSON-LD generation for job pages
-
-Job structured data is generated carefully to avoid unsafe content being injected into the page.
-
----
-
-## ⚡ Error & Loading States
-
-Important application states are handled explicitly:
-
-* Loading states
-* Empty states
-* Form validation errors
-* Application errors
-* Authentication errors
-* Not-found states
-* Server errors
-
-The goal is to avoid leaving users with ambiguous or broken UI states.
-
----
-
-## 🧪 Running Tests
-
-### Unit Tests
+Current unit-test coverage: **62 tests**.
 
 ```bash
 npm run test:unit
 ```
 
-### End-to-End Tests
+### End-to-End Tests — Playwright
+Simulates a full hiring workflow:
+
+```
+Register Employer → Register Candidate → Create Jobs → Apply to Jobs
+  → Save / Withdraw → Review Application → Accept Application
+  → Verify Candidate Status
+```
+
+The E2E environment includes automatic cleanup of test records.
 
 ```bash
 npm run test:e2e
 ```
 
-### Lint
+### Lint & Type Check
 
 ```bash
 npm run lint
-```
-
-### Type Check
-
-```bash
 npx tsc --noEmit
 ```
 
@@ -370,59 +246,48 @@ npx tsc --noEmit
 ## 🚀 Getting Started
 
 ### 1. Clone the repository
-
 ```bash
 git clone https://github.com/mina-gharzi/jobboard.git
-
 cd jobboard
 ```
 
 ### 2. Install dependencies
-
 ```bash
 npm install
 ```
 
 ### 3. Configure environment variables
-
-Create a `.env` file based on the required project environment variables.
-
-Typical configuration includes database and authentication settings.
-
-### 4. Prepare the database
-
-Run the required Prisma database setup for your local environment.
+Copy `.env.example` to `.env` and fill in the values:
 
 ```bash
-npx prisma generate
+cp .env.example .env
 ```
 
-Then apply the Prisma schema to your configured database.
+| Variable | Description |
+|---|---|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `BETTER_AUTH_SECRET` | Secret used to sign auth sessions |
+| `NEXT_PUBLIC_APP_URL` | Public base URL of the app (e.g. `http://localhost:3000`) |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob token for resume uploads |
+
+### 4. Prepare the database
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
 
 ### 5. Start the development server
-
 ```bash
 npm run dev
 ```
 
-Open:
-
-```text
-http://localhost:3000
-```
+Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
 ## 🧹 Code Quality
 
-The project uses:
-
-* ESLint for static analysis
-* TypeScript for type safety
-* Husky for Git hooks
-* lint-staged for checking staged TypeScript files
-
-This helps keep the codebase consistent and catch issues before commits.
+The project uses ESLint for static analysis, TypeScript for type safety, Husky for Git hooks, and lint-staged to check staged files before every commit — keeping the codebase consistent and catching issues early.
 
 ---
 
@@ -430,16 +295,15 @@ This helps keep the codebase consistent and catch issues before commits.
 
 Jobino was built as a portfolio-grade full-stack application with emphasis on:
 
-* Real-world user flows
-* Type-safe development
-* Secure authentication
-* Database integrity
-* Server-side validation
-* Practical testing
-* Accessibility
-* SEO
-* Maintainable architecture
-* Production-oriented UX
+- Real-world user flows
+- Type-safe development
+- Secure authentication
+- Database integrity
+- Server-side validation
+- Practical testing
+- Accessibility & SEO
+- Maintainable architecture
+- Production-oriented UX
 
 Rather than focusing only on visual implementation, the project demonstrates how a complete web application can be designed across the **frontend, backend, database, authentication, validation, and testing layers**.
 
@@ -447,22 +311,19 @@ Rather than focusing only on visual implementation, the project demonstrates how
 
 ## 📌 Future Improvements
 
-Possible future improvements include:
-
-* Expanded automated coverage for server actions
-* More comprehensive file-upload test coverage
-* Additional performance optimizations
-* CI-based automated test execution
-* Further production monitoring and observability
+- Expanded automated coverage for server actions
+- More comprehensive file-upload test coverage
+- Additional performance optimizations
+- CI-based automated test execution
+- Further production monitoring and observability
 
 ---
 
 ## 👩‍💻 Author
 
-**Mina Gharzi**
+**Mina Gharzi** — Frontend Developer
+[GitHub](https://github.com/mina-gharzi)
 
-Frontend Developer
+## 📄 License
 
-GitHub:
-
-https://github.com/mina-gharzi
+This project is licensed under the [MIT License](./LICENSE).
