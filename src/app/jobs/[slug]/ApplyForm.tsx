@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useRef, useState } from "react";
+import { startTransition, useActionState, useRef, useState } from "react";
 import { applyToJob } from "@/lib/actions/applyToJob";
 import { Check, Upload } from "lucide-react";
 
@@ -73,7 +73,9 @@ export default function ApplyForm({
     } else {
       fd.delete("resumePdf");
     }
-    formAction(fd);
+    startTransition(() => {
+      formAction(fd);
+    });
   }
 
   return (
