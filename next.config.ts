@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "8mb",
     },
   },
+
+  // اطمینان از اینکه فایل‌های باینری Prisma Query Engine
+  // در بسته‌ی نهایی سرورلس Vercel گنجانده می‌شوند
+  outputFileTracingIncludes: {
+    "/*": ["./src/generated/prisma/**/*"],
+  },
 };
 
 export default nextConfig;
