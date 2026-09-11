@@ -4,6 +4,21 @@ import { prisma } from "./prisma";
 import { sendResetPasswordEmail } from "./email";
 
 export const auth = betterAuth({
+  // آدرس پایه‌ی سرور برای better-auth. روی Vercel، VERCEL_URL به‌صورت
+  // خودکار (هم در production و هم در preview) با آدرس واقعی همون دیپلوی
+  // ست می‌شه؛ اگه NEXT_PUBLIC_APP_URL هم تنظیم شده باشه (مثلاً برای
+  // دامنه‌ی اصلی production)، همون اولویت داره.
+  baseURL:
+    process.env.NEXT_PUBLIC_APP_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined),
+  // origin هایی که better-auth بهشون اعتماد می‌کنه (برای جلوگیری از CSRF).
+  // بدون این، درخواست‌های ثبت‌نام/لاگین از دامنه‌ای که با baseURL یکی
+  // نیست (مثل preview URL های تصادفی Vercel) با خطای "Invalid origin"
+  // رد می‌شن.
+  trustedOrigins: [
+    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+    ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
+  ],
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
