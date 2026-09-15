@@ -25,7 +25,7 @@ export default function CategoryCard({
         "animate-fade-in-up hover:-translate-y-1 hover:border-gold/50",
         "hover:bg-white/85 hover:shadow-[0_16px_40px_-16px_rgba(84,122,149,0.3)]",
         featured
-          ? "border-gold/30 bg-gradient-to-br from-white via-white/80 to-gold/10"
+          ? "border-gold/30 bg-linear-to-br from-white via-white/80 to-gold/10"
           : "",
       ].join(" ")}
     >

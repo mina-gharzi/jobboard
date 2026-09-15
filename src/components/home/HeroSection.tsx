@@ -53,8 +53,8 @@ export default function HeroSection({
   return (
     <section className="relative min-h-[85vh] flex items-center mesh-gradient">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full bg-gold/8 blur-[100px] animate-morph" />
-        <div className="absolute -bottom-40 -left-32 h-[450px] w-[450px] rounded-full bg-slate/6 blur-[100px] animate-morph" style={{ animationDelay: "4s" }} />
+        <div className="absolute -right-32 -top-32 h-125 w-125 rounded-full bg-gold/8 blur-[100px] animate-morph" />
+        <div className="absolute -bottom-40 -left-32 h-112.5 w-112.5 rounded-full bg-slate/6 blur-[100px] animate-morph" style={{ animationDelay: "4s" }} />
         <div className="absolute left-1/3 top-1/3 h-64 w-64 rounded-full bg-gold/4 blur-[80px]" />
 
         <div className="absolute right-[8%] top-[12%] hidden lg:block">
@@ -98,18 +98,18 @@ export default function HeroSection({
             از استارتاپ‌های نوپا تا شرکت‌های بزرگ.
           </p>
 
-          <div className="animate-fade-in-up-delay-3 mt-10 rounded-[2rem] border border-white/50 bg-white/70 p-2.5 shadow-[0_24px_80px_-24px_rgba(44,57,71,0.2)] backdrop-blur-2xl">
+          <div className="animate-fade-in-up-delay-3 mt-10 rounded-4xl border border-white/50 bg-white/70 p-2.5 shadow-[0_24px_80px_-24px_rgba(44,57,71,0.2)] backdrop-blur-2xl">
             <form action="/jobs" method="GET">
               <div className="grid grid-cols-1 gap-2 lg:grid-cols-[1fr_0.85fr_auto]">
-                <label className="group flex min-h-16 cursor-text items-center gap-3 rounded-[1.5rem] border border-transparent bg-transparent px-5 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
+                <label className="group flex min-h-16 cursor-text items-center gap-3 rounded-3xl border border-transparent bg-transparent px-5 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
                   <Search className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" />
                   <input type="text" name="q" placeholder="عنوان شغل، مهارت یا کلمه کلیدی" aria-label="عنوان شغل، مهارت یا کلمه کلیدی" className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/60 focus:outline-none" />
                 </label>
-                <label className="group flex min-h-16 cursor-text items-center gap-3 rounded-[1.5rem] border border-transparent bg-transparent px-5 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
+                <label className="group flex min-h-16 cursor-text items-center gap-3 rounded-3xl border border-transparent bg-transparent px-5 transition focus-within:border-gold/30 focus-within:bg-paper/70 focus-within:ring-4 focus-within:ring-gold/10">
                   <MapPin className="h-5 w-5 shrink-0 text-ink-muted transition-colors group-focus-within:text-gold" />
                   <input type="text" name="city" placeholder="شهر" aria-label="شهر" className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/60 focus:outline-none" />
                 </label>
-                <button type="submit" className="group flex min-h-16 items-center justify-center gap-2.5 rounded-[1.5rem] bg-ink px-8 text-sm font-bold text-paper transition hover:-translate-y-0.5 hover:bg-ink/90 hover:shadow-[0_16px_32px_-12px_rgba(44,57,71,0.5)] active:translate-y-0">
+                <button type="submit" className="group flex min-h-16 items-center justify-center gap-2.5 rounded-3xl bg-ink px-8 text-sm font-bold text-paper transition hover:-translate-y-0.5 hover:bg-ink/90 hover:shadow-[0_16px_32px_-12px_rgba(44,57,71,0.5)] active:translate-y-0">
                   <Search className="h-4 w-4" />
                   جستجوی شغل
                 </button>
@@ -142,7 +142,7 @@ export default function HeroSection({
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-paper to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-paper to-transparent" />
     </section>
   );
 }
