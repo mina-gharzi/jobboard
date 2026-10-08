@@ -39,7 +39,7 @@ async function registerUser(
   page: Page,
   roleLabel: string,
   name: string,
-  email: string
+  email: string,
 ) {
   await page.goto("/register");
   await page.locator("label", { hasText: roleLabel }).click();
@@ -57,7 +57,7 @@ test("ثبت‌نام کارفرما", async ({ page }) => {
 
   await page.goto("/employer");
   await expect(
-    page.getByRole("heading", { name: "آگهی‌های من" })
+    page.getByRole("heading", { name: "آگهی‌های من" }),
   ).toBeVisible();
   await expect(page.getByText("هنوز آگهی‌ای ثبت نکرده‌اید.")).toBeVisible();
 
@@ -69,9 +69,11 @@ test("ثبت‌نام کارجو", async ({ page }) => {
 
   await page.goto("/candidate");
   await expect(
-    page.getByText("درخواست‌های من", { exact: true }).first()
+    page.getByText("درخواست‌های من", { exact: true }).first(),
   ).toBeVisible();
-  await expect(page.getByText(/هنوز برای هیچ آگهی‌ای اپلای نکرده/)).toBeVisible();
+  await expect(
+    page.getByText(/هنوز برای هیچ آگهی‌ای اپلای نکرده/),
+  ).toBeVisible();
 
   await page.context().storageState({ path: CANDIDATE_STATE });
 });
@@ -124,7 +126,7 @@ test("کارجو برای هر دو آگهی اپلای می‌کند", async ({
     for (const [url, title, withResume] of apps) {
       await page.goto(url);
       await expect(
-        page.getByRole("heading", { name: title, exact: true })
+        page.getByRole("heading", { name: title, exact: true }),
       ).toBeVisible();
 
       if (withResume) {
@@ -142,7 +144,11 @@ test("کارجو برای هر دو آگهی اپلای می‌کند", async ({
         .locator("aside")
         .getByRole("button", { name: "ارسال درخواست", exact: true })
         .click();
-      await expect(page.getByText(/با موفقیت ثبت شد/)).toBeVisible();
+      await expect(
+        page
+          .locator("aside")
+          .getByRole("heading", { name: "درخواست شما ثبت شده است" }),
+      ).toBeVisible();
     }
 
     // هر دو درخواست در داشبورد کارجو با وضعیت PENDING دیده می‌شوند.
@@ -169,7 +175,7 @@ test("ذخیره‌ی آگهی و انصراف از درخواست", async ({ br
     await expect(saveButton).toBeVisible();
     await saveButton.click();
     await expect(
-      page.getByRole("button", { name: "حذف از ذخیره‌ها", exact: true })
+      page.getByRole("button", { name: "حذف از ذخیره‌ها", exact: true }),
     ).toBeVisible();
 
     // در تب ذخیره‌شده‌ها دیده می‌شود
@@ -204,7 +210,7 @@ test("کارفرما وضعیت درخواست را به پذیرش می‌رس�
 
     await expect(page.getByText(candidateEmail)).toBeVisible();
     await expect(
-      page.locator("span.badge", { hasText: "در انتظار بررسی" })
+      page.locator("span.badge", { hasText: "در انتظار بررسی" }),
     ).toBeVisible();
 
     const statusSelect = page.locator('select[name="status"]');
@@ -221,7 +227,7 @@ test("کارفرما وضعیت درخواست را به پذیرش می‌رس�
       .getByRole("button", { name: "ثبت تغییر وضعیت", exact: true })
       .click();
     await expect(
-      page.locator("span.badge", { hasText: "پذیرفته‌شده" })
+      page.locator("span.badge", { hasText: "پذیرفته‌شده" }),
     ).toBeVisible();
 
     // کارجو وضعیت پذیرش را در داشبورد خودش می‌بیند و دکمه‌ی انصراف ندارد.
@@ -233,7 +239,7 @@ test("کارفرما وضعیت درخواست را به پذیرش می‌رس�
       const itemB = candidatePage.locator("li", { hasText: JOB_B_TITLE });
       await expect(itemB.getByText("پذیرفته‌شده")).toBeVisible();
       await expect(
-        itemB.getByRole("button", { name: "انصراف از درخواست" })
+        itemB.getByRole("button", { name: "انصراف از درخواست" }),
       ).toHaveCount(0);
     } finally {
       await candidatePage.close();

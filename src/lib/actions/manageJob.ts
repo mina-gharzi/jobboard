@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { updateJobSchema, toStr } from "@/lib/validation";
+import { deleteResumePdf } from "@/lib/resume";
 
 async function getOwnedJob(jobId: string) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -113,11 +114,22 @@ export async function deleteJob(
     return { error: error ?? "خطایی رخ داد" };
   }
 
+  // آدرس رزومه‌ی درخواست‌ها را قبل از حذف ردیف‌ها می‌گیریم تا فایل‌ها روی
+  // Blob یتیم نمانند (داده‌ی شخصی کارجوها).
+  const resumes = await prisma.application.findMany({
+    where: { jobId, resumePdf: { not: null } },
+    select: { resumePdf: true },
+  });
+
   // چون Application به Job وصل است، اول درخواست‌های مرتبط حذف می‌شوند
   await prisma.$transaction([
     prisma.application.deleteMany({ where: { jobId } }),
     prisma.job.delete({ where: { id: jobId } }),
   ]);
+
+  // حذف فایل‌ها بعد از موفقیت تراکنش و best-effort است؛ خطای Blob نباید
+  // حذف آگهی را خراب کند (deleteFile خطا را خودش می‌بلعد).
+  await Promise.all(resumes.map((r) => deleteResumePdf(r.resumePdf)));
 
   revalidatePath("/jobs");
   revalidatePath("/employer");

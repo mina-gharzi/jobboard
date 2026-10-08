@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { uploadPublicFile, deleteFile, isOwnBlobUrl } from "./storage";
 
 export const MAX_RESUME_SIZE = 5 * 1024 * 1024; // 5 مگابایت
@@ -28,10 +29,14 @@ export async function saveResumePdf(file: File, userId: string): Promise<string>
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  // شناسه‌ی تصادفی ساده برای جلوگیری از برخورد نام وقتی کاربر چند فایل پشت
-  // سر هم (مثلاً برای اپلای‌های مختلف) بارگذاری می‌کند.
-  const suffix = Math.random().toString(36).slice(2, 8);
-  const key = `${RESUME_KEY_PREFIX}${userId}-${Date.now()}-${suffix}.pdf`;
+  // پسوند و type را کاربر کنترل می‌کند؛ محتوای واقعی را هم چک می‌کنیم: هر
+  // فایل PDF با «%PDF-» شروع می‌شود.
+  if (buffer.subarray(0, 5).toString("latin1") !== "%PDF-") {
+    throw new Error("فایل انتخاب‌شده یک PDF معتبر نیست");
+  }
+  // فایل‌ها public هستند و امنیتشان به غیرقابل‌حدس‌بودن آدرس است؛ پس بخش
+  // تصادفی نام باید واقعاً تصادفی (CSPRNG) باشد، نه Math.random.
+  const key = `${RESUME_KEY_PREFIX}${userId}-${Date.now()}-${randomUUID()}.pdf`;
 
   try {
     return await uploadPublicFile(key, buffer, "application/pdf");
