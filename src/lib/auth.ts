@@ -1,7 +1,9 @@
 import { betterAuth } from "better-auth";
+import { APIError } from "better-auth/api";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import { sendResetPasswordEmail } from "./email";
+import { normalizeRole } from "./roles";
 
 export const auth = betterAuth({
   // آدرس پایه‌ی سرور برای better-auth. روی Vercel، VERCEL_URL به‌صورت
@@ -52,6 +54,31 @@ export const auth = betterAuth({
     // تایید ایمیل الزامی نیست: کاربر بلافاصله بعد از ثبت‌نام می‌تونه وارد بشه.
     sendResetPassword: async ({ user, url }) => {
       await sendResetPasswordEmail({ to: user.email, url });
+    },
+  },
+  // نقش کاربر فقط موقع ثبت‌نام و فقط از بین مقادیر مجاز قابل‌تعیین است.
+  // چون `role` یک additionalField قابل‌ورودی از کلاینت است، بدون این hookها:
+  //  - ثبت‌نام با هر مقدار دلخواه (مثلاً "ADMIN") پذیرفته می‌شد؛
+  //  - کاربر می‌توانست بعداً با /api/auth/update-user نقشش را عوض کند.
+  // اپ هیچ‌جا از update-user استفاده نمی‌کند (پروفایل‌ها با Prisma ذخیره
+  // می‌شوند)، پس رد کردن هر تغییرِ role اینجا چیزی را خراب نمی‌کند.
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => ({
+          data: { ...user, role: normalizeRole(user.role) },
+        }),
+      },
+      update: {
+        before: async (data) => {
+          if ("role" in data) {
+            throw new APIError("FORBIDDEN", {
+              message: "تغییر نقش کاربر مجاز نیست",
+            });
+          }
+          return { data };
+        },
+      },
     },
   },
   user: {
