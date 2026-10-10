@@ -8,6 +8,7 @@ A full-stack job board with separate **candidate** and **employer** roles: post 
 
 **Built with:** Next.js 16 · TypeScript · Prisma · PostgreSQL (Neon) · Better Auth · Zod · Tailwind CSS · Vercel Blob · Resend · Vitest · Playwright
 
+![CI](https://github.com/mina-gharzi/jobboard/actions/workflows/ci.yml/badge.svg)
 ## What it does
 
 **Candidates**
