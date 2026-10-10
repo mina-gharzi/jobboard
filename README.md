@@ -1,329 +1,97 @@
-# Jobino — Job Board Platform
-
-A full-stack job board platform built with Next.js, TypeScript, Prisma, Better Auth, and PostgreSQL.
-
-🔗 **Live Demo:** [jobboard-6p9y.vercel.app](https://jobboard-6p9y.vercel.app)
-
----
+# Jabino — Job Board
 
-Jobino is a full-stack job board application designed around realistic hiring workflows between **job seekers** and **employers**. The project focuses not only on UI implementation, but also on authentication, authorization, database relationships, validation, file uploads, search, testing, accessibility, and reliable end-to-end workflows.
-
-![Jobino screenshot](./public/screenshot.jpg)
-
-## 📚 Table of Contents
-
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Architecture](#️-architecture)
-- [Main User Flows](#-main-user-flows)
-- [Database](#️-database)
-- [Resume Upload](#-resume-upload)
-- [Accessibility](#-accessibility)
-- [SEO](#-seo)
-- [Testing](#-testing)
-- [Getting Started](#-getting-started)
-- [Code Quality](#-code-quality)
-- [Project Goals](#-project-goals)
-- [Future Improvements](#-future-improvements)
-- [Author](#-author)
+A full-stack job board with separate **candidate** and **employer** roles: post and manage jobs, search and filter them, apply with a PDF resume, and track every application through to a decision. Persian-first (RTL) interface.
 
----
+**[Live demo](https://jobboard-6p9y.vercel.app/)**
 
-## ✨ Features
+![Jabino screenshot](docs/screenshot.png)
 
-### 👤 Authentication & Roles
+**Built with:** Next.js 16 · TypeScript · Prisma · PostgreSQL (Neon) · Better Auth · Zod · Tailwind CSS · Vercel Blob · Resend · Vitest · Playwright
 
-- User registration and authentication
-- Separate **Candidate** and **Employer** roles
-- Role-based access control
-- Protected dashboard routes
-- Session-based authentication with Better Auth
-- Ownership checks for employer resources
+## What it does
 
-### 💼 Job Management
+**Candidates**
+- Browse, search, filter, sort and paginate jobs (search handles Persian character variants)
+- Apply with a cover letter and an optional PDF resume
+- Save jobs, track application status, and withdraw an application before a decision is made
+- Keep a profile with phone, bio and resume
 
-**Employers can:**
-- Create job listings
-- Edit existing jobs
-- Manage published jobs
-- View applicants
-- Review candidate applications
-- Update application statuses
-
-**Candidates can:**
-- Browse available jobs
-- Search and filter jobs
-- View detailed job information
-- Apply to jobs
-- Withdraw applications
-- Save jobs for later
-- Track application status
-
-### 📄 Applications & Resumes
-
-- Cover letter support
-- Application status workflow
-- Resume upload support
-- PDF resume validation
-- Secure file URL handling
-- Candidate application history
-
-Application status workflow:
-
-```
-PENDING → REVIEWED → ACCEPTED
-```
-
-Candidates can also withdraw an application when the current status allows it.
-
-### 🔎 Search & Filtering
-
-Job search supports:
-
-- Keyword search
-- Location filtering
-- Remote-work filtering
-- Salary filtering
-- Pagination
-- Persian text normalization
-
-The search implementation handles Persian text variations such as نیم‌فاصله, regular spaces, and ZWNJ variants — making search more reliable for Persian job titles and descriptions.
-
-### 🛡️ Validation & Security
-
-- Zod schema validation
-- Role-based authorization
-- Resource ownership checks
-- HTTP/HTTPS URL validation
-- Protection against unsafe URL schemes
-- Safe JSON-LD generation
-- Database uniqueness constraints
-- Handling Prisma unique-constraint conflicts
-- Protected E2E cleanup endpoint
-- Rate-limit control for sensitive auth routes
-
-### ♿ Accessibility
-
-- Semantic HTML
-- Accessible form labels
-- Keyboard navigation
-- Focus states
-- Error, loading, and empty states handled explicitly
-
-### 🔍 SEO
-
-- Dynamic metadata
-- Sitemap and robots configuration
-- JSON-LD structured data for job pages, generated safely to avoid unsafe content injection
-
----
+**Employers**
+- Post, edit, close or delete jobs (draft, published, closed)
+- Review applicants per job and move each application through pending, reviewed, accepted or rejected
+- Maintain a company profile with logo, description, website and team size
 
-## 🧰 Tech Stack
-
-| Layer | Technologies |
-|---|---|
-| **Frontend** | Next.js 16 · React 19 · TypeScript · Tailwind CSS · Lucide React · Vazirmatn (Persian font) |
-| **Backend** | Next.js Server Actions · Prisma ORM · PostgreSQL · Better Auth · Zod |
-| **Storage** | Vercel Blob (resume uploads) |
-| **Testing** | Vitest (unit) · Playwright (E2E) |
-| **Code Quality** | ESLint · TypeScript · Husky · lint-staged |
-
----
+**Platform**
+- Email and password auth with password reset by email
+- SEO basics: sitemap, robots, page metadata and JSON-LD structured data for jobs
+- Per-route loading and error states, privacy policy and terms pages
 
-## 🏗️ Architecture
-
-The project follows a feature-oriented Next.js application structure:
+## Key engineering decisions
 
-```
-jobboard/
-├── e2e/
-│   ├── fixtures/
-│   ├── global-teardown.ts
-│   └── jobboard.spec.ts
-│
-├── prisma/
-│   └── schema.prisma
-│
-├── public/
-│
-├── src/
-│   ├── app/
-│   │   ├── api/
-│   │   ├── candidate/
-│   │   ├── employer/
-│   │   ├── jobs/
-│   │   └── ...
-│   │
-│   ├── components/
-│   ├── lib/
-│   └── ...
-│
-├── middleware.ts
-├── next.config.ts
-├── playwright.config.ts
-├── prisma.config.ts
-├── vitest.config.ts
-└── package.json
-```
+**Every server action checks role and ownership.** Before touching data, an action reads the session, verifies the role, then verifies the resource belongs to that user (for example, an employer can only change the status of applications on their own jobs). The UI hides controls, but the server is the real gatekeeper.
 
----
+**Roles are controlled on the server.** Better Auth lets clients send extra user fields, so sign-up coerces any unknown role to `CANDIDATE` and role changes through the auth API are rejected. The column is a Prisma enum, so the database also refuses invalid values.
 
-## 🔄 Main User Flows
+**Resume uploads are validated and cleaned up.** Files must be real PDFs (the `%PDF-` header is checked, not just the extension), are limited to 5 MB, and get a cryptographically random name. Files are deleted from Vercel Blob when an application is withdrawn or its job is deleted.
 
-**Candidate flow**
-```
-Register → Candidate Dashboard → Browse Jobs → Search / Filter
-  → View Job → Apply → Track Application → Accepted / Rejected / Withdrawn
-```
+**Concurrency is handled in the database.** `(job, candidate)` is unique, and a duplicate submission from a double click is caught via the unique-constraint error and reported correctly instead of failing silently.
 
-**Employer flow**
-```
-Register → Employer Dashboard → Create Job → Manage Jobs
-  → View Applicants → Review Application → Update Status
-```
+**Auth endpoints are rate limited.** Sign-in, sign-up and password-reset have stricter limits than the global default.
 
----
+**The E2E cleanup endpoint is locked down.** It only works when rate limiting is explicitly disabled for tests, only deletes `@e2e.test` accounts, and is never available on Vercel production.
 
-## 🗄️ Database
+## Testing
 
-Prisma is used as the ORM for database access and relational data management. Core entities include Users, Sessions, Jobs, Applications, Saved Jobs, candidate profiles, and company profiles.
+| Layer | Tooling | Command |
+| --- | --- | --- |
+| Unit | Vitest: validation, search, filters, formatting, roles, resume upload | `npx vitest run` |
+| End-to-end | Playwright: register as employer and candidate, post jobs, apply with a PDF, save and withdraw, change application status | `npx playwright test` |
 
-Database-level constraints are used alongside application-level validation to maintain data integrity — for example, duplicate applications are prevented both through validation logic and a database uniqueness constraint.
+E2E tests create and delete data, so run them against a **separate database** (for example a Neon branch), never your production one.
 
----
+## Known limitations
 
-## 📁 Resume Upload
+- **Rate limiting is in-memory.** On a serverless host it is not shared between instances. A shared store (for example Redis) is the next step.
+- **Email verification is not required** at sign-up.
+- **Resume files are public by link.** Names are unguessable and links are only shown to the candidate and the employer of that job, but anyone holding a link can open it. This is stated in the privacy policy.
+- **No self-service account deletion** yet; the privacy policy points users to support.
 
-Resume uploads are handled through **Vercel Blob**:
+## Getting started
 
-1. File type validation (PDF only)
-2. File size validation (max 5 MB)
-3. Upload to Blob storage
-4. Secure URL handling
-5. Association with the candidate's application
+Requirements: Node.js 20+ and a PostgreSQL database.
 
-The E2E suite also covers resume uploads when the required Blob environment variable is available.
-
----
-
-## 🧪 Testing
-
-### Unit Tests — Vitest
-Covers pure application logic: salary formatting, relative date formatting, Persian search normalization, filter parsing, salary range matching, and validation schemas for jobs, applications, and application status.
-
-Current unit-test coverage: **62 tests**.
-
-```bash
-npm run test:unit
-```
-
-### End-to-End Tests — Playwright
-Simulates a full hiring workflow:
-
-```
-Register Employer → Register Candidate → Create Jobs → Apply to Jobs
-  → Save / Withdraw → Review Application → Accept Application
-  → Verify Candidate Status
-```
-
-The E2E environment includes automatic cleanup of test records.
-
-```bash
-npm run test:e2e
-```
-
-### Lint & Type Check
-
-```bash
-npm run lint
-npx tsc --noEmit
-```
-
-> Make sure the local database and required environment variables are configured before running the E2E suite.
-
----
-
-## 🚀 Getting Started
-
-### 1. Clone the repository
 ```bash
 git clone https://github.com/mina-gharzi/jobboard.git
 cd jobboard
+npm install        # also runs prisma generate
 ```
 
-### 2. Install dependencies
+Create `.env`:
+
+```
+DATABASE_URL=postgresql://...
+BETTER_AUTH_SECRET=a-long-random-string
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+BLOB_READ_WRITE_TOKEN=...          # resume uploads (Vercel Blob)
+RESEND_API_KEY=...                 # optional; without it, reset links are printed to the console
+RESEND_FROM_EMAIL=...              # optional
+```
+
 ```bash
-npm install
+npx prisma migrate deploy
+npm run dev        # http://localhost:3000
 ```
 
-### 3. Configure environment variables
-Copy `.env.example` to `.env` and fill in the values:
+## Project structure
 
-```bash
-cp .env.example .env
+```
+src/app/        routes: jobs, employer, candidate, auth pages, privacy, terms, api
+src/components/ shared UI and home page sections
+src/lib/        server actions, auth, validation (Zod), search, resume and storage helpers
+prisma/         schema and migrations
+e2e/            Playwright tests
 ```
 
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `BETTER_AUTH_SECRET` | Secret used to sign auth sessions |
-| `NEXT_PUBLIC_APP_URL` | Public base URL of the app (e.g. `http://localhost:3000`) |
-| `BLOB_READ_WRITE_TOKEN` | Vercel Blob token for resume uploads |
+## License
 
-### 4. Prepare the database
-```bash
-npx prisma generate
-npx prisma migrate dev
-```
-
-### 5. Start the development server
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
----
-
-## 🧹 Code Quality
-
-The project uses ESLint for static analysis, TypeScript for type safety, Husky for Git hooks, and lint-staged to check staged files before every commit — keeping the codebase consistent and catching issues early.
-
----
-
-## 🎯 Project Goals
-
-Jobino was built as a portfolio-grade full-stack application with emphasis on:
-
-- Real-world user flows
-- Type-safe development
-- Secure authentication
-- Database integrity
-- Server-side validation
-- Practical testing
-- Accessibility & SEO
-- Maintainable architecture
-- Production-oriented UX
-
-Rather than focusing only on visual implementation, the project demonstrates how a complete web application can be designed across the **frontend, backend, database, authentication, validation, and testing layers**.
-
----
-
-## 📌 Future Improvements
-
-- Expanded automated coverage for server actions
-- More comprehensive file-upload test coverage
-- Additional performance optimizations
-- CI-based automated test execution
-- Further production monitoring and observability
-
----
-
-## 👩‍💻 Author
-
-**Mina Gharzi** — Frontend Developer
-[GitHub](https://github.com/mina-gharzi)
-
-## 📄 License
-
-This project is licensed under the [MIT License](./LICENSE).
+MIT © Mina Gharzi
